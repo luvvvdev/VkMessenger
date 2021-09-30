@@ -1,11 +1,22 @@
 
-import {Image, ImageSourcePropType, ImageStyle, StyleProp, Text, TextStyle, View, ViewStyle} from "react-native";
+import {
+    Image,
+    ImageSourcePropType,
+    ImageStyle,
+    StyleProp,
+    Text,
+    TextStyle,
+    TouchableOpacity,
+    View,
+    ViewStyle
+} from "react-native";
 import React from "react";
 import {format, formatDistanceToNowStrict, isSameYear} from 'date-fns'
 import {GroupsGroupFull, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../models";
 import {isToday} from "date-fns";
+import {navigate} from "../../navigators";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -119,18 +130,20 @@ const ConversationItem = ({data}: ConversationItemProps) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.leadingPart}>
-                <Image style={styles.image as ImageStyle} source={imgSource} />
-                <View>
-                    <Text style={styles.userName}>{`${getConversationName()}`}</Text>
-                    <View style={{width: 260, display: "flex", flexDirection: 'row'}}>
-                        <Text style={styles.textMessage} numberOfLines={1}>{`${getLastMessageText()}`}</Text>
-                        <Text style={{color: 'gray'}}>{' '}· {getDate()}</Text>
+        <TouchableOpacity onPress={() => navigate('conversation', {conversation: conversation, photo: getPhotoUrl(), title: getConversationName()})}>
+            <View style={styles.container}>
+                <View style={styles.leadingPart}>
+                    <Image style={styles.image as ImageStyle} source={imgSource} />
+                    <View>
+                        <Text style={styles.userName}>{`${getConversationName()}`}</Text>
+                        <View style={{width: 260, display: "flex", flexDirection: 'row'}}>
+                            <Text style={styles.textMessage} numberOfLines={1}>{`${getLastMessageText()}`}</Text>
+                            <Text style={{color: 'gray'}}>{' '}· {getDate()}</Text>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

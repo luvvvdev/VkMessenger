@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {
     SafeAreaView,
-    ScrollView,
+    ScrollView, TouchableOpacity,
     View,
 } from "react-native";
 import {Dispatch, RootState} from "../../models";
@@ -9,13 +9,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {ConversationsState} from "../../models/conversations";
 import {ConversationItem} from "../../components/ConversationItem/ConversationItem";
 import {TextField} from "../../components/TextField/TextField";
+import {navigate} from "../../navigators";
 
 export const MessengerScreen = () => {
     const dispatch = useDispatch<Dispatch>()
     const conversations = useSelector<RootState, ConversationsState>((state) => state.conversations)
 
+    const getConversations = () => {
+        dispatch.conversations.get().then((data) => {
+            setTimeout(() => getConversations(), 5000)
+            return data
+        })
+    }
+
     useEffect(() => {
-        dispatch.conversations.get()
+        getConversations()
     }, [])
 
     return (

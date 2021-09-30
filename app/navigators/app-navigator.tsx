@@ -5,15 +5,15 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import {Button, Image, ImageSourcePropType, useColorScheme} from "react-native";
+import {Button, Image, ImageSourcePropType, Text, useColorScheme, View} from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {MessengerScreen} from "../screens/Messenger/MessengerScreen"
 import {navigate, navigationRef} from "./navigation-utilities"
 import LoginScreen from "../screens/Login/LoginScreen";
-import VKLogin from "react-native-vkontakte-login";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../models";
+import ConversationScreen from "../screens/Messenger/Conversation";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -30,6 +30,7 @@ import {Dispatch, RootState} from "../models";
 export type NavigatorParamList = {
   messenger: undefined
   login: undefined
+  conversation: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -47,27 +48,42 @@ const AppStack = () => {
                 contentStyle: {
                     backgroundColor: 'white'
                 },
-                headerRight: (props => {
-                    const logout = async () => {
-                        await dispatch.user.logout()
-
-                        navigate('login')
-                    }
-
-                    return <Button title={'Выход'} onPress={logout} />
-                }),
-                headerLeft: () => {
-                    const imgSource: ImageSourcePropType = {
-                        method: 'GET',
-                        uri: userData?.photo_100
-                    }
-                    return <Image style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
-                }
             }}
         >
             {
                 isLoggedIn ? (
-                    <Stack.Screen name="messenger" component={MessengerScreen} options={{title: 'Мессенджер', headerTransparent: true, animationTypeForReplace: 'push'}}/>
+                    <>
+                        <Stack.Screen name="messenger" component={MessengerScreen} options={{
+                            title: 'Мессенджер', headerTransparent: true, animationTypeForReplace: 'push',
+                            headerLeft: () => {
+                                const imgSource: ImageSourcePropType = {
+                                    method: 'GET',
+                                    uri: userData?.photo_100
+                                }
+                                return <Image style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
+                            },
+                            headerRight: (props => {
+                                const logout = async () => {
+                                    await dispatch.user.logout()
+
+                                    navigate('login')
+                                }
+
+                                return <Button title={'Выход'} onPress={logout} />
+                            }),
+                        }}/>
+                        <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (
+                            {headerBackVisible: true, headerBackTitleVisible: false,
+                                headerTitle: (props) => {
+                                    console.log('HGHELO', )
+
+                                    return (<View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
+                                        <Image source={{uri: route.params!.photo}} style={{backgroundColor: 'gray', marginRight: 10, height: 30, width: 30, borderRadius: 100}}/>
+                                        <Text style={{fontWeight: 'bold'}}>{`${route.params!.title.toString()}`}</Text>
+                                    </View>)
+                                }
+                            })} />
+                    </>
                 ) : <Stack.Screen name="login" component={LoginScreen} options={{title: 'Войдите', headerLargeTitle: true, headerTransparent: true}}/>
             }
         </Stack.Navigator>

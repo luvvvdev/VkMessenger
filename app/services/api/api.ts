@@ -77,6 +77,26 @@ export class Api {
     }
   }
 
+  async findConversations(): Promise<GetConversationsResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
+        extended: true
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      // console.log(response)
+
+      return { kind: "ok", data: response.data.response } as GetConversationsResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
   async getConversations(): Promise<GetConversationsResult> {
     try {
       const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
