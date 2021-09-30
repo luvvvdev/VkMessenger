@@ -14,8 +14,14 @@
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "paths": {
+      "@/*": ["./app/*"]
+    }
   },
   "exclude": ["node_modules"],
-  "include": ["index.js", "app", "test", "storybook"]
+  "include": ["index.js", "app", "test", "storybook"],
+  "files": ["global.d.ts"]
 }

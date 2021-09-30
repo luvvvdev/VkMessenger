@@ -1,7 +1,8 @@
-import { ApisauceInstance, create, ApiResponse } from "apisauce"
+import {ApisauceInstance, create, ApiResponse} from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-import * as Types from "./api.types"
+import {GetConversationsResult, GetUserResult} from "./api.types";
+import VKLogin from "react-native-vkontakte-login";
 
 /**
  * Manages all requests to the API.
@@ -33,70 +34,68 @@ export class Api {
    *
    * Be as quick as possible in here.
    */
-  setup() {
+  async setup() {
+    let access_token: string | undefined = undefined;
+    let v = '5.133';
+
+    const data = await VKLogin.getAccessToken()
+
+    if (data?.access_token) {
+      access_token = data.access_token
+    }
+
     // construct the apisauce instance
     this.apisauce = create({
       baseURL: this.config.url,
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
+        'User-Agent': 'VKDesktopMessenger/5.3.2 (darwin; 20.4.0; x64)'
       },
+      params: {
+        access_token, v, lang: 'ru'
+      }
     })
+
+    global.api = this as Api
   }
 
-  /**
-   * Gets a list of users.
-   */
-  async getUsers(): Promise<Types.GetUsersResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    const convertUser = (raw) => {
-      return {
-        id: raw.id,
-        name: raw.name,
-      }
-    }
-
-    // transform the data into the format we are expecting
+  async getUser(): Promise<GetUserResult> {
     try {
-      const rawUsers = response.data
-      const resultUsers: Types.User[] = rawUsers.map(convertUser)
-      return { kind: "ok", users: resultUsers }
-    } catch {
-      return { kind: "bad-data" }
-    }
-  }
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/users.get`, {
+        fields: ['has_photo', 'photo_100', 'photo_200']
+      })
 
-  /**
-   * Gets a single user by ID
-   */
-
-  async getUser(id: string): Promise<Types.GetUserResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const resultUser: Types.User = {
-        id: response.data.id,
-        name: response.data.name,
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
       }
-      return { kind: "ok", user: resultUser }
-    } catch {
-      return { kind: "bad-data" }
+
+      return { kind: "ok", data: response.data.response } as GetUserResult
+    } catch (e) {
+      return {kind: "bad-data"}
     }
   }
+
+  async getConversations(): Promise<GetConversationsResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
+        extended: true, offset: 0, count: 200
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      // console.log(response)
+
+      return { kind: "ok", data: response.data.response } as GetConversationsResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
+
 }

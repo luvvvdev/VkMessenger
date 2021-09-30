@@ -1,5 +1,19 @@
-export * from "./extensions/with-environment"
-export * from "./extensions/with-root-store"
-export * from "./root-store/root-store"
-export * from "./root-store/root-store-context"
-export * from "./root-store/setup-root-store"
+import {init, Models, RematchDispatch, RematchRootState} from '@rematch/core'
+import persistPlugin from '@rematch/persist'
+
+import {conversations} from './conversations'
+import {user} from "./user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export interface RootModel extends Models<RootModel> {
+    conversations: typeof conversations
+    user: typeof user
+}
+
+export const models: RootModel = {conversations, user};
+
+export const store = init({models, plugins: [persistPlugin<RootState, any, any>({key: 'root', storage: AsyncStorage})]})
+
+export type Store = typeof store;
+export type Dispatch = RematchDispatch<RootModel>;
+export type RootState = RematchRootState<RootModel>;

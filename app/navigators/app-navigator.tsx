@@ -5,11 +5,15 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme } from "react-native"
+import {Button, Image, ImageSourcePropType, useColorScheme} from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
-import { navigationRef } from "./navigation-utilities"
+import {MessengerScreen} from "../screens/Messenger/MessengerScreen"
+import {navigate, navigationRef} from "./navigation-utilities"
+import LoginScreen from "../screens/Login/LoginScreen";
+import VKLogin from "react-native-vkontakte-login";
+import {useDispatch, useSelector} from "react-redux";
+import {Dispatch, RootState} from "../models";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,27 +28,50 @@ import { navigationRef } from "./navigation-utilities"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type NavigatorParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
+  messenger: undefined
+  login: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="welcome"
-    >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
-    </Stack.Navigator>
-  )
+    const isLoggedIn = useSelector((state: RootState) => Boolean(state.user.login_data?.access_token))
+    const userData = useSelector((state: RootState) => state.user.user_data)
+    const dispatch = useDispatch<Dispatch>()
+
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: true,
+                contentStyle: {
+                    backgroundColor: 'white'
+                },
+                headerRight: (props => {
+                    const logout = async () => {
+                        await dispatch.user.logout()
+
+                        navigate('login')
+                    }
+
+                    return <Button title={'Выход'} onPress={logout} />
+                }),
+                headerLeft: () => {
+                    const imgSource: ImageSourcePropType = {
+                        method: 'GET',
+                        uri: userData?.photo_100
+                    }
+                    return <Image style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
+                }
+            }}
+        >
+            {
+                isLoggedIn ? (
+                    <Stack.Screen name="messenger" component={MessengerScreen} options={{title: 'Мессенджер', headerTransparent: true, animationTypeForReplace: 'push'}}/>
+                ) : <Stack.Screen name="login" component={LoginScreen} options={{title: 'Войдите', headerLargeTitle: true, headerTransparent: true}}/>
+            }
+        </Stack.Navigator>
+    )
 }
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
@@ -57,7 +84,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
+        <AppStack />
     </NavigationContainer>
   )
 }
@@ -73,5 +100,5 @@ AppNavigator.displayName = "AppNavigator"
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["messenger"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

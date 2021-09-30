@@ -18,6 +18,7 @@
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
+      <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>

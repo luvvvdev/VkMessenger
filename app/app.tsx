@@ -11,13 +11,16 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import { useBackButtonHandler, AppNavigator, canExit, useNavigationPersistence } from "./navigators"
-import { RootStore, RootStoreProvider, setupRootStore } from "./models"
-import { ToggleStorybook } from "../storybook/toggle-storybook"
+import VKLogin from 'react-native-vkontakte-login'
+import {Provider} from 'react-redux'
+
+import {Api} from "./services/api/api";
+import {store} from "./models";
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -25,24 +28,31 @@ import { ToggleStorybook } from "../storybook/toggle-storybook"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
+
+// API setting up
+const api = new Api()
+api.setup()
+
 /**
  * This is the root component of our app.
  */
 function App() {
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+  // const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
   useBackButtonHandler(canExit)
   const {
     initialNavigationState,
     onNavigationStateChange,
-    isRestored: isNavigationStateRestored,
+    //isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
+    VKLogin.initialize(2685278)
+
     ;(async () => {
       await initFonts() // expo
-      setupRootStore().then(setRootStore)
+      // setupRootStore().then(setRootStore)
     })()
   }, [])
 
@@ -52,20 +62,18 @@ function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
-  if (!rootStore || !isNavigationStateRestored) return null
+ //  if (!rootStore || !isNavigationStateRestored) return null
 
   // otherwise, we're ready to render the app
   return (
-    <ToggleStorybook>
-      <RootStoreProvider value={rootStore}>
+      <Provider store={store}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <AppNavigator
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
           />
         </SafeAreaProvider>
-      </RootStoreProvider>
-    </ToggleStorybook>
+      </Provider>
   )
 }
 

@@ -1,13 +1,9 @@
 import { GeneralApiProblem } from "./api-problem"
-import { Character } from "../../models/character/character"
+import {MessagesGetConversationsResponse, UsersGetResponse} from "../../types/vk";
 
-export interface User {
-  id: number
-  name: string
-}
+type ApiResult<T> = {kind: 'ok', data: T}
 
-export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
-export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
+type ApiRes<T> = ApiResult<T> | GeneralApiProblem
 
-export type GetCharactersResult = { kind: "ok"; characters: Character[] } | GeneralApiProblem
-export type GetCharacterResult = { kind: "ok"; character: Character } | GeneralApiProblem
+export type GetConversationsResult = ApiRes<MessagesGetConversationsResponse>
+export type GetUserResult = ApiRes<UsersGetResponse>
