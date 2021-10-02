@@ -27,8 +27,6 @@ import {store} from "./models";
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-
 // API setting up
 const api = new Api()
 api.setup()

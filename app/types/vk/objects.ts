@@ -4102,6 +4102,7 @@ export interface MessagesConversation {
      */
     mentions?: number[];
     [key: string]: any;
+    peer: MessagesConversationPeer
     important?: boolean | number;
     unanswered?: boolean | number;
     special_service_type?: "business_notify";
@@ -4135,6 +4136,7 @@ export interface MessagesConversationPeer {
     [key: string]: any;
     id: number;
     local_id?: number;
+    type: MessagesConversationPeerType
 }
 
 export type MessagesConversationPeerType = "chat" | "email" | "user" | "group";
@@ -4439,6 +4441,7 @@ export interface MessagesMessage {
     payload?: string;
     ref?: string;
     ref_source?: string;
+    geo?: WallGeo
 }
 
 export interface MessagesMessageAction {
@@ -8017,6 +8020,8 @@ export interface WallGeo {
      * Place type
      */
     type?: string;
+
+    place?: BasePlace
     [key: string]: any;
 }
 

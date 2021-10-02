@@ -5,7 +5,17 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import {Button, Image, ImageSourcePropType, Text, useColorScheme, View} from "react-native";
+import {
+    Button,
+    Image,
+    ImageSourcePropType,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    useColorScheme,
+    View,
+    ViewStyle
+} from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {MessengerScreen} from "../screens/Messenger/MessengerScreen"
@@ -14,6 +24,8 @@ import LoginScreen from "../screens/Login/LoginScreen";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../models";
 import ConversationScreen from "../screens/Messenger/Conversation";
+import Icon from 'react-native-vector-icons/Feather'
+import {Header} from "../components";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -43,12 +55,13 @@ const AppStack = () => {
 
     return (
         <Stack.Navigator
-            screenOptions={{
+            screenOptions={({navigation, route}) => ({
                 headerShown: true,
                 contentStyle: {
                     backgroundColor: 'white'
                 },
-            }}
+                header: Header,
+            })}
         >
             {
                 isLoggedIn ? (
@@ -73,16 +86,13 @@ const AppStack = () => {
                             }),
                         }}/>
                         <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (
-                            {headerBackVisible: true, headerBackTitleVisible: false,
-                                headerTitle: (props) => {
-                                    console.log('HGHELO', )
+                            {headerBackVisible: true, headerBackTitleVisible: false, headerTitleAlign: 'left', headerTitle: (props) => {
 
-                                    return (<View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
+                                    return (<View style={{display: 'flex', width: '100%', alignItems: 'center',  justifyContent: 'flex-start', flexDirection: 'row'}}>
                                         <Image source={{uri: route.params!.photo}} style={{backgroundColor: 'gray', marginRight: 10, height: 30, width: 30, borderRadius: 100}}/>
                                         <Text style={{fontWeight: 'bold'}}>{`${route.params!.title.toString()}`}</Text>
                                     </View>)
-                                }
-                            })} />
+                                },})} />
                     </>
                 ) : <Stack.Screen name="login" component={LoginScreen} options={{title: 'Войдите', headerLargeTitle: true, headerTransparent: true}}/>
             }

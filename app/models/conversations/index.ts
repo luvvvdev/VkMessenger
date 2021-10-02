@@ -14,7 +14,7 @@ export const conversations = createModel<RootModel>()({
     } as ConversationsState,
     reducers: {
         update: (state, payload: ConversationsState) => (payload ? payload : state),
-        clean: () => ({
+        clear: () => ({
             count: 0,
             unread_count: 0,
             items: [],
@@ -23,9 +23,11 @@ export const conversations = createModel<RootModel>()({
         })
     },
     effects: dispatch => ({
-        get: async () => {
+        get: async (payload, state) => {
             try {
-                const {data} = await global.api.getConversations()
+                const {data, kind} = await global.api.getConversations()
+
+                if (kind !== 'ok') return
 
                 dispatch.conversations.update(data)
             }

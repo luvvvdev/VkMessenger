@@ -1,7 +1,14 @@
 import {ApisauceInstance, create, ApiResponse} from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-import {GetConversationsResult, GetUserResult} from "./api.types";
+import {
+  GetConversationsByIdResult,
+  GetConversationsResult,
+  GetLongPollServerResult,
+  GetLongPollUpdatesResult,
+  GetUserResult,
+  PostMessageResult
+} from "./api.types";
 import VKLogin from "react-native-vkontakte-login";
 
 /**
@@ -50,7 +57,7 @@ export class Api {
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
-        'User-Agent': 'VKDesktopMessenger/5.3.2 (darwin; 20.4.0; x64)'
+        //'User-Agent': 'VKDesktopMessenger/5.3.2 (darwin; 20.4.0; x64)'
       },
       params: {
         access_token, v, lang: 'ru'
@@ -77,10 +84,10 @@ export class Api {
     }
   }
 
-  async findConversations(): Promise<GetConversationsResult> {
+  async getHistory(peer_id: number, offset?: number, count?: number): Promise<GetConversationsResult> {
     try {
-      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
-        extended: true
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getHistory`, {
+        extended: true, peer_id, count: count || 50, offset: offset || 0, rev: 0
       })
 
       // the typical ways to die when calling an api
@@ -89,13 +96,104 @@ export class Api {
         if (problem) return problem
       }
 
-      // console.log(response)
+      return { kind: "ok", data: response.data.response } as GetConversationsResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
+  async findConversations(query: string): Promise<GetConversationsResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
+        extended: true, q: query
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
 
       return { kind: "ok", data: response.data.response } as GetConversationsResult
     } catch (e) {
       return {kind: "bad-data"}
     }
   }
+
+  async sendMessage(peer_id: number, message: string): Promise<PostMessageResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.post(`/method/messages.send`, {
+        extended: true, offset: 0, count: 200
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data.response } as PostMessageResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
+  async getLongPollServer(): Promise<GetLongPollServerResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getLongPollServer`, {
+        need_pts: 1, lp_version: 3
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data.response } as GetLongPollServerResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
+  async getLongPollUpdates(server: string, key: string, ts: number): Promise<GetLongPollUpdatesResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`https://${server}`, {
+        act: 'a_check', key, ts, wait: 25, mode: 234, version: 12
+      }, {baseURL: undefined})
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data } as GetLongPollUpdatesResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
+  async getConversationsById(peer_ids: number[]): Promise<GetConversationsByIdResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversationsById`, {
+        extended: true, peer_ids: peer_ids
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      console.log('GET CONVERSATIONB', response.data)
+
+      return { kind: "ok", data: response.data.response } as GetConversationsByIdResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
+
 
   async getConversations(): Promise<GetConversationsResult> {
     try {
@@ -109,7 +207,7 @@ export class Api {
         if (problem) return problem
       }
 
-      // console.log(response)
+      //console.log(response.data)
 
       return { kind: "ok", data: response.data.response } as GetConversationsResult
     } catch (e) {

@@ -1226,7 +1226,10 @@ export interface MessagesGetConversationMembersResponse {
     groups?: Objects.GroupsGroupFull[];
 }
 
-export type MessagesGetConversationsByIdExtendedResponse = Objects.MessagesGetConversationById //& MessagesGetConversationsByIdExtendedResponse1;
+export type MessagesGetConversationsByIdExtendedResponse = Objects.MessagesGetConversationById & {
+    profiles?: Objects.UsersUserFull[]
+    groups?: Objects.GroupsGroupFull[]
+};
 
 export type MessagesGetConversationsByIdResponse = Objects.MessagesGetConversationById;
 

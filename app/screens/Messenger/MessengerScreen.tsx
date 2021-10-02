@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {
     SafeAreaView,
-    ScrollView, TouchableOpacity,
+    ScrollView,
     View,
 } from "react-native";
 import {Dispatch, RootState} from "../../models";
@@ -9,22 +9,38 @@ import {useDispatch, useSelector} from "react-redux";
 import {ConversationsState} from "../../models/conversations";
 import {ConversationItem} from "../../components/ConversationItem/ConversationItem";
 import {TextField} from "../../components/TextField/TextField";
-import {navigate} from "../../navigators";
+import FastImage from "react-native-fast-image";
 
 export const MessengerScreen = () => {
     const dispatch = useDispatch<Dispatch>()
     const conversations = useSelector<RootState, ConversationsState>((state) => state.conversations)
 
     const getConversations = () => {
-        dispatch.conversations.get().then((data) => {
-            setTimeout(() => getConversations(), 5000)
-            return data
+        if (conversations.profiles && conversations.groups) {
+            const profilesPhotos = conversations.profiles?.map((profile) => ({uri: profile.photo_100})).filter((src) => typeof src.uri !== 'undefined')
+            const groupsPhotos = conversations.groups?.map((group) => ({uri: group.photo_100})).filter((src) => typeof src.uri !== 'undefined')
+
+            FastImage.preload([...profilesPhotos, ...groupsPhotos])
+        }
+        dispatch.conversations.get().then(() => {
+            //setTimeout(() => getConversations(), 5000)
         })
     }
 
+    const subscribeUpdates = async () => {
+        await dispatch.longpoll.connect()
+        await dispatch.longpoll.lookup()
+    }
+
+    //dispatch.conversations.clear()
+
     useEffect(() => {
+        subscribeUpdates()
+
         getConversations()
     }, [])
+
+    const conversationsSortedByDate = conversations
 
     return (
         <SafeAreaView>

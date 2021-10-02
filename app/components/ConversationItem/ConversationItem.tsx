@@ -1,7 +1,4 @@
-
 import {
-    Image,
-    ImageSourcePropType,
     ImageStyle,
     StyleProp,
     Text,
@@ -11,12 +8,13 @@ import {
     ViewStyle
 } from "react-native";
 import React from "react";
-import {format, formatDistanceToNowStrict, isSameYear} from 'date-fns'
+import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear} from 'date-fns'
 import {GroupsGroupFull, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../models";
 import {isToday} from "date-fns";
 import {navigate} from "../../navigators";
+import FastImage from "react-native-fast-image";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -85,6 +83,7 @@ const ConversationItem = ({data}: ConversationItemProps) => {
         switch (conversation.peer.type) {
             case 'user':
                 const profile = profiles.find((profile) => profile.id === conversation.peer.id)
+
                 return `${profile?.first_name} ${profile?.last_name}`
             case 'group':
                 const group = groups.find(group => group.id === conversation.peer.local_id)
@@ -94,7 +93,7 @@ const ConversationItem = ({data}: ConversationItemProps) => {
         }
     }
 
-    const imgSource: ImageSourcePropType = {
+    const imgSource = {
         method: 'GET',
         uri: getPhotoUrl()
     }
@@ -103,6 +102,8 @@ const ConversationItem = ({data}: ConversationItemProps) => {
         if (last_message.text) return last_message.text
 
         const {attachments} = last_message
+
+        if (!attachments) return 'None'
 
         const first_attachment = attachments![0]
 
@@ -123,6 +124,7 @@ const ConversationItem = ({data}: ConversationItemProps) => {
     const getDate = () => {
         const messageDate = last_message.date * 1000
 
+        if (differenceInMinutes(Date.now(), messageDate) <= 1) return 'Сейчас'
         if (isToday(messageDate)) return formatDistanceToNowStrict(messageDate)
         if (isSameYear(messageDate, new Date())) return format(messageDate, 'd MMM')
 
@@ -133,7 +135,7 @@ const ConversationItem = ({data}: ConversationItemProps) => {
         <TouchableOpacity onPress={() => navigate('conversation', {conversation: conversation, photo: getPhotoUrl(), title: getConversationName()})}>
             <View style={styles.container}>
                 <View style={styles.leadingPart}>
-                    <Image style={styles.image as ImageStyle} source={imgSource} />
+                    <FastImage style={styles.image as any} source={imgSource} />
                     <View>
                         <Text style={styles.userName}>{`${getConversationName()}`}</Text>
                         <View style={{width: 260, display: "flex", flexDirection: 'row'}}>

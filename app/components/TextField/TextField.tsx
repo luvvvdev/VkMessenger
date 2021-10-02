@@ -12,7 +12,7 @@ const TextField = ({variant, style, ...rest}: TextFieldProps) => {
         primary: {
             backgroundColor: '#EBEBEB',
             padding: 10,
-            borderRadius: 5,
+            borderRadius: 8,
 
         },
         transparent: {
