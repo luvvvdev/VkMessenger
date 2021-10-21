@@ -1,11 +1,12 @@
 import {Text, View, ViewStyle} from "react-native";
 import React, {useEffect, useState} from "react";
-import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
+import {GroupsGroupFull, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
+import {Message} from "../../entities/Message";
 
-type MessageProps = {
-    message: MessagesMessage
+type MessageItemProps = {
+    message: Message
     style?: ViewStyle
     extraData: {
         profiles: UsersUserFull[]
@@ -14,7 +15,7 @@ type MessageProps = {
     myId: number
 }
 
-const Message = ({message, style, extraData: {profiles, groups}, myId}: MessageProps) => {
+const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: MessageItemProps) => {
     const [peer, setPeer] = useState<UsersUserFull | GroupsGroupFull | null>(null)
 
     const isMine = message.from_id === myId
@@ -51,4 +52,4 @@ const Message = ({message, style, extraData: {profiles, groups}, myId}: MessageP
     )
 }
 
-export {Message}
+export {MessageItem}

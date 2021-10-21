@@ -1,10 +1,11 @@
 module.exports = {
-  presets: ["module:metro-react-native-babel-preset"],
+  presets: ["@babel/preset-react", "@babel/plugin-syntax-jsx"],
   env: {
     production: {},
   },
   plugins: [
     [
+        "@babel/plugin-syntax-jsx",
       "@babel/plugin-proposal-decorators",
       {
         legacy: true,
