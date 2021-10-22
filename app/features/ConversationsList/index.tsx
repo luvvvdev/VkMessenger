@@ -30,7 +30,6 @@ const ConversationsList = () => {
 
         if (!item.conversation) {
             console.log('error VALUE', item.conversation)
-
             // dispatch.conversations.removeConversation({peer_id: value.last_message.peer_id})
             return null
         }

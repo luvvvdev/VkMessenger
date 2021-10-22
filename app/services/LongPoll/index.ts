@@ -149,6 +149,7 @@ class LongPollService {
         this.store.dispatch.conversations.editLastMessage({message}).catch((e) => {
             console.error(e)
         })
+
         this.store.dispatch.history.addMessage({message})
     }
 

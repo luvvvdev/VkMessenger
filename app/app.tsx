@@ -29,6 +29,7 @@ import * as UIKit from 'react-native-ios-kit'
 import {PersistGate} from 'redux-persist/lib/integration/react'
 
 import {getPersistor} from "@rematch/persist";
+import {Text, View} from "react-native";
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:

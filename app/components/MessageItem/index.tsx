@@ -55,9 +55,12 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                             {message.text.length > 0 && <Text style={styles.messageText} textBreakStrategy={'simple'}>{message.text}</Text>}
                             {message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo' ?
                                 (
-                                    <FastImage
-                                        style={{width: attachmentWnH, height: attachmentWnH}}
-                                        source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>
+                                    <View style={{width: 200, height: 200}}>
+                                        <FastImage
+                                            resizeMode={'stretch'}
+                                            style={{width: 200, height: 200, maxWidth: attachmentWnH, maxHeight: attachmentWnH}}
+                                            source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>
+                                    </View>
                                         ) : null
                             }
                         </View>

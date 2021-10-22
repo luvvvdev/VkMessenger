@@ -1,13 +1,5 @@
 import {createModel} from "@rematch/core";
 import {RootModel} from "../index";
-import {
-    GroupsGroupFull,
-    MessagesConversation,
-    MessagesMessage,
-    UsersUserFull
-} from "../../types/vk";
-import {getMessageByEvent} from "./utils/messageFromEvent";
-import {Message} from "../../entities/Message";
 
 type LongPollState = {
     server: string | null

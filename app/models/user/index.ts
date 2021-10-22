@@ -47,7 +47,6 @@ export const user = createModel<RootModel>()({
             await VKLogin.logout()
 
             dispatch.history.reset();
-            (dispatch.longpoll.reset as () => void)();
             (dispatch.conversations.reset as () => void)();
             (dispatch.user.update as any)({user_data: null, login_data: null});
         }

@@ -1,10 +1,11 @@
 import React from "react";
 import Screen from "../../../components/Screen";
-
-const Conversation = React.lazy(() => import('./Conversation'))
+import Conversation from './Conversation'
+import {View} from "react-native";
+// const Conversation = React.lazy(() => import('./Conversation'))
 
 export default (props) => (
-    <Screen>
+    <View>
         <Conversation {...props}/>
-    </Screen>
+    </View>
 )

@@ -66,11 +66,11 @@ const history = createModel<RootModel>()({
             return ({...state, items: newItems})
         },
         setCurrentId: (state, payload: {peer_id: number | null}) => ({...state, current_id: payload.peer_id}),
-        addMessage: (state, {message}: {message: Message}) => {
-            // console.log('add new message to history', message)
+        addMessage: (state, {message}: {message: MessagesMessage}) => {
+            console.log('add new message to history', message)
             if (message.peer_id !== state.current_id) {
-                // console.log('unable to add new message')
-                return state
+                //console.log('unable to add new message')
+                //return state
             }
 
             /* const existsMessageIndex = state.items[message.peer_id].items.findIndex((m) => m.id === message.id)
@@ -112,8 +112,6 @@ const history = createModel<RootModel>()({
                     payload.count,
                     startMessageId)
 
-                console.log('smid', startMessageId)
-
                 if (historyResponse.kind !== 'ok' || !historyResponse.data.response) return
 
                 const data = historyResponse.data.response
@@ -142,7 +140,12 @@ const history = createModel<RootModel>()({
         },
         loadMore: async (payload: {count?: number}, state) => {
             // console.log('loadMore start', state.history, state.history.items[state.history.current_id!])
-            if (!state.history.current_id || !state.history.items[state.history.current_id]) return
+
+            if (!state.history.current_id) return
+
+            const currentPeer = state.history.items[state.history.current_id]
+
+            if (!currentPeer || currentPeer.items.length >= currentPeer.count) return
 
             const offset = state.history.items[state.history.current_id].items.length
 
@@ -150,14 +153,13 @@ const history = createModel<RootModel>()({
 
             await dispatch.history.get({offset, count: 200, peer_id: state.history.current_id} as HistoryGetEffect)
         },
-        sendMessage: async ({message}: {message: Message}, state) => {
+        sendMessage: async ({message}: {message: MessagesMessage}, state) => {
             console.log('trying to send message with id', message.id)
-            message.loading = true
 
-            await dispatch.history.addMessage({message})
+            //dispatch.history.addMessage({message})
 
-            const response = await global.api.sendMessage(message.peer_id, message.text)
-
+            const response = global.api.sendMessage(message.peer_id, message.text)
+/*
             if (response.kind !== 'ok' || !response.data.response) return
 
             // const messageId: number = response.data
@@ -178,7 +180,8 @@ const history = createModel<RootModel>()({
                 return
             }
 
-            await dispatch.history.addMessage({message: loadingMessage})
+            await dispatch.history.addMessage({message: loadingMessage})*/
+
             //const newMessage = new Message({id: messages[0].id + 1, peer_id: peerId, from_id: myId, text: textMessage, date: Date.now(), attachments: []} as MessagesMessage)
             //newMessage.loading = true
 

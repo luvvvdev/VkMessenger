@@ -1,18 +1,16 @@
 import {
     ImageStyle,
-    StyleProp, StyleSheet,
+    StyleSheet,
     Text,
-    TextStyle,
     TouchableOpacity,
     View,
-    ViewStyle
 } from "react-native";
 import React, {memo} from "react";
-import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear, isToday} from 'date-fns'
 import {GroupsGroupFull, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../models";
 import FastImage from "react-native-fast-image";
+import {TimeAgo} from "./TimeAgo";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -21,16 +19,6 @@ type ConversationItemProps = {
 type ProfilesAndGroups = {
     profiles: UsersUserFull[]
     groups: GroupsGroupFull[]
-}
-
-const getDate = (last_message) => {
-    const messageDate = last_message.date * 1000
-
-    if (differenceInMinutes(Date.now(), messageDate) <= 1) return 'Сейчас'
-    if (isToday(messageDate)) return formatDistanceToNowStrict(messageDate)
-    if (isSameYear(messageDate, new Date())) return format(messageDate, 'd MMM')
-
-    return format(messageDate, 'dd.MM.yyyy')
 }
 
 const getLastMessageText = (last_message) => {
@@ -112,7 +100,7 @@ const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
                         <Text style={styles.userName}>{`${conversationName}`}</Text>
                         <View style={styles.lastMessageContainer}>
                             <Text style={styles.textMessage} numberOfLines={1}>{`${getLastMessageText(last_message)}`}</Text>
-                            <Text style={{color: 'gray'}}>{' '}· {getDate(last_message)}</Text>
+                            <TimeAgo last_message={last_message}/>
                         </View>
                     </View>
                 </View>

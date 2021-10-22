@@ -1,4 +1,4 @@
-import {ActivityIndicator, Dimensions, ListRenderItemInfo, SectionList, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, StyleSheet, View} from "react-native";
 import React, {useEffect} from "react";
 import {MessagesMessage} from "../../types/vk";
 import MessageItem from "../../components/MessageItem";
@@ -7,10 +7,9 @@ import {Dispatch, RootState} from "../../models";
 import {navigate} from "../../navigators";
 import * as _ from 'lodash'
 import startOfDay from 'date-fns/startOfDay'
-import {format, formatDistanceToNowStrict, isSameYear, isToday} from "date-fns";
-import BigList, {BigListItem} from 'react-native-big-list'
+import {format, isSameYear, isToday} from "date-fns";
+import BigList from 'react-native-big-list'
 import SectionHeader from "../ConversationsList/SectionHeader";
-import {LargeList} from 'react-native-largelist'
 
 type MessagesProps = {
     peer_id: number
@@ -32,16 +31,17 @@ export default ({peer_id}: MessagesProps) => {
 
     const myId = useSelector((state: RootState) => state.user.user_data?.id)
     const historyLoading = useSelector((state: RootState) => state.loading.effects.history.get.loading)
+    const loadingMore = useSelector((state: RootState) => state.loading.effects.history.loadMore.loading)
 
-    const messages = useSelector<RootState, Array<{items: MessagesMessage[]}>>((state) => {
+    const messages = useSelector<RootState, Array<MessagesMessage[]>>((state) => {
         const messages = state.history.items[peer_id]?.items
 
-        const _partitionedMessages: {[key: string]: MessagesMessage[]} = _.groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
+        const groupedMessages: {[key: string]: MessagesMessage[]} = _.groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
 
-        const sectionedMessages: Array<{items: MessagesMessage[]}> = []
+        const sectionedMessages: Array<MessagesMessage[]> = []
 
-        Object.keys(_partitionedMessages).forEach((key) => {
-            sectionedMessages.push({items: _partitionedMessages[key]})
+        Object.keys(groupedMessages).forEach((key, index) => {
+            sectionedMessages.push(groupedMessages[key])
         })
 
         return sectionedMessages
@@ -76,13 +76,15 @@ export default ({peer_id}: MessagesProps) => {
     }
 
     const renderSectionHeader = (section) => (
-        <SectionHeader title={getDate(getStartOfDayUTC(messages![section].items[0]))} />
+        <SectionHeader title={getDate(getStartOfDayUTC(messages![section][0]))} />
     )
 
-    const getHeightForItem = ({section, row}) => {
-        const msg = messages[section].items[row]
+    const getHeightForItem = (section: number, item: number) => {
+        if (!Number.isInteger(item) || !Number.isInteger(section)) return 60
 
-        const baseContainerHeight = 55
+        const msg = messages[section][item]
+
+        const baseContainerHeight = 60
         const rowMaxSymbolsCount = 37
         const heightOfRow = 20 // height for one row
 
@@ -93,51 +95,44 @@ export default ({peer_id}: MessagesProps) => {
 
         const hasImage = msg.attachments && msg.attachments.length > 0 && msg.attachments[0].type === 'photo'
 
-        return baseContainerHeight + heightOfRows + (hasImage ? imageHeight : 0)
+        const height = baseContainerHeight + (msg.text.length > 0 ? heightOfRows : 0) + (hasImage ? imageHeight : 0)
+
+        return height
     }
 
-    return (
-        <View>
-            {
-                !historyLoading && messages ? (
-                    <LargeList
-                        inverted
-                        data={messages}
-                        style={styles.messagesList}
-                        renderSection={renderSectionHeader}
-                        heightForIndexPath={getHeightForItem}
-                        renderIndexPath={indexPath => renderItem(messages[indexPath.section].items[indexPath.row])}
-                        // extraData={[groups, profiles, messages]}
-                        // inverted={true}
-                        // removeClippedSubviews={true}
-                        // persistentScrollbar={true}
-                        // initialNumToRender={20}
-                        // maxToRenderPerBatch={50}
-                        // onEndReachedThreshold={0.5}
-                        // onEndReached={onEndReached}
-                        // renderItem={renderItem}
-                        // keyExtractor={keyExtractor}
-                        // contentInsetAdjustmentBehavior={'never'}
-                        // automaticallyAdjustContentInsets={false}
-                        // style={styles.messagesList}
-                        // renderSectionFooter={renderSectionHeader}
-                        // sections={messages}
-                        // sectionFooterHeight={40}
-                        // itemHeight={40}
-                    />
-                ) : (
-                    <View style={styles.messagesListLoadingContainer}>
-                        <ActivityIndicator />
-                    </View>
-                )
-            }
+    if (historyLoading && !loadingMore) return (
+        <View style={styles.messagesListLoadingContainer}>
+            <ActivityIndicator />
         </View>
-            )
+    )
+
+    return (
+            <View style={styles.messagesList}>
+                <BigList
+                    inverted
+                    sections={messages}
+                    snapToAlignment={'end'}
+                    renderSectionFooter={renderSectionHeader}
+                    contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}
+                    // @ts-ignore
+                    itemHeight={getHeightForItem}
+                    sectionFooterHeight={30}
+                    renderItem={(item) => renderItem(item.item)}
+                    keyExtractor={keyExtractor}
+                    onEndReached={onEndReached}
+                    onEndReachedThreshold={0.3}
+                    footerHeight={50}
+                    removeClippedSubviews={true}
+                    batchSizeThreshold={0.5}
+                    renderFooter={loadingMore ? () => <ActivityIndicator /> : undefined}
+                />
+            </View>
+    )
 }
 
 const styles = StyleSheet.create({
     messagesList: {
-       height: '94.8%',
+       height: '94%',
         width: '100%'
     },
     messagesListLoadingContainer: {
