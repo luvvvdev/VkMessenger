@@ -709,7 +709,7 @@ export enum APIErrorCode {
      */
     MESSAGES_TOO_LONG_FORWARDS = 913,
     /**
-     * Message is too long
+     * MessageItem is too long
      *
      * Code: `914`
      */
@@ -781,7 +781,7 @@ export enum APIErrorCode {
      */
     MESSAGES_CONTACT_NOT_FOUND = 936,
     /**
-     * Message request already sent
+     * MessageItem request already sent
      *
      * Code: `939`
      */

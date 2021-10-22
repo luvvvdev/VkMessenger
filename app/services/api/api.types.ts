@@ -1,5 +1,6 @@
 import { GeneralApiProblem } from "./api-problem"
 import {
+    BaseError,
     MessagesGetConversationsByIdExtendedResponse,
     MessagesGetConversationsResponse,
     MessagesGetHistoryExtendedResponse, MessagesSendResponse,
@@ -18,7 +19,9 @@ type MessagesLongPollUpdatesResponse = {
     failed?: number
 }
 
-type ApiResult<T> = {kind: 'ok', data: T}
+export type VkResponse<T> = {response?: T, error?: BaseError}
+
+type ApiResult<T> = {kind: 'ok', data: VkResponse<T>}
 
 type ApiRes<T> = ApiResult<T> | GeneralApiProblem
 
@@ -28,5 +31,5 @@ export type GetUserResult = ApiRes<UsersGetResponse>
 export type GetHistoryResult = ApiRes<MessagesGetHistoryExtendedResponse>
 export type PostMessageResult = ApiRes<MessagesSendResponse>
 export type GetLongPollServerResult = ApiRes<MessagesGetLongPollServerResponse>
-export type GetLongPollUpdatesResult = ApiRes<MessagesLongPollUpdatesResponse>
-export type GetLongPollUpdatesResult = ApiRes<GroupsGet>
+export type GetLongPollUpdatesResult = {kind: 'ok', data: MessagesLongPollUpdatesResponse}
+// export type GetLongPollUpdatesResult = ApiRes<GroupsGet>

@@ -16,7 +16,7 @@ export interface RootModel extends Models<RootModel> {
 
 export const models: RootModel = {conversations, user, history, longpoll};
 
-export const store = init({models, plugins: [persistPlugin<RootState, any, any>({key: 'root', storage: AsyncStorage})]})
+export const store = init<RootModel>({models, plugins: [persistPlugin<RootState, any, any>({key: 'root', storage: AsyncStorage})]})
 
 export type Store = typeof store;
 export type Dispatch = RematchDispatch<RootModel>;

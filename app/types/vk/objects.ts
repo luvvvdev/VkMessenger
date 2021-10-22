@@ -2728,7 +2728,7 @@ export interface FriendsRequestsXtrMessage {
      */
     from?: string;
     /**
-     * Message sent with a request
+     * MessageItem sent with a request
      */
     message?: string;
     /**
@@ -4078,7 +4078,7 @@ export interface MessagesConversation {
      */
     last_message_id: number;
     /**
-     * Conversation message ID of the last message in conversation
+     * ConversationScreen message ID of the last message in conversation
      */
     last_conversation_message_id?: number;
     /**
@@ -4098,7 +4098,7 @@ export interface MessagesConversation {
      */
     is_marked_unread?: boolean | number;
     /**
-     * Message id of message with mention
+     * MessageItem id of message with mention
      */
     mentions?: number[];
     [key: string]: any;
@@ -4120,7 +4120,7 @@ export interface MessagesConversationMember {
      */
     can_kick?: boolean | number;
     /**
-     * Message request date
+     * MessageItem request date
      */
     request_date?: number;
     [key: string]: any;
@@ -4154,7 +4154,7 @@ export interface MessagesConversationSortId {
 }
 
 export interface MessagesConversationWithMessage {
-    [key: string]: any;
+    // [key: string]: any;
     conversation: MessagesConversation
     last_message: MessagesMessage
 
@@ -4162,7 +4162,7 @@ export interface MessagesConversationWithMessage {
 
 export interface MessagesForeignMessage {
     /**
-     * Conversation message ID
+     * ConversationScreen message ID
      */
     conversation_message_id?: number;
     /**
@@ -4170,11 +4170,11 @@ export interface MessagesForeignMessage {
      */
     date: number;
     /**
-     * Message author's ID
+     * MessageItem author's ID
      */
     from_id: number;
     /**
-     * Message ID
+     * MessageItem ID
      */
     id?: number;
     /**
@@ -4182,7 +4182,7 @@ export interface MessagesForeignMessage {
      */
     peer_id?: number;
     /**
-     * Message text
+     * MessageItem text
      */
     text: string;
     /**
@@ -4204,19 +4204,19 @@ export interface MessagesForeignMessage {
 
 export interface MessagesForward {
     /**
-     * Messages owner_id
+     * MessagesList owner_id
      */
     owner_id?: number;
     /**
-     * Messages peer_id
+     * MessagesList peer_id
      */
     peer_id?: number;
     /**
-     * Message conversation_message_id
+     * MessageItem conversation_message_id
      */
     conversation_message_ids?: number[];
     /**
-     * Message message_id
+     * MessageItem message_id
      */
     message_ids?: number[];
     /**
@@ -4265,11 +4265,11 @@ export interface MessagesGraffiti {
 
 export interface MessagesHistoryAttachment {
     /**
-     * Message ID
+     * MessageItem ID
      */
     message_id: number;
     /**
-     * Message author's ID
+     * MessageItem author's ID
      */
     from_id: number;
     /**
@@ -4387,11 +4387,11 @@ export interface MessagesMessage {
      */
     date: number;
     /**
-     * Message author's ID
+     * MessageItem author's ID
      */
     from_id: number;
     /**
-     * Message ID
+     * MessageItem ID
      */
     id: number;
     /**
@@ -4415,7 +4415,7 @@ export interface MessagesMessage {
      */
     random_id?: number;
     /**
-     * Message text
+     * MessageItem text
      */
     text: string;
     /**
@@ -4446,7 +4446,7 @@ export interface MessagesMessage {
 
 export interface MessagesMessageAction {
     /**
-     * Message ID
+     * MessageItem ID
      */
     conversation_message_id?: number;
     /**
@@ -4458,7 +4458,7 @@ export interface MessagesMessageAction {
      */
     member_id?: number;
     /**
-     * Message body of related message
+     * MessageItem body of related message
      */
     message?: string;
     /**
@@ -4499,11 +4499,11 @@ export interface MessagesMessageRequestData {
      */
     status?: string;
     /**
-     * Message request sender id
+     * MessageItem request sender id
      */
     inviter_id?: number;
     /**
-     * Message request date
+     * MessageItem request date
      */
     request_date?: number;
     [key: string]: any;
@@ -4534,11 +4534,11 @@ export interface MessagesPinnedMessage {
      */
     date: number;
     /**
-     * Message author's ID
+     * MessageItem author's ID
      */
     from_id: number;
     /**
-     * Message ID
+     * MessageItem ID
      */
     id: number;
     /**
@@ -4546,7 +4546,7 @@ export interface MessagesPinnedMessage {
      */
     peer_id: number;
     /**
-     * Message text
+     * MessageItem text
      */
     text: string;
     [key: string]: any;

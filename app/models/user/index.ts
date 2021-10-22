@@ -27,13 +27,15 @@ export const user = createModel<RootModel>()({
 
                 const user_request = await global.api.getUser() as GetUserResult
 
-                if (user_request.kind === 'ok') {
+                if (user_request.kind === 'ok' && user_request.data) {
                     user_data = user_request.data[0]
                 }
 
                 console.log('userData', user_data)
             } catch (e) {
                 console.log(e)
+
+                return
             }
 
             // @ts-ignore
@@ -41,8 +43,11 @@ export const user = createModel<RootModel>()({
         },
         logout: async () => {
             await VKLogin.logout()
-            // @ts-ignore
-            dispatch.user.update({user_data: null, login_data: null})
+
+            dispatch.history.reset();
+            (dispatch.longpoll.reset as () => void)();
+            (dispatch.conversations.reset as () => void)();
+            (dispatch.user.update as any)({user_data: null, login_data: null});
         }
     })
 

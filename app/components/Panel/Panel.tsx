@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
-import { Header } from "../Header/Header";
 
 type PanelProps = {
   children: ReactNode,
@@ -16,7 +15,6 @@ const Panel = ({children, title}: PanelProps) => {
 
   return (
     <View style={style}>
-      <Header>{title}</Header>
       {children}
     </View>
   )

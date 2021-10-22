@@ -311,6 +311,8 @@ PODS:
     - React-Core
   - react-native-flipper (0.113.0):
     - React-Core
+  - react-native-ios-modal (0.1.8):
+    - React
   - react-native-performance (2.0.0):
     - React-Core
   - react-native-safe-area-context (3.1.8):
@@ -469,6 +471,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-background-actions (from `../node_modules/react-native-background-actions`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
+  - react-native-ios-modal (from `../node_modules/react-native-ios-modal`)
   - react-native-performance (from `../node_modules/react-native-performance/ios`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-vkontakte-login (from `../node_modules/react-native-vkontakte-login`)
@@ -572,6 +575,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-actions"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
+  react-native-ios-modal:
+    :path: "../node_modules/react-native-ios-modal"
   react-native-performance:
     :path: "../node_modules/react-native-performance/ios"
   react-native-safe-area-context:
@@ -668,6 +673,7 @@ SPEC CHECKSUMS:
   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
   react-native-background-actions: 7fb2f664de6bedb67ee9c1816894d2213bd1843c
   react-native-flipper: 2a212eb0fead9ae9b42d1eb75604757cdf36f2bb
+  react-native-ios-modal: 2894324e2590b0d5c50572370ccc4d640596e0e7
   react-native-performance: 6bd6cfac80594775fb782405fceaaf206becf53b
   react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e

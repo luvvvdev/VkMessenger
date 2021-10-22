@@ -4,28 +4,24 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React from "react"
+import React, {useRef} from "react"
 import {
     Button,
-    Image,
-    ImageSourcePropType,
-    SafeAreaView,
-    Text,
-    TouchableOpacity,
+    Text, TouchableOpacity,
     useColorScheme,
     View,
-    ViewStyle
 } from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import {MessengerScreen} from "../screens/Messenger/MessengerScreen"
 import {navigate, navigationRef} from "./navigation-utilities"
 import LoginScreen from "../screens/Login/LoginScreen";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../models";
-import ConversationScreen from "../screens/Messenger/Conversation";
-import Icon from 'react-native-vector-icons/Feather'
+import ConversationScreen from "../screens/Messenger/ConversationScreen/ConversationScreen";
 import {Header} from "../components";
+import ConversationsScreen from "../screens/Messenger/ConversationsScreen/ConversationsScreen";
+import SettingsModal from "../features/SettingsModal";
+import FastImage from "react-native-fast-image";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -60,20 +56,34 @@ const AppStack = () => {
                 contentStyle: {
                     backgroundColor: 'white'
                 },
+                headerTransparent: true,
+                headerTintColor: 'white',
+                headerShadowVisible: false,
                 header: Header,
             })}
         >
             {
                 isLoggedIn ? (
                     <>
-                        <Stack.Screen name="messenger" component={MessengerScreen} options={{
+                        <Stack.Screen name="messenger" component={ConversationsScreen} options={{
                             title: 'Мессенджер', headerTransparent: true, animationTypeForReplace: 'push',
                             headerLeft: () => {
-                                const imgSource: ImageSourcePropType = {
+                                const modalRef = useRef(null)
+                                const imgSource = {
                                     method: 'GET',
                                     uri: userData?.photo_100
                                 }
-                                return <Image style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
+
+                                return (
+                                    <View>
+                                        <SettingsModal ref={modalRef} />
+                                        <TouchableOpacity onPress={() => {
+                                            (modalRef.current as any)?.setVisibility(true)
+                                        }}>
+                                            <FastImage style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )
                             },
                             headerRight: (props => {
                                 const logout = async () => {
@@ -86,13 +96,29 @@ const AppStack = () => {
                             }),
                         }}/>
                         <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (
-                            {headerBackVisible: true, headerBackTitleVisible: false, headerTitleAlign: 'left', headerTitle: (props) => {
+                            {headerBackVisible: true, headerBackTitleVisible: false, headerTitleAlign: 'left', headerShown: true, headerRight: () => {
+                                    const currentPeerId = useSelector<RootState, number | null>((state) => state.history.current_id)
+                                    const dispatch = useDispatch<Dispatch>()
 
-                                    return (<View style={{display: 'flex', width: '100%', alignItems: 'center',  justifyContent: 'flex-start', flexDirection: 'row'}}>
-                                        <Image source={{uri: route.params!.photo}} style={{backgroundColor: 'gray', marginRight: 10, height: 30, width: 30, borderRadius: 100}}/>
-                                        <Text style={{fontWeight: 'bold'}}>{`${route.params!.title.toString()}`}</Text>
-                                    </View>)
-                                },})} />
+                                    if (!currentPeerId) return null
+
+                                    const fullRefresh = () => {
+                                        dispatch.history.clear({peer_id: currentPeerId})
+                                        dispatch.history.get({peer_id: currentPeerId, offset: 0})
+                                    }
+
+                                    return (<Button title={'Clear'} onPress={fullRefresh} />)
+                                },
+                                headerTitle: () => {
+
+                                    return (
+                                            <View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
+                                                <FastImage source={{uri: (route.params! as any).photo}} style={{backgroundColor: 'gray', marginRight: 10, height: 30, width: 30, borderRadius: 100}}/>
+                                                <Text style={{fontWeight: 'bold'}}>{`${(route.params! as any).title.toString()}`}</Text>
+                                            </View>
+                                    )
+                                },
+                            })} />
                     </>
                 ) : <Stack.Screen name="login" component={LoginScreen} options={{title: 'Войдите', headerLargeTitle: true, headerTransparent: true}}/>
             }
@@ -104,14 +130,15 @@ interface NavigationProps extends Partial<React.ComponentProps<typeof Navigation
 
 export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
+
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      {...props}
-    >
-        <AppStack />
-    </NavigationContainer>
+        <NavigationContainer
+            ref={navigationRef}
+            theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            {...props}
+        >
+            <AppStack />
+        </NavigationContainer>
   )
 }
 

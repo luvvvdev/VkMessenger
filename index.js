@@ -8,7 +8,11 @@
 //
 // It's easier just to leave it here.
 import App from "./app/app.tsx"
-import { AppRegistry } from "react-native"
+import { AppRegistry } from 'react-native';
+
+if (true) {
+  require('react-native-performance-flipper-reporter').setupDefaultFlipperReporter();
+}
 
 AppRegistry.registerComponent("VkMessenger", () => App)
 export default App

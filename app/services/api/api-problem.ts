@@ -1,6 +1,9 @@
 import { ApiResponse } from "apisauce"
+import {BaseError} from "../../types/vk";
+import {VkResponse} from "./api.types";
 
 export type GeneralApiProblem =
+    //{kind: 'ok'; data: {error: BaseError}}
   /**
    * Times up.
    */
@@ -37,13 +40,18 @@ export type GeneralApiProblem =
    * The data we received is not in the expected format.
    */
   | { kind: "bad-data" }
+  | {kind: "vk-error", error?: string}
 
 /**
  * Attempts to get a common cause of problems from an api response.
  *
  * @param response The api response.
  */
-export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProblem | void {
+export function getGeneralApiProblem<T>(response: ApiResponse<T | any>): GeneralApiProblem | void {
+  if (!response.problem && response.data.error) {
+    return { kind: 'vk-error', error: response.data.error.error_msg }
+  }
+
   switch (response.problem) {
     case "CONNECTION_ERROR":
       return { kind: "cannot-connect", temporary: true }
@@ -67,8 +75,6 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
           return { kind: "rejected" }
       }
     case "CANCEL_ERROR":
-      return null
+      return {kind: "bad-data"}
   }
-
-  return null
 }

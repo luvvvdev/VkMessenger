@@ -1,19 +1,17 @@
 import {
     ImageStyle,
-    StyleProp,
+    StyleProp, StyleSheet,
     Text,
     TextStyle,
     TouchableOpacity,
     View,
     ViewStyle
 } from "react-native";
-import React from "react";
-import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear} from 'date-fns'
+import React, {memo} from "react";
+import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear, isToday} from 'date-fns'
 import {GroupsGroupFull, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../models";
-import {isToday} from "date-fns";
-import {navigate} from "../../navigators";
 import FastImage from "react-native-fast-image";
 
 type ConversationItemProps = {
@@ -25,128 +23,140 @@ type ProfilesAndGroups = {
     groups: GroupsGroupFull[]
 }
 
-const ConversationItem = ({data}: ConversationItemProps) => {
+const getDate = (last_message) => {
+    const messageDate = last_message.date * 1000
+
+    if (differenceInMinutes(Date.now(), messageDate) <= 1) return 'Сейчас'
+    if (isToday(messageDate)) return formatDistanceToNowStrict(messageDate)
+    if (isSameYear(messageDate, new Date())) return format(messageDate, 'd MMM')
+
+    return format(messageDate, 'dd.MM.yyyy')
+}
+
+const getLastMessageText = (last_message) => {
+    //console.log('message text', last_message)
+    if (last_message.text) return last_message.text
+
+    const {attachments} = last_message
+
+    if (!attachments) return 'None'
+
+    const first_attachment = attachments![0]
+
+    if (!first_attachment) return 'Вложение'
+
+    if (first_attachment?.type === 'photo') return 'Фотография'
+    if (first_attachment?.type === 'sticker') return 'Стикер'
+    if (first_attachment?.type === 'audio_message') return 'Голосовое сообщение'
+    if (first_attachment?.type === 'audio') return 'Аудиозапись'
+    if (first_attachment?.type === 'video') return 'Видео'
+    if (first_attachment?.type === 'link') return 'Ссылка'
+    if (first_attachment?.type === 'wall') return 'Запись'
+    if (first_attachment?.type === 'poll') return 'Опрос'
+
+    return 'Вложение'
+}
+
+const onOpen = (conversation, photo, title) => {
+
+    import('../../navigators').then((n) => {
+        n.navigate('conversation', {conversation, photo, title})
+    })
+}
+
+const getConversationName = (conversation, profiles, groups) => {
+    switch (conversation.peer.type) {
+        case 'user':
+            const profile = profiles.find((profile) => profile.id === conversation.peer.id)
+
+            return `${profile?.first_name} ${profile?.last_name}`
+        case 'group':
+            const group = groups.find(group => group.id === conversation.peer.local_id)
+            return `${group?.name}`
+        case 'chat':
+            return conversation.chat_settings?.title
+    }
+}
+
+const getPhotoUrl = (conversation, profiles, groups) => {
+    switch (conversation.peer.type) {
+        case 'user':
+            const profile = profiles.find((profile) => profile.id === conversation.peer.id)
+            return profile?.photo_100
+        case 'group':
+            const group = groups.find(group => group.id === conversation.peer.local_id)
+            return group?.photo_200
+        case 'chat':
+            return conversation.chat_settings?.photo?.photo_100 || conversation.chat_settings?.photo?.photo_50
+    }
+}
+
+const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
     const {profiles, groups} = useSelector<RootState, ProfilesAndGroups>(({conversations}) => ({profiles: conversations.profiles || [], groups: conversations.groups || []}))
     const {conversation, last_message} = data
 
-    const styles: Record<string, StyleProp<ViewStyle | TextStyle | ImageStyle>> = {
-        container: {
-            display: "flex",
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 10
-        },
-        image: {
-            height: 55,
-            width: 55,
-            borderRadius: 50,
-            backgroundColor: 'gray',
-            marginRight: 10
-        } as ImageStyle,
-        leadingPart: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        userName: {
-            fontSize: 16,
-            fontWeight: '600',
-            width: 260,
-            marginBottom: 4
-        },
-        textMessage: {
-            maxWidth: 200,
-            maxHeight: '100%',
-            color: 'gray',
-        },
-        trailingPart: {
-
-        }
-    }
-
-    const getPhotoUrl = () => {
-        switch (conversation.peer.type) {
-            case 'user':
-                const profile = profiles.find((profile) => profile.id === conversation.peer.id)
-                return profile?.photo_100
-            case 'group':
-                const group = groups.find(group => group.id === conversation.peer.local_id)
-                return group?.photo_200
-            case 'chat':
-                return conversation.chat_settings?.photo?.photo_100 || conversation.chat_settings?.photo?.photo_50
-        }
-    }
-
-    const getConversationName = () => {
-        switch (conversation.peer.type) {
-            case 'user':
-                const profile = profiles.find((profile) => profile.id === conversation.peer.id)
-
-                return `${profile?.first_name} ${profile?.last_name}`
-            case 'group':
-                const group = groups.find(group => group.id === conversation.peer.local_id)
-                return `${group?.name}`
-            case 'chat':
-                return conversation.chat_settings?.title
-        }
-    }
+    const conversationPhotoUrl = getPhotoUrl(conversation, profiles, groups)
+    const conversationName = getConversationName(conversation, profiles, groups)
 
     const imgSource = {
         method: 'GET',
-        uri: getPhotoUrl()
-    }
-
-    const getLastMessageText = () => {
-        if (last_message.text) return last_message.text
-
-        const {attachments} = last_message
-
-        if (!attachments) return 'None'
-
-        const first_attachment = attachments![0]
-
-        if (!first_attachment) return 'Вложение'
-
-        if (first_attachment?.type === 'photo') return 'Фотография'
-        if (first_attachment?.type === 'sticker') return 'Стикер'
-        if (first_attachment?.type === 'audio_message') return 'Голосовое сообщение'
-        if (first_attachment?.type === 'audio') return 'Аудиозапись'
-        if (first_attachment?.type === 'video') return 'Видео'
-        if (first_attachment?.type === 'link') return 'Ссылка'
-        if (first_attachment?.type === 'wall') return 'Запись'
-        if (first_attachment?.type === 'poll') return 'Опрос'
-
-        return 'Вложение'
-    }
-
-    const getDate = () => {
-        const messageDate = last_message.date * 1000
-
-        if (differenceInMinutes(Date.now(), messageDate) <= 1) return 'Сейчас'
-        if (isToday(messageDate)) return formatDistanceToNowStrict(messageDate)
-        if (isSameYear(messageDate, new Date())) return format(messageDate, 'd MMM')
-
-        return format(messageDate, 'dd.MM.yyyy')
+        uri: conversationPhotoUrl
     }
 
     return (
-        <TouchableOpacity onPress={() => navigate('conversation', {conversation: conversation, photo: getPhotoUrl(), title: getConversationName()})}>
+        <TouchableOpacity onPress={() => onOpen(conversation, conversationPhotoUrl, conversationName)}>
             <View style={styles.container}>
                 <View style={styles.leadingPart}>
                     <FastImage style={styles.image as any} source={imgSource} />
                     <View>
-                        <Text style={styles.userName}>{`${getConversationName()}`}</Text>
-                        <View style={{width: 260, display: "flex", flexDirection: 'row'}}>
-                            <Text style={styles.textMessage} numberOfLines={1}>{`${getLastMessageText()}`}</Text>
-                            <Text style={{color: 'gray'}}>{' '}· {getDate()}</Text>
+                        <Text style={styles.userName}>{`${conversationName}`}</Text>
+                        <View style={styles.lastMessageContainer}>
+                            <Text style={styles.textMessage} numberOfLines={1}>{`${getLastMessageText(last_message)}`}</Text>
+                            <Text style={{color: 'gray'}}>{' '}· {getDate(last_message)}</Text>
                         </View>
                     </View>
                 </View>
             </View>
         </TouchableOpacity>
     )
-}
+})
+
+const styles = StyleSheet.create({
+    container: {
+        display: "flex",
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    image: {
+        height: 55,
+        width: 55,
+        borderRadius: 50,
+        backgroundColor: 'gray',
+        marginRight: 10
+    } as ImageStyle,
+    leadingPart: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    userName: {
+        fontSize: 16,
+        fontWeight: '600',
+        width: 260,
+        marginBottom: 4
+    },
+    textMessage: {
+        maxWidth: 200,
+        maxHeight: '100%',
+        color: 'gray',
+    },
+    trailingPart: {
+
+    },
+    lastMessageContainer: {width: 260, display: "flex", flexDirection: 'row'}
+})
 
 export {ConversationItem, ConversationItemProps}

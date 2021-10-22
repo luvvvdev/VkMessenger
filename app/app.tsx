@@ -11,38 +11,58 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useEffect } from "react"
-import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import React, {useEffect, useLayoutEffect} from "react"
+import {
+  SafeAreaProvider,
+} from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
-import * as storage from "./utils/storage"
-import { useBackButtonHandler, AppNavigator, canExit, useNavigationPersistence } from "./navigators"
+import { useBackButtonHandler, AppNavigator, canExit } from "./navigators"
 import VKLogin from 'react-native-vkontakte-login'
 import {Provider} from 'react-redux'
-
 import {Api} from "./services/api/api";
 import {store} from "./models";
+import {startLongPoll, stopLongPoll} from "./services/LongPoll/background";
+import BackgroundService from "react-native-background-actions";
+import VK from "react-native-vkontakte-login";
+
+import * as UIKit from 'react-native-ios-kit'
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-// API setting up
-const api = new Api()
-api.setup()
+
+const setupServices = async () => {
+  // API setting up
+  const api = new Api()
+  await api.setup()
+}
+
+setupServices()
 
 /**
  * This is the root component of our app.
  */
+
+const subscribeUpdates = async () => {
+  if (global.lp_started || BackgroundService.isRunning() || !(await VK.isLoggedIn())) return
+
+  await startLongPoll()
+}
+
+
 function App() {
   // const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
   useBackButtonHandler(canExit)
-  const {
+  /*
+  * const {
     initialNavigationState,
     onNavigationStateChange,
     //isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+  * */
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
@@ -54,6 +74,14 @@ function App() {
     })()
   }, [])
 
+  useLayoutEffect(() => {
+    subscribeUpdates()
+
+    return () => {
+      stopLongPoll()
+    }
+  }, [])
+
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
   // color set in native by rootView's background color.
@@ -63,16 +91,21 @@ function App() {
  //  if (!rootStore || !isNavigationStateRestored) return null
 
   // otherwise, we're ready to render the app
+  //
   return (
-      <Provider store={store}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <AppNavigator
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </SafeAreaProvider>
-      </Provider>
+      <UIKit.ThemeProvider>
+        <Provider store={store}>
+          <SafeAreaProvider initialMetrics={null}>
+            <AppNavigator
+                //initialState={initialNavigationState}
+                //onStateChange={onNavigationStateChange}
+            />
+          </SafeAreaProvider>
+        </Provider>
+      </UIKit.ThemeProvider>
   )
 }
 
-export default App
+export default () => {
+  return <App />
+}

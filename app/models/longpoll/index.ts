@@ -1,21 +1,21 @@
 import {createModel} from "@rematch/core";
 import {RootModel} from "../index";
-import {getPeerType} from "../../utils/peerType";
 import {
     GroupsGroupFull,
     MessagesConversation,
-    MessagesConversationWithMessage, MessagesGetHistoryResponse,
     MessagesMessage,
     UsersUserFull
 } from "../../types/vk";
 import {getMessageByEvent} from "./utils/messageFromEvent";
+import {Message} from "../../entities/Message";
 
 type LongPollState = {
     server: string | null
     key: string | null
     failed?: number | null
     ts: number | null
-    updates: any[]
+    updates: Array<any>[]
+    active: boolean
 }
 
 enum LongPollEvents {
@@ -35,83 +35,64 @@ enum LongPollEvents {
 
 }
 
-const longpoll = createModel<RootModel>()({
-    state: {
-        server: null,
-        key: null,
-        ts: null,
-        updates: [],
-        failed: null,
-    } as LongPollState,
-    reducers: {
-        update: (state, payload?: LongPollState) => (!payload ? state : payload)
-    },
-    effects: (dispatch) => ({
-        connect: async (payload, state) => {
-            console.log(state.longpoll)
-            //state.longpoll.server &&
-            //if ( !state.longpoll.failed) return
+const initialState: LongPollState = {
+    server: null,
+    key: null,
+    ts: null,
+    updates: [],
+    failed: null,
+    active: false
+};
 
-            console.log(`[longpoll] ${state.longpoll.failed ? 're' : ''}connecting to longpoll server..`)
-            const response = await global.api.getLongPollServer()
-
-            if (response.kind !== 'ok') return
-
-            console.log('[longpoll] successful connected!', response.data)
-
-            dispatch.longpoll.update({...state.longpoll, ...response.data})
-        },
-        getUpdates: async (payload, state) => {
-            console.log('[longpoll] getting updates..')
-            const {server, key, ts} = state.longpoll
-
-            const response = await global.api.getLongPollUpdates(server, key, ts)
-
-            if (response.kind !== "ok" || response.data?.failed) {
-                switch (response.data?.failed) {
-                    case 2 || 3:
-                        dispatch.longpoll.connect()
-                        return
-                    case 4:
-                        throw new Error('Invalid LongPoll version number')
-                }
-
-                return
-            }
-
-            console.log('[longpoll] updates: ', response)
-            dispatch.longpoll.update({...state.longpoll, ...response.data})
-        },
-        handleUpdates: async (payload, state) => {
+/*handleUpdates: async (payload, state) => {
             const currentUserId = state.user.user_data!.id
             const sendMessagesEvents = state.longpoll.updates.filter((event: any[]) => (event[0] === LongPollEvents.ADD_MESSAGE)).map((event) => getMessageByEvent(event, currentUserId))
 
             const sortedByPeerIdDictOfEvents: {[key: number]: MessagesMessage[]} = {}
 
-            sendMessagesEvents.forEach((message) => sortedByPeerIdDictOfEvents[message.peer_id].push(message))
+            console.log('sorted', sortedByPeerIdDictOfEvents)
+
+            sendMessagesEvents.forEach((message) => {
+                sortedByPeerIdDictOfEvents[message.peer_id] = []
+                sortedByPeerIdDictOfEvents[message.peer_id].push(message)
+
+                console.log(sortedByPeerIdDictOfEvents)
+
+            })
 
             const handleMessages = async () => {
-                Object.keys(sortedByPeerIdDictOfEvents).forEach((peer_id) => {
+                const updatePromises = Object.keys(sortedByPeerIdDictOfEvents).map(async (peer_id) => {
                     const messages: MessagesMessage[] = sortedByPeerIdDictOfEvents[peer_id]
 
-                    const conversations = state.conversations.items
+                    let conversations = Array.from(state.conversations.items).reverse()
                     const conversationIndex = conversations.findIndex((conversation) => conversation.conversation.peer.id === Number(peer_id))
                     let conversation = conversations[conversationIndex]
 
                     if (conversation) {
                         const conversationToUpdateLastMessage = conversation
-                        conversationToUpdateLastMessage.last_message = messages[messages.length]
+                        conversationToUpdateLastMessage.last_message = new Message(messages[messages.length - 1])
 
-                        conversations[conversationIndex] = conversationToUpdateLastMessage
+                        conversations.push(conversationToUpdateLastMessage)
 
-                        dispatch.conversations.update({...state.conversations, items: conversations})
+                        delete conversations[conversationIndex]
 
-                        const historyToUpdate = state.history.items[Number(peer_id)]
+                        conversations = conversations.filter((c) => c)
+                        conversations = conversations.reverse()
+
+                        console.log('last message!!', conversationToUpdateLastMessage)
+
+                        if (conversationToUpdateLastMessage) {
+                            dispatch.conversations.update({...state.conversations, items: conversations})
+                        }
+
+                        const historyToUpdate = state.history.items[peer_id]
 
                         historyToUpdate.items.reverse().push(...messages)
                         historyToUpdate.items.reverse()
 
                         dispatch.history.update({peer_id: Number(peer_id), history: historyToUpdate})
+
+
                         return
                     }
 
@@ -141,7 +122,11 @@ const longpoll = createModel<RootModel>()({
 
                     dispatch.conversations.update({...state.conversations, profiles, groups, items: [...state.conversations.items, conversation]})
                 })
+
+                await Promise.all(updatePromises)
             }
+
+            await handleMessages()
 
             const getNotSavedConversations: Promise<void>[] = sendMessagesEvents.map(async (event) => {
                 const peerId = event[4]
@@ -202,20 +187,73 @@ const longpoll = createModel<RootModel>()({
             })
 
             await Promise.all(getNotSavedConversations)
+},*/
+
+const longpoll = createModel<RootModel>()({
+    state: initialState,
+    reducers: {
+        reset: () => (initialState),
+        update: (state, payload?: LongPollState) => (!payload ? state : payload)
+    },
+    effects: (dispatch) => ({
+        connect: async (payload, state) => {
+            // console.log(state.longpoll)
+
+            //state.longpoll.server &&
+            //if ( !state.longpoll.failed) return
+
+            console.log(`[longpoll] ${state.longpoll.failed ? 're' : ''}connecting to longpoll server..`)
+            const response = await global.api.getLongPollServer()
+
+            if (response.kind !== 'ok') return
+
+            console.log('[longpoll] successful connected!', response.data)
+
+            dispatch.longpoll.update({...state.longpoll, ...response.data})
+        },
+        getUpdates: async (payload, state) => {
+            console.log('[longpoll] getting updates..')
+            const {server, key, ts} = state.longpoll
+
+            if (!server) return
+
+            const response = await global.api.getLongPollUpdates(server, key, ts)
+
+            if (response.kind !== "ok" || response.data?.failed) {
+                switch (response.data?.failed) {
+                    case 2 || 3:
+                        dispatch.longpoll.connect()
+                        return
+                    case 4:
+                        throw new Error('Invalid LongPoll version number')
+                }
+
+                return
+            }
+
+            console.log('[longpoll] updates: ', response)
+            dispatch.longpoll.update({...state.longpoll, ...response.data})
+        },
+        stop: (payload, state) => {
+            dispatch.longpoll.update({...state.longpoll, updates: [], active: true})
+        },
+        start: (payload, state) => {
+            dispatch.longpoll.update({...state.longpoll, updates: [], active: true})
         },
         lookup: async (payload, state) => {
+            if (state.longpoll.active) return
             console.log('[longpool] looking up for update')
 
             try {
-                await dispatch.longpoll.update({...state.longpoll, updates: []})
+                await dispatch.longpoll.update({...state.longpoll, updates: [], active: true})
 
                 await dispatch.longpoll.getUpdates().then(async () => {
-                    await dispatch.longpoll.handleUpdates()
+                    // await dispatch.longpoll.handleUpdates()
                 })
 
-                await dispatch.longpoll.lookup()
                 return
             } catch (e) {
+                await dispatch.longpoll.update({...state.longpoll, updates: [], active: false})
                 console.log('lookup error', e)
                 return
             }

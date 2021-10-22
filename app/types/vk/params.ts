@@ -4092,7 +4092,7 @@ export interface MessagesGetByConversationMessageIdParams {
 
 export interface MessagesGetByIdParams {
     /**
-     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: Messages are not truncated by default. Messages are truncated by words."
+     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: MessagesList are not truncated by default. MessagesList are truncated by words."
      */
     preview_length?: number;
     /**
@@ -4218,7 +4218,7 @@ export interface MessagesGetHistoryAttachmentsParams {
      */
     media_type?: "audio" | "audio_message" | "doc" | "graffiti" | "link" | "market" | "photo" | "share" | "video" | "wall";
     /**
-     * Message ID to start return results from.
+     * MessageItem ID to start return results from.
      */
     start_from?: string;
     /**
@@ -4307,7 +4307,7 @@ export interface MessagesGetLongPollHistoryParams {
      */
     pts?: number;
     /**
-     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: Messages are not truncated by default. Messages are truncated by words."
+     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: MessagesList are not truncated by default. MessagesList are truncated by words."
      */
     preview_length?: number;
     /**
@@ -4420,7 +4420,7 @@ export interface MessagesMarkAsReadParams {
      */
     peer_id?: number;
     /**
-     * Message ID to start from.
+     * MessageItem ID to start from.
      */
     start_message_id?: number;
     /**
@@ -4438,11 +4438,11 @@ export interface MessagesPinParams {
      */
     peer_id: number;
     /**
-     * Message ID
+     * MessageItem ID
      */
     message_id?: number;
     /**
-     * Conversation message ID
+     * ConversationScreen message ID
      */
     conversation_message_id?: number;
     [key: string]: any;
@@ -4487,7 +4487,7 @@ export interface MessagesSearchParams {
      */
     date?: number;
     /**
-     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: Messages are not truncated by default. Messages are truncated by words."
+     * Number of characters after which to truncate a previewed message. To preview the full message, specify '0'. "NOTE: MessagesList are not truncated by default. MessagesList are truncated by words."
      */
     preview_length?: number;
     /**

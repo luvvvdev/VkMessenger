@@ -1,25 +1,64 @@
-import {ActivityIndicator, FlatList, ListRenderItemInfo, View} from "react-native";
-import React from "react";
+import {ActivityIndicator, FlatList, ListRenderItemInfo, SectionList, StyleSheet, Text, View} from "react-native";
+import React, {useEffect} from "react";
 import {MessagesMessage} from "../../types/vk";
-import {MessageItem} from "../../components/MessageItem";
+import MessageItem from "../../components/MessageItem";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../../models";
 import {HistoryState} from "../../models/history";
+import {navigate} from "../../navigators";
+import {groupBy} from 'lodash'
+import startOfDay from 'date-fns/startOfDay'
+import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear, isToday} from "date-fns";
 
 type MessagesProps = {
     peer_id: number
+}
+
+const getDate = (utcString: string) => {
+    const messageDate = Date.parse(utcString)
+
+    if (isToday(messageDate)) return formatDistanceToNowStrict(messageDate)
+    if (isSameYear(messageDate, new Date())) return format(messageDate, 'd MMMM')
+
+    return format(messageDate, 'dd.MM.yyyy')
 }
 
 export default ({peer_id}: MessagesProps) => {
     const dispatch = useDispatch<Dispatch>()
 
     const myId = useSelector((state: RootState) => state.user.user_data?.id)
-    const history = useSelector<RootState, HistoryState>((state) => state.history)
+    const historyLoading = useSelector((state: RootState) => state.history.loading)
+    const messages = useSelector<RootState, Array<{title: string, data: MessagesMessage[]}> | null>((state) => {
+        const messages = state.history.items[peer_id]?.items
+
+        if (!messages) return null
+
+        const _partitionedMessages: {[key: string]: MessagesMessage[]} = groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
+
+        const sectionedMessages: Array<{title: string, data: MessagesMessage[]}> = []
+
+        Object.keys(_partitionedMessages).forEach((key) => {
+            sectionedMessages.push({title: key, data: _partitionedMessages[key]})
+        })
+
+        return sectionedMessages
+    })
+
     const {profiles, groups} = useSelector((state: RootState) => ({profiles: state.conversations.profiles, groups: state.conversations.groups}))
 
-    const renderItem = (data: ListRenderItemInfo<MessagesMessage>) => {
-        return <MessageItem message={data.item} myId={myId || 0} extraData={{profiles: profiles || [], groups: groups || []}} style={{marginBottom: 10}}/>
-    }
+    useEffect(() => {
+        dispatch.history.get({peer_id, offset: 0, count: 200})
+            .catch((error) => {
+                console.log('error')
+                dispatch.history.clear({peer_id})
+                navigate('messenger')
+
+            })
+    }, [])
+
+    const renderItem = (data: ListRenderItemInfo<MessagesMessage>) => (
+        <MessageItem message={data.item} myId={myId || 0} extraData={{profiles: profiles || [], groups: groups || []}} style={{marginBottom: 10}}/>
+    )
 
     const keyExtractor = (item: MessagesMessage) => (`message-${item.id}`)
 
@@ -34,34 +73,49 @@ export default ({peer_id}: MessagesProps) => {
             })
     }
 
-    let messages: MessagesMessage[] = []
+    const renderHeader = ({section}) => (
+        <View style={styles.sectionHeaderContainer}>
+            <Text style={styles.headerText}>{getDate(section.title)}</Text>
+        </View>
+    )
 
-    if (history.items[peer_id]) {
-        messages = history.items[peer_id].items
-    }
-
-    return (<View>
-        {messages.length !== 0 ? (
-            <FlatList
-                data={messages}
-                extraData={[groups, profiles, messages]}
-                inverted={true} persistentScrollbar={true}
-                initialNumToRender={200}
-                maxToRenderPerBatch={50}
-                onEndReachedThreshold={0.5}
-                onEndReached={onEndReached}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                //getItem={(data, index) => data[index]}
-                //contentInset={{top: 20, bottom: 20}}
-                contentInsetAdjustmentBehavior={'never'}
-                automaticallyAdjustContentInsets={false}
-                style={{height: '92%', width: '100%'}}
-            />
-        ) : (
-            <View style={{height: '92%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-
-            </View>
-        )}
-    </View>)
+    return (
+        <View>
+            {
+                !historyLoading && messages ? (
+                    <SectionList
+                        extraData={[groups, profiles, messages]}
+                        inverted={true}
+                        // persistentScrollbar={true}
+                        initialNumToRender={20}
+                        maxToRenderPerBatch={20}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={onEndReached}
+                        renderItem={renderItem}
+                        keyExtractor={keyExtractor}
+                        contentInsetAdjustmentBehavior={'never'}
+                        automaticallyAdjustContentInsets={false}
+                        style={styles.messagesList}
+                        renderSectionFooter={renderHeader}
+                        sections={messages || []}
+                    />
+                ) : (
+                    <View style={styles.messagesListLoadingContainer}>
+                        <ActivityIndicator />
+                    </View>
+                )
+            }
+        </View>
+            )
 }
+
+const styles = StyleSheet.create({
+    sectionHeaderContainer: {
+        width: '100%', marginTop: 5, marginBottom: 10, alignItems: 'center'
+    },
+    headerText: {
+        color: 'darkgray', fontSize: 12,
+    },
+    messagesList: {height: '97%', width: '100%'},
+    messagesListLoadingContainer: {height: '97%', width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}
+})

@@ -26,7 +26,7 @@ const os = require("os")
 
   // on iOS, make sure our native modules are installed
   { command: "pod install", cwd: "ios", onlyPlatforms: ["darwin"] },
-  { command: "yarn patch-package" },
+  { command: "yarn patch" },
 ]
   .filter(({ onlyPlatforms }) => !onlyPlatforms || onlyPlatforms.includes(os.platform()))
   .forEach((commandAndOptions) => {

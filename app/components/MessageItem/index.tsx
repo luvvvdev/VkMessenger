@@ -1,12 +1,11 @@
-import {Text, View, ViewStyle} from "react-native";
-import React, {useEffect, useState} from "react";
-import {GroupsGroupFull, UsersUserFull} from "../../types/vk";
+import {StyleSheet, Text, View, ViewStyle} from "react-native";
+import React, {memo, useEffect, useLayoutEffect, useState} from "react";
+import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
-import {Message} from "../../entities/Message";
 
 type MessageItemProps = {
-    message: Message
+    message: MessagesMessage
     style?: ViewStyle
     extraData: {
         profiles: UsersUserFull[]
@@ -15,35 +14,48 @@ type MessageItemProps = {
     myId: number
 }
 
+const getPeerById = (id: number, profiles, groups) => {
+    if (profiles && groups) return id > 0 ? profiles.find((profile) => profile.id === id) || null : groups.find((group => group.id === id)) || null;
+
+    return null
+}
+
 const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: MessageItemProps) => {
     const [peer, setPeer] = useState<UsersUserFull | GroupsGroupFull | null>(null)
 
     const isMine = message.from_id === myId
 
-    const getPeerById = (id: number) => {
-        if (profiles && groups) return id > 0 ? profiles.find((profile) => profile.id === id) || null : groups.find((group => group.id === id)) || null;
-
-        return null
-    }
-
     useEffect(() => {
-        const _peer = getPeerById(message.from_id)
+        const _peer = getPeerById(message.from_id, profiles, groups)
 
         setPeer(_peer)
 
     }, [profiles, groups])
 
+    if (message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo') {
+        // console.log(message.attachments[0].photo.sizes[0].url)
+    }
+
     return (
-        <View key={`${peer}`} style={{display: 'flex', flexDirection: !isMine ? 'row' : 'row-reverse', maxWidth: '90%',  alignItems: 'flex-end', ...style}}>
+        <View key={`${peer}`} style={{...styles.messageContainer, flexDirection: !isMine ? 'row' : 'row-reverse', ...style}}>
             {
-                !isMine && (<FastImage source={{uri: peer?.photo_100, priority: FastImage.priority.high,}} style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 666, marginRight: 5}}/>)
+                !isMine && (
+                    <FastImage
+                    source={{uri: peer?.photo_100, priority: FastImage.priority.high,}}
+                    style={styles.senderAvatar}/>
+                    )
             }
-            <View style={{padding: 10, flexWrap: 'wrap',backgroundColor: 'whitesmoke', borderRadius: 8}}>
+            <View style={styles.contentContainer}>
                 <View style={{minWidth: 0}}>
                     <View style={{margin: 0}}>
-                        <Text style={{flexWrap: 'wrap'}} textBreakStrategy={'simple'}>{message.text}</Text>
-                        <View style={{ position: 'relative', top: 5, marginLeft: 30, alignSelf: 'flex-end'}}>
-                            <Text style={{fontSize: 11, color: 'gray'}}>{format(message.date * 1000, 'hh:mm')}</Text>
+                        <View style={{flexDirection: 'column'}}>
+                            {message.text.length > 0 && <Text style={styles.messageText} textBreakStrategy={'simple'}>{message.text}</Text>}
+                            {message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo' ?
+                                (<FastImage style={{width: 100, height: 100}} source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>) : null
+                            }
+                        </View>
+                        <View style={styles.timeContainer}>
+                            <Text style={styles.timeText}>{format(message.date * 1000, 'hh:mm')}</Text>
                         </View>
                     </View>
                 </View>
@@ -52,4 +64,26 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
     )
 }
 
-export {MessageItem}
+const styles = StyleSheet.create({
+    messageContainer: {
+        display: 'flex',
+        maxWidth: '90%',
+        alignItems: 'flex-end',
+    },
+    senderAvatar: {height: 25, width: 25, backgroundColor: 'gray', borderRadius: 666, marginRight: 5},
+    contentContainer: {
+        padding: 10, flexWrap: 'wrap',backgroundColor: 'whitesmoke', borderRadius: 8
+    },
+    timeText: {
+        fontSize: 11, color: 'gray'
+    },
+    timeContainer: {
+        position: 'relative', top: 5, marginLeft: 30, alignSelf: 'flex-end'
+    },
+    messageText: {
+        flexWrap: 'wrap',
+        fontSize: 15
+    }
+})
+
+export default memo(MessageItem)
