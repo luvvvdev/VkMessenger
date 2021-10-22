@@ -2,13 +2,13 @@ import BackgroundService from 'react-native-background-actions'
 import {LongPollService} from "./index";
 
 const backgroundLongPolling = async (taskData) => {
-    if (global.lp_started) return
+    if (global.lp) return
     const lp = new LongPollService()
     global.lp = lp
 
     try {
         await global.lp.connect()
-        await global.lp.getUpdates()
+        await global.lp.lookupUpdates()
     } catch (e) {
         console.error(e)
         stopLongPoll()

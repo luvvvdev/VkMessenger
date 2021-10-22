@@ -1,14 +1,13 @@
-import {ActivityIndicator, FlatList, ListRenderItemInfo, SectionList, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, ListRenderItemInfo, SectionList, StyleSheet, Text, View} from "react-native";
 import React, {useEffect} from "react";
 import {MessagesMessage} from "../../types/vk";
 import MessageItem from "../../components/MessageItem";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../../models";
-import {HistoryState} from "../../models/history";
 import {navigate} from "../../navigators";
-import {groupBy} from 'lodash'
+import _ from 'lodash'
 import startOfDay from 'date-fns/startOfDay'
-import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear, isToday} from "date-fns";
+import {format, formatDistanceToNowStrict, isSameYear, isToday} from "date-fns";
 
 type MessagesProps = {
     peer_id: number
@@ -27,13 +26,16 @@ export default ({peer_id}: MessagesProps) => {
     const dispatch = useDispatch<Dispatch>()
 
     const myId = useSelector((state: RootState) => state.user.user_data?.id)
-    const historyLoading = useSelector((state: RootState) => state.history.loading)
+    const historyLoading = useSelector((state: RootState) => state.loading.effects.history.get.loading)
     const messages = useSelector<RootState, Array<{title: string, data: MessagesMessage[]}> | null>((state) => {
         const messages = state.history.items[peer_id]?.items
 
         if (!messages) return null
 
-        const _partitionedMessages: {[key: string]: MessagesMessage[]} = groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
+        // const dubplicated = _.filter(messages, (val, i, iteratee) => _.includes(iteratee, val, i + 1));
+        // console.log(dubplicated)
+
+        const _partitionedMessages: {[key: string]: MessagesMessage[]} = _.groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
 
         const sectionedMessages: Array<{title: string, data: MessagesMessage[]}> = []
 
@@ -60,7 +62,7 @@ export default ({peer_id}: MessagesProps) => {
         <MessageItem message={data.item} myId={myId || 0} extraData={{profiles: profiles || [], groups: groups || []}} style={{marginBottom: 10}}/>
     )
 
-    const keyExtractor = (item: MessagesMessage) => (`message-${item.id}`)
+    const keyExtractor = (item: MessagesMessage) => (`message-${item.from_id}-${item.id}`)
 
     const onEndReached = ({distanceFromEnd}) => {
         if (distanceFromEnd < 0) return
@@ -86,9 +88,10 @@ export default ({peer_id}: MessagesProps) => {
                     <SectionList
                         extraData={[groups, profiles, messages]}
                         inverted={true}
-                        // persistentScrollbar={true}
+                        removeClippedSubviews={true}
+                        persistentScrollbar={true}
                         initialNumToRender={20}
-                        maxToRenderPerBatch={20}
+                        maxToRenderPerBatch={50}
                         onEndReachedThreshold={0.5}
                         onEndReached={onEndReached}
                         renderItem={renderItem}

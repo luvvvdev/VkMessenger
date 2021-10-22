@@ -26,6 +26,9 @@ import BackgroundService from "react-native-background-actions";
 import VK from "react-native-vkontakte-login";
 
 import * as UIKit from 'react-native-ios-kit'
+import {PersistGate} from 'redux-persist/lib/integration/react'
+
+import {getPersistor} from "@rematch/persist";
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -51,10 +54,8 @@ const subscribeUpdates = async () => {
   await startLongPoll()
 }
 
-
 function App() {
   // const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
-
   useBackButtonHandler(canExit)
   /*
   * const {
@@ -91,18 +92,18 @@ function App() {
  //  if (!rootStore || !isNavigationStateRestored) return null
 
   // otherwise, we're ready to render the app
-  //
+
   return (
-      <UIKit.ThemeProvider>
-        <Provider store={store}>
-          <SafeAreaProvider initialMetrics={null}>
-            <AppNavigator
-                //initialState={initialNavigationState}
-                //onStateChange={onNavigationStateChange}
-            />
-          </SafeAreaProvider>
-        </Provider>
-      </UIKit.ThemeProvider>
+        <UIKit.ThemeProvider>
+          <Provider store={store}>
+            <SafeAreaProvider initialMetrics={null}>
+                <AppNavigator
+                    //initialState={initialNavigationState}
+                    //onStateChange={onNavigationStateChange}
+                />
+            </SafeAreaProvider>
+          </Provider>
+        </UIKit.ThemeProvider>
   )
 }
 

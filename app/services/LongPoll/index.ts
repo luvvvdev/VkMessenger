@@ -37,6 +37,23 @@ class LongPollError extends Error {
     }
 }
 
+/**
+ * @class
+ * Класс для работы с LongPoll ВК
+ * Для запуска работы следует вызвать метод connect()
+ * Затем для дальнейшего отслеживания и обработки обновлений lookupUpdates()
+ * @example
+ *   const lp = new LongPollService()
+ *
+ *   global.lp = lp
+ *
+ *   try {
+        await global.lp.connect()
+        await global.lp.lookupUpdates()
+    } catch (e) {
+        console.error(e)
+    }
+ * */
 class LongPollService {
     private api: Api
 
@@ -45,13 +62,14 @@ class LongPollService {
     private ts: number | null = null
     private failed?: number | null = null
 
-    updates: any[] = []
+    private updates: any[] = []
+    private retries: number
+
+    private store: Store
+
+    private emitter: DeviceEventEmitterStatic
+
     active: boolean = false
-    retries: number
-
-    store: Store
-
-    emitter: DeviceEventEmitterStatic
 
     constructor() {
 
@@ -61,23 +79,27 @@ class LongPollService {
 
         this.api = global.api
         this.store = store
-        global.lp_started = true
     }
 
     async connect() {
         this.emit('lp_server_connect')
 
-        try {
-            const serverData = await this.api.getLongPollServer()
+        const userStore = store.getState().user
+        if (!userStore.login_data || !userStore.user_data) return
 
-            if (serverData.kind !== 'ok' || serverData.data.error) {
+        try {
+            const response = await this.api.getLongPollServer()
+
+            // console.log(serverData)
+
+            if (response.kind !== 'ok' || response.data.error) {
                 // @ts-ignore
-                throw new LongPollError('Failed connection', serverData.data.error)
+                throw new LongPollError('Failed connection', response)
                 return
             }
 
             // @ts-ignore
-            const {server, key, ts} = serverData.data.response
+            const {server, key, ts} = response.data.response
 
             this.server = server
             this.key = key
@@ -94,7 +116,7 @@ class LongPollService {
         }
     }
 
-    reconnect(error: Error, event: TLongPollActions) {
+    private reconnect(error: Error, event: TLongPollActions) {
         this.emit(event, error)
 
         const retry = setInterval(async () => {
@@ -113,7 +135,7 @@ class LongPollService {
         }, 5000)
     }
 
-    onUpdates({ts, updates}: {ts: number, updates: Array<any[]>}) {
+    private onUpdates({ts, updates}: {ts: number, updates: Array<any[]>}) {
         this.ts = ts
         this.updates = updates || []
 
@@ -122,7 +144,7 @@ class LongPollService {
         this.handleUpdates(updates)
     }
 
-    onNewMessage(message: Message) {
+    private onNewMessage(message: Message) {
         console.log('New MessageItem', message)
         this.store.dispatch.conversations.editLastMessage({message}).catch((e) => {
             console.error(e)
@@ -130,19 +152,19 @@ class LongPollService {
         this.store.dispatch.history.addMessage({message})
     }
 
-    onEditMessage(message: Message) {
+    private onEditMessage(message: Message) {
 
     }
 
-    onReadMessage(readState) {
+    private onReadMessage(readState) {
 
     }
 
-    onTyping(typingEvent) {
+    private onTyping(typingEvent) {
 
     }
 
-    handleUpdates(updates: Array<any[]>) {
+    private handleUpdates(updates: Array<any[]>) {
         if (updates.length === 0) return
 
         //const state: RootState = store.getState()
@@ -184,48 +206,69 @@ class LongPollService {
         return
     }
 
+    private async getHistoryUpdates() {
+        const response = await this.api.getLongPollHistory({ts: this.ts!, lp_version: 12})
+
+        console.log('this.getHistoryUpdates()', response)
+    }
+
     // call it only if connected
-    async getUpdates() {
-        console.log(this.active, this.server, this.failed, this.ts)
-        if ( !this.server || this.failed) return
+    private async getUpdates() {
+        const updatesResponse = await this.api.getLongPollUpdates(this.server!, this.key!, this.ts!)
+
+        // console.log(updatesResponse)
+
+        // @ts-ignore
+        if (updatesResponse.kind === 'timeout') {
+            return await this.getUpdates()
+        }
+
+        if (updatesResponse.kind !== 'ok' || !updatesResponse.data) {
+            throw new LongPollError(`LongPoll updating request error`, JSON.stringify(updatesResponse))
+        }
+
+        if (updatesResponse.data.failed) {
+            this.failed = updatesResponse.data.failed
+
+            switch (updatesResponse.data?.failed) {
+                case 2 || 3:
+                    new Error('Failed to get updates (maybe problem of server)')
+                    break
+                case 4:
+                    throw new Error('Invalid LongPoll version number')
+                    break
+                default:
+                    throw new Error('Unknown error')
+                    break
+            }
+        }
+
+        const {ts, updates} = updatesResponse.data
+
+        return {ts, updates}
+    }
+
+    async lookupUpdates() {
+        // console.log(this.active, this.server, this.failed, this.ts)
+        if (!this.server || this.failed) return
+
+        console.log(this.active)
+        if (!this.active) await this.getHistoryUpdates()
 
         this.active = true
 
         try {
             this.emit('lp_updates_check')
-            const updatesResponse = await this.api.getLongPollUpdates(this.server!, this.key!, this.ts!)
 
-            // @ts-ignore
-            if (updatesResponse.kind === 'timeout') {
-                return await this.getUpdates()
-            }
-
-            if (updatesResponse.kind !== 'ok' || !updatesResponse.data) {
-                throw new LongPollError(`LongPoll updating request error`, JSON.stringify(updatesResponse))
-            }
-
-            if (updatesResponse.data.failed) {
-                this.failed = updatesResponse.data.failed
-
-                switch (updatesResponse.data?.failed) {
-                    case 2 || 3:
-                        new Error('Failed to get updates (maybe problem of server)')
-                        break
-                    case 4:
-                        throw new Error('Invalid LongPoll version number')
-                        break
-                    default:
-                        throw new Error('Unknown error')
-                        break
-                }
-            }
-
-            const {ts, updates} = updatesResponse.data
+            const {ts, updates} = await this.getUpdates()
 
             await this.onUpdates({ts, updates: updates || []})
 
-            await this.getUpdates()
+            await this.lookupUpdates()
         } catch (error) {
+            const userStore = store.getState().user
+            if (!userStore.login_data || !userStore.user_data) return
+
             if (this.failed === 4) return console.error(error)
             return this.reconnect(error, 'lp_updates_check_failed')
         }
@@ -239,7 +282,7 @@ class LongPollService {
         return this.emitter.addListener(eventName, listener)
     }
 
-    emit(eventType: TLongPollActions, ...params: any[]) {
+    private emit(eventType: TLongPollActions, ...params: any[]) {
         return this.emitter.emit(eventType, ...params)
     }
 }

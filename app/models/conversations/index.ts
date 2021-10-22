@@ -18,7 +18,6 @@ export interface ConversationsState {
     items: MessagesConversationWithMessage[];
     profiles?: Objects.UsersUserFull[];
     groups?: Objects.GroupsGroupFull[];
-    loading: boolean
 }
 
 const initialState: ConversationsState = {
@@ -27,7 +26,6 @@ const initialState: ConversationsState = {
     items: [],
     profiles: [],
     groups: [],
-    loading: true
 }
 
 export const conversations = createModel<RootModel>()({
@@ -42,13 +40,10 @@ export const conversations = createModel<RootModel>()({
 
             return {...state, items: state.items}
         },
-        setLoading: (state, payload: boolean) => ({...state, loading: payload})
     },
     effects: dispatch => ({
         get: async (payload, state) => {
             try {
-                dispatch.conversations.setLoading(state.conversations.items.length > 0)
-
                 // console.log(global.api)
                 const response = await global.api.getConversations()
 
@@ -58,7 +53,7 @@ export const conversations = createModel<RootModel>()({
 
                 dispatch.conversations.update({...response.data.response, items})
 
-                dispatch.conversations.setLoading(false)
+                //dispatch.conversations.setLoading(false)
             }
             catch (e) {
                 console.error('Get conversation error')

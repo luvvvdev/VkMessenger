@@ -25,13 +25,15 @@ export const user = createModel<RootModel>()({
             try {
                 login_data = await VKLogin.login(['notify', 'friends', 'photos', 'audio', 'video', 'stories', 'pages', 'status', 'notes', 'messages', 'wall', 'offline', 'docs', 'groups', 'notifications', 'email', 'market'])
 
-                const user_request = await global.api.getUser() as GetUserResult
+                const response = await global.api.getUser() as GetUserResult
 
-                if (user_request.kind === 'ok' && user_request.data) {
-                    user_data = user_request.data[0]
+                if (response.kind === 'ok' && response.data) {
+                    const userData = (response.data.response || [null])[0]
+
+                    if (!userData) return
+
+                    user_data = userData
                 }
-
-                console.log('userData', user_data)
             } catch (e) {
                 console.log(e)
 

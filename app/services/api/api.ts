@@ -3,7 +3,7 @@ import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import {
   GetConversationsByIdResult,
-  GetConversationsResult,
+  GetConversationsResult, GetLongPollHistoryResult,
   GetLongPollServerResult,
   GetLongPollUpdatesResult,
   GetUserResult,
@@ -12,7 +12,7 @@ import {
 import VKLogin from "react-native-vkontakte-login";
 import {
   MessagesGetConversationsByIdExtendedResponse,
-  MessagesGetHistoryParams,
+  MessagesGetHistoryParams, MessagesGetLongPollHistoryParams,
   MessagesSendResponse
 } from "../../types/vk";
 
@@ -173,6 +173,21 @@ export class Api {
       }
 
       return { kind: "ok", data: response.data } as GetLongPollUpdatesResult
+  }
+
+  async getLongPollHistory(params: MessagesGetLongPollHistoryParams): Promise<GetLongPollHistoryResult> {
+    const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getLongPollHistory`,
+        {
+          ...params, lp_version: 12,
+        })
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem as any
+    }
+
+    return { kind: "ok", data: response.data } as GetLongPollHistoryResult
   }
 
   async getConversationsById(peer_ids: number[]): Promise<GetConversationsByIdResult> {

@@ -3,7 +3,7 @@ import {
     BaseError,
     MessagesGetConversationsByIdExtendedResponse,
     MessagesGetConversationsResponse,
-    MessagesGetHistoryExtendedResponse, MessagesSendResponse,
+    MessagesGetHistoryExtendedResponse, MessagesGetLongPollHistoryResponse, MessagesSendResponse,
     UsersGetResponse
 } from "../../types/vk";
 
@@ -32,4 +32,5 @@ export type GetHistoryResult = ApiRes<MessagesGetHistoryExtendedResponse>
 export type PostMessageResult = ApiRes<MessagesSendResponse>
 export type GetLongPollServerResult = ApiRes<MessagesGetLongPollServerResponse>
 export type GetLongPollUpdatesResult = {kind: 'ok', data: MessagesLongPollUpdatesResponse}
+export type GetLongPollHistoryResult = ApiRes<MessagesGetLongPollHistoryResponse>
 // export type GetLongPollUpdatesResult = ApiRes<GroupsGet>

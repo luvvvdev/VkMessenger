@@ -20,7 +20,6 @@ export interface HistoryState {
         [peer_id: number]: History
     }
     current_id: number | null
-    loading: boolean
 }
 
 export type HistoryGetEffect = {
@@ -32,7 +31,6 @@ export type HistoryGetEffect = {
 const initialState: HistoryState = {
     items: [],
     current_id: null,
-    loading: false
 }
 
 type UpdateHistoryReducerPayload = {
@@ -92,8 +90,14 @@ const history = createModel<RootModel>()({
     },
     effects: (dispatch) => ({
         get: async (payload: HistoryGetEffect, state) => {
+            // console.log(Object.keys(state.history.items).map((key) => ({key, length: state.history.items[key].items.length})))
+
             try {
                 const neededHistory = state.history.items[payload.peer_id]
+
+                // if items already loaded skip loading
+                if (neededHistory && (!payload.offset || payload.offset === 0)) return
+
                 const startMessageId = neededHistory && neededHistory.items.length > 0 && (!payload.offset || payload.offset === 0) ? neededHistory.items[neededHistory.items.length - 1].id : undefined
 
                 dispatch.history.setLoading(!startMessageId)

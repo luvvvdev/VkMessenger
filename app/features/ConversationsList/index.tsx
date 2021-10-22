@@ -10,6 +10,7 @@ const ConversationsList = () => {
     const dispatch = useDispatch<Dispatch>()
 
     const conversations = useSelector<RootState, ConversationsState>((state) => state.conversations)
+    const loading = useSelector<RootState, boolean>((state) => state.loading.effects.conversations.get.loading || true)
 
     const getConversations = async () => {
         await dispatch.conversations.get()
@@ -41,7 +42,7 @@ const ConversationsList = () => {
     return (
         <View style={{width: '100%'}}>
             {
-               !conversations.loading ? (
+               !loading ? (
                     <FlatList showsHorizontalScrollIndicator={false} extraData={[conversations]} data={conversations.items} renderItem={renderItem} />
                 ) : (
                    <View>

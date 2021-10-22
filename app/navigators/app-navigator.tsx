@@ -80,7 +80,10 @@ const AppStack = () => {
                                         <TouchableOpacity onPress={() => {
                                             (modalRef.current as any)?.setVisibility(true)
                                         }}>
-                                            <FastImage style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}} source={imgSource} />
+                                            <FastImage
+                                                style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}}
+                                                source={imgSource}
+                                            />
                                         </TouchableOpacity>
                                     </View>
                                 )
@@ -92,7 +95,7 @@ const AppStack = () => {
                                     navigate('login')
                                 }
 
-                                return <Button title={'Выход'} onPress={logout} />
+                                return null // <Button title={'Выход'} onPress={logout} />
                             }),
                         }}/>
                         <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (

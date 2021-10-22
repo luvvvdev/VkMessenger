@@ -41,8 +41,9 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
             {
                 !isMine && (
                     <FastImage
-                    source={{uri: peer?.photo_100, priority: FastImage.priority.high,}}
-                    style={styles.senderAvatar}/>
+                      source={{uri: peer?.photo_100, priority: FastImage.priority.high, cache: 'cacheOnly'}}
+                        style={styles.senderAvatar}
+                    />
                     )
             }
             <View style={styles.contentContainer}>
@@ -51,11 +52,17 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                         <View style={{flexDirection: 'column'}}>
                             {message.text.length > 0 && <Text style={styles.messageText} textBreakStrategy={'simple'}>{message.text}</Text>}
                             {message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo' ?
-                                (<FastImage style={{width: 100, height: 100}} source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>) : null
+                                (
+                                    <FastImage
+                                        style={{width: 100, height: 100}}
+                                        source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>
+                                        ) : null
                             }
                         </View>
                         <View style={styles.timeContainer}>
-                            <Text style={styles.timeText}>{format(message.date * 1000, 'hh:mm')}</Text>
+                            <Text style={styles.timeText}>
+                                {format(message.date * 1000, 'hh:mm')}
+                            </Text>
                         </View>
                     </View>
                 </View>
