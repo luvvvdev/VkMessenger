@@ -252,7 +252,7 @@ class LongPollService {
         // console.log(this.active, this.server, this.failed, this.ts)
         if (!this.server || this.failed) return
 
-        console.log(this.active)
+        // console.log(this.active)
         if (!this.active) await this.getHistoryUpdates()
 
         this.active = true

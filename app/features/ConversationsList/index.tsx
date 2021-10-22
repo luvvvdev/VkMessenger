@@ -10,10 +10,9 @@ const ConversationsList = () => {
     const dispatch = useDispatch<Dispatch>()
 
     const conversations = useSelector<RootState, ConversationsState>((state) => state.conversations)
-    const loading = useSelector<RootState, boolean>((state) => state.loading.effects.conversations.get.loading || true)
+    const loading = useSelector<RootState, boolean>((state) => state.loading.effects.conversations.get.loading!)
 
-    const getConversations = async () => {
-        await dispatch.conversations.get()
+    const getConversations = () => dispatch.conversations.get().then(() => {
 
         if (conversations.profiles && conversations.groups) {
             const profilesPhotos = conversations.profiles?.map((profile) => ({uri: profile.photo_100})).filter((src) => typeof src.uri !== 'undefined')
@@ -21,9 +20,9 @@ const ConversationsList = () => {
 
             FastImage.preload([...profilesPhotos, ...groupsPhotos])
         }
-    }
+    })
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         getConversations()
     }, [])
 

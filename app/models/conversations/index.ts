@@ -54,10 +54,14 @@ export const conversations = createModel<RootModel>()({
                 dispatch.conversations.update({...response.data.response, items})
 
                 //dispatch.conversations.setLoading(false)
+                return
             }
             catch (e) {
                 console.error('Get conversation error')
+                return
             }
+
+            return
         },
         editLastMessage: async ({message, retries = 0}: {message: Message, retries?: number}, state) => {
             try {

@@ -1,9 +1,10 @@
 import React from "react";
-import {ActivityIndicator, View} from "react-native";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {ActivityIndicator, View, Dimensions,} from "react-native";
+import {useSafeAreaInsets, SafeAreaView} from "react-native-safe-area-context";
 
 const Screen = ({children}) => {
     const insets = useSafeAreaInsets()
+    const dimensions = Dimensions.get('screen')
 
     const fallback = (
         <View style={{height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center'}}>
@@ -13,17 +14,17 @@ const Screen = ({children}) => {
 
     return (
         <React.Suspense fallback={fallback}>
-            <View style={{
+            <SafeAreaView style={{
                 paddingRight: 20,
                 paddingLeft: 20,
-                paddingBottom: insets.bottom + insets.bottom * 0.1,
+                // paddingBottom: insets.bottom + insets.bottom * 0.1,
                 backgroundColor: 'white',
                 display: 'flex',
                 flexDirection: 'column',
-                height: '92%'
-            }}>
+                // height: dimensions.height - insets.bottom * 3
+            }} edges={["bottom"]}>
                     {children}
-            </View>
+            </SafeAreaView>
         </React.Suspense>)
 
 }

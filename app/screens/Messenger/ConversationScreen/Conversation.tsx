@@ -31,8 +31,8 @@ const ConversationScreen = (props) => {
 
 const styles = StyleSheet.create({
     messageInputContainer: {
-        height: 40,
-        marginTop: 15,
+        //height: 30,
+        //marginTop: 5,
         width: '100%',
         display: 'flex',
         alignItems: 'center',

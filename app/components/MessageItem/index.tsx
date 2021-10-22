@@ -36,6 +36,8 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
         // console.log(message.attachments[0].photo.sizes[0].url)
     }
 
+    const attachmentWnH = 200
+
     return (
         <View key={`${peer}`} style={{...styles.messageContainer, flexDirection: !isMine ? 'row' : 'row-reverse', ...style}}>
             {
@@ -54,7 +56,7 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                             {message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo' ?
                                 (
                                     <FastImage
-                                        style={{width: 100, height: 100}}
+                                        style={{width: attachmentWnH, height: attachmentWnH}}
                                         source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>
                                         ) : null
                             }
@@ -76,13 +78,15 @@ const styles = StyleSheet.create({
         display: 'flex',
         maxWidth: '90%',
         alignItems: 'flex-end',
+        flex: 1
     },
     senderAvatar: {height: 25, width: 25, backgroundColor: 'gray', borderRadius: 666, marginRight: 5},
     contentContainer: {
         padding: 10, flexWrap: 'wrap',backgroundColor: 'whitesmoke', borderRadius: 8
     },
     timeText: {
-        fontSize: 11, color: 'gray'
+        fontSize: 11,
+        color: 'gray'
     },
     timeContainer: {
         position: 'relative', top: 5, marginLeft: 30, alignSelf: 'flex-end'
