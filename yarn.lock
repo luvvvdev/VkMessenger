@@ -3240,6 +3240,11 @@ babel-plugin-syntax-trailing-function-commas@^7.0.0-beta.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-7.0.0-beta.0.tgz#aa213c1435e2bffeb6fca842287ef534ad05d5cf"
   integrity sha512-Xj9XuRuz3nTSbaTXWv3itLOcxyF4oPD8douBBmj7U9BBC6nEBYfyOJYQMf/8PJAFotC62UY5dFfIGEPr7WswzQ==
 
+babel-plugin-transform-remove-console@^6.9.4:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-remove-console/-/babel-plugin-transform-remove-console-6.9.4.tgz#b980360c067384e24b357a588d807d3c83527780"
+  integrity sha1-uYA2DAZzhOJLNXpYjYB9PINSd4A=
+
 babel-preset-current-node-syntax@^0.1.2:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-0.1.4.tgz#826f1f8e7245ad534714ba001f84f7e906c3b615"
@@ -9218,10 +9223,10 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-background-actions@^2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/react-native-background-actions/-/react-native-background-actions-2.6.3.tgz#bb55dc9d3a7ba1dec516692d15330a4ae2200c02"
-  integrity sha512-zJZ4QVL32h8MWdQKtURvRM5OXTlDRlxk6d+PSWndkTfrs3v39IglHvpjw9O1eCkpWzp/yo6aXq0XeCITA/sHJA==
+react-native-background-actions@^2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/react-native-background-actions/-/react-native-background-actions-2.6.5.tgz#43361b64a878095536a5f6154d217fa1c3dedc41"
+  integrity sha512-cKbMZ8LIOQobI2LQdkKNDE0hQRbgJF5gohusaBxuhV0j/v5M+0esC83NFa7r9lzahmSDhf6mF+8AH4iUWjhj9Q==
   dependencies:
     eventemitter3 "^4.0.7"
 

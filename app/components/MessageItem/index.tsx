@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View, ViewStyle} from "react-native";
+import {ActivityIndicator, StyleSheet, Text, View, ViewStyle} from "react-native";
 import React, {memo, useEffect, useLayoutEffect, useState} from "react";
 import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
 
-type MessageItemProps = {
+export type MessageItemProps = {
     message: MessagesMessage
     style?: ViewStyle
     extraData: {
@@ -43,7 +43,7 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
             {
                 !isMine && (
                     <FastImage
-                      source={{uri: peer?.photo_100, priority: FastImage.priority.high, cache: 'cacheOnly'}}
+                      source={{uri: peer?.photo_100, priority: FastImage.priority.high, cache: 'immutable'}}
                         style={styles.senderAvatar}
                     />
                     )
@@ -59,7 +59,7 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                                         <FastImage
                                             resizeMode={'stretch'}
                                             style={{width: 200, height: 200, maxWidth: attachmentWnH, maxHeight: attachmentWnH}}
-                                            source={{uri: message.attachments[0].photo.sizes[0].url || ''}}/>
+                                            source={{uri: message.attachments[0].photo.sizes[0].url || '', cache: 'immutable'}}/>
                                     </View>
                                         ) : null
                             }
@@ -71,6 +71,9 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                         </View>
                     </View>
                 </View>
+            </View>
+            <View>
+                {message.loaded === false ? <ActivityIndicator /> : null}
             </View>
         </View>
     )

@@ -125,11 +125,11 @@ export class Api {
     }
   }
 
-  async sendMessage(peer_id: number, message: string): Promise<PostMessageResult> {
+  async sendMessage(peer_id: number, message: string, random_id?: number): Promise<PostMessageResult> {
     try {
       const response: ApiResponse<VkResponse<MessagesSendResponse>, any> = await this.apisauce.post(`/method/messages.send`, {
 
-      }, {params: { random_id: Number(new Date().getMilliseconds()), peer_id, message, }})
+      }, {params: { random_id: random_id || Number(new Date().getMilliseconds()), peer_id, message, }})
 
       // the typical ways to die when calling an api
       if (!response.ok) {

@@ -4,7 +4,7 @@ import {
     View,
     StyleSheet
 } from "react-native";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Messages from '../../../features/MessagesList'
 import {MessagesMessage} from "../../../types/vk";
 import {useDispatch, useSelector} from "react-redux";
@@ -31,29 +31,37 @@ const ConversationScreen = (props) => {
 
         const messages = history.items
 
-        return messages[messages.length - 1].id
+        return messages[0].id
     })
 
     const myId = useSelector<RootState>((state) => state.user.user_data?.id)
     const [textMessage, setTextMessage] = useState<string>('')
 
+    useEffect(() => {
+        console.log('Last Message ID', lastMessageId)
+    }, [lastMessageId])
+
     const onMessageSend = () => {
+        setTextMessage('')
+        const rid = Math.ceil(Date.now() / 1000)
+
         dispatch.history.sendMessage({
             message:
                 {
-                    id: getNewMessageId(lastMessageId),
+                    random_id: rid,
+                    id: rid,
                     peer_id: peerId,
                     from_id: myId,
                     text: textMessage,
                     date: Date.now() / 1000,
-                    attachments: []} as MessagesMessage
+                    attachments: []} as MessagesMessage,
         })
     }
 
     return <KeyboardAvoidingView behavior={'position'} keyboardVerticalOffset={95}>
             <Messages peer_id={peerId} />
             <View style={styles.messageInputContainer}>
-                <TextInput style={styles.messageInput} onSubmitEditing={onMessageSend} onChangeText={(text) => setTextMessage(text)}  placeholder={'Сообщение'}/>
+                <TextInput autoFocus={true} style={styles.messageInput} onSubmitEditing={onMessageSend} value={textMessage} onChangeText={(text) => setTextMessage(text)}  placeholder={'Сообщение'}/>
             </View>
     </KeyboardAvoidingView>
 }

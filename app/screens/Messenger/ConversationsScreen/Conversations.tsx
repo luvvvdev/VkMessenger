@@ -4,10 +4,11 @@ import {TextField} from "../../../components/TextField/TextField";
 import {Lazy} from "../../../components/Lazy/Lazy";
 
 import ConversationsList from '../../../features/ConversationsList'
+import {translate} from "../../../i18n";
 
 const Conversations = () => (
     <View>
-        <TextField style={{marginBottom: 20, marginTop: 5}} variant={'primary'} placeholder={'Поиск'}/>
+        <TextField style={{marginBottom: 20, marginTop: 5}} variant={'primary'} placeholder={`${translate('common.search')}`}/>
         <Lazy>
             <ConversationsList />
         </Lazy>

@@ -16,7 +16,7 @@ const backgroundLongPolling = async (taskData) => {
 }
 
 const options = {
-    taskName: 'VK Meesenger',
+    taskName: 'VK Messenger',
     taskTitle: 'Updates',
     taskDesc: '.',
     taskIcon: {

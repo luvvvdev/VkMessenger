@@ -112,6 +112,7 @@ export class Message implements MessagesMessage {
         let time = event[5]
         let text = event[6]
         let messageFromId;
+        const randomId = event[9]
 
         console.log(event, event[4])
 
@@ -164,6 +165,7 @@ export class Message implements MessagesMessage {
         this.date = time
         this.from_id = Number(messageFromId)
         this.id = messageId
+        this.random_id = randomId
 
         // TODO: implements attachments supporting
         this.attachments = []

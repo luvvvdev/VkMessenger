@@ -2,7 +2,7 @@ import {DeviceEventEmitter, DeviceEventEmitterStatic} from "react-native";
 import {Api} from "../api/api";
 import {Store, store} from "../../models";
 import {Message} from "../../entities/Message";
-
+import _ from 'lodash'
 type TLongPollActions = 'lp_service_init' | TLongPollConnectionActions | TLongPollUpdatesActions
 type TLongPollConnectionActions = 'lp_server_connect' | 'lp_server_connect_ok' | 'lp_server_connect_failed' | 'lp_server_reconnect'
 type TLongPollUpdatesActions = 'lp_updates_check' | 'lp_updates_check_failed' | 'lp_updates_check_ok' | 'update'
@@ -146,11 +146,29 @@ class LongPollService {
 
     private onNewMessage(message: Message) {
         console.log('New MessageItem', message)
+
         this.store.dispatch.conversations.editLastMessage({message}).catch((e) => {
             console.error(e)
         })
 
-        this.store.dispatch.history.addMessage({message})
+        const messageHistory = this.store.getState().history.items[message.peer_id]
+
+        if (!messageHistory) return
+
+        const loadingMessageIndex = _.findIndex(messageHistory.items, (v) => v.id === message.random_id)
+
+        if (loadingMessageIndex === -1) {
+            console.log('message hasnt loading instance')
+
+            this.store.dispatch.history.addMessage({message})
+            return
+        }
+
+        console.log('message has loading instance', message.id)
+
+        //messageHistory.items[loadingMessageIndex].loading = false
+
+        this.store.dispatch.history.setMessageLoading({peer_id: message.peer_id, msg_id: message.id, rid: message.random_id!})
     }
 
     private onEditMessage(message: Message) {

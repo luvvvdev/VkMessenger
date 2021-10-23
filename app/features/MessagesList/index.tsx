@@ -1,5 +1,5 @@
-import {ActivityIndicator, StyleSheet, View} from "react-native";
-import React, {useEffect} from "react";
+import {ActivityIndicator, Animated, StyleSheet, View} from "react-native";
+import React, {useEffect, useRef} from "react";
 import {MessagesMessage} from "../../types/vk";
 import MessageItem from "../../components/MessageItem";
 import {useDispatch, useSelector} from "react-redux";
@@ -10,6 +10,7 @@ import startOfDay from 'date-fns/startOfDay'
 import {format, isSameYear, isToday} from "date-fns";
 import BigList from 'react-native-big-list'
 import SectionHeader from "../ConversationsList/SectionHeader";
+import {AnimatedMessage} from "./Item";
 
 type MessagesProps = {
     peer_id: number
@@ -59,15 +60,16 @@ export default ({peer_id}: MessagesProps) => {
     }, [])
 
     const renderItem = (data: MessagesMessage) => (
-            <MessageItem message={data} myId={myId || 0} extraData={{profiles: profiles || [], groups: groups || []}} style={{marginBottom: 10}}/>
+                <MessageItem
+                    message={data} myId={myId || 0}
+                    extraData={{profiles: profiles || [], groups: groups || []}}
+                    style={{marginBottom: 10}} />
     )
 
     const keyExtractor = (item: MessagesMessage) => (`message-${item.from_id}-${item.id}`)
 
     const onEndReached = ({distanceFromEnd}) => {
         if (distanceFromEnd < 0) return
-
-        console.log('loading more messages', distanceFromEnd)
 
         dispatch.history.loadMore({count: 200})
             .catch((e) => {
@@ -100,30 +102,36 @@ export default ({peer_id}: MessagesProps) => {
         return height
     }
 
-    if (historyLoading && !loadingMore) return (
+    const placeholder = (
         <View style={styles.messagesListLoadingContainer}>
             <ActivityIndicator />
         </View>
     )
+
+    if (historyLoading && !loadingMore) return placeholder
 
     return (
             <View style={styles.messagesList}>
                 <BigList
                     inverted
                     sections={messages}
-                    snapToAlignment={'end'}
-                    renderSectionFooter={renderSectionHeader}
-                    contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}
                     // @ts-ignore
                     itemHeight={getHeightForItem}
-                    sectionFooterHeight={30}
                     renderItem={(item) => renderItem(item.item)}
+                    renderSectionHeader={renderSectionHeader}
+                    //stickySectionHeadersEnabled={true}
+                    invertStickyHeaders={false}
+                    sectionHeaderHeight={30}
+                    placeholderComponent={placeholder}
+                    contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}
                     keyExtractor={keyExtractor}
                     onEndReached={onEndReached}
                     onEndReachedThreshold={0.3}
-                    footerHeight={50}
+
                     removeClippedSubviews={true}
                     batchSizeThreshold={0.5}
+                    footerHeight={50}
+
                     renderFooter={loadingMore ? () => <ActivityIndicator /> : undefined}
                 />
             </View>

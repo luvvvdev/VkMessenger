@@ -1,0 +1,23 @@
+{
+  "common": {
+    "ok": "Ок",
+    "cancel": "Отмена",
+    "back": "Назад",
+    "search": "Поиск",
+    "clear": "Очистить"
+  },
+  "ConversationsScreen": {
+    "title": "Мессенджер"
+  },
+  "ConversationScreen": {
+    "input_message": "Введите сообщение"
+  },
+  "SettingsModal": {
+    "night_mode": "Ночной режим",
+    "online": "Онлайн",
+    "logout": "Выход",
+    "debug_clear_all": "Очистить все",
+    "debug_clear_conversations": "Очистить кэш бесед",
+    "debug_clear_messages": "Очистить кэш сообщений"
+  }
+}
