@@ -42,6 +42,7 @@ const ConversationScreen = (props) => {
     }, [lastMessageId])
 
     const onMessageSend = () => {
+        if (textMessage === '') return
         setTextMessage('')
         const rid = Math.ceil(Date.now() / 1000)
 

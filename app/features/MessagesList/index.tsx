@@ -10,7 +10,7 @@ import startOfDay from 'date-fns/startOfDay'
 import {format, isSameYear, isToday} from "date-fns";
 import BigList from 'react-native-big-list'
 import SectionHeader from "../ConversationsList/SectionHeader";
-import {AnimatedMessage} from "./Item";
+import {getAttachmentsHeight} from "../../utils/getAttachmentsHeight";
 
 type MessagesProps = {
     peer_id: number
@@ -90,14 +90,11 @@ export default ({peer_id}: MessagesProps) => {
         const rowMaxSymbolsCount = 37
         const heightOfRow = 20 // height for one row
 
-        const heightOfRows = msg.text.length / rowMaxSymbolsCount * heightOfRow
+        const heightOfRows = msg.text.length > 0 ? msg.text.length / rowMaxSymbolsCount * heightOfRow : 0
 
-        // fixed height/width for attachment
-        const imageHeight = 200
+        const attachmentsHeight = getAttachmentsHeight(msg.attachments)
 
-        const hasImage = msg.attachments && msg.attachments.length > 0 && msg.attachments[0].type === 'photo'
-
-        const height = baseContainerHeight + (msg.text.length > 0 ? heightOfRows : 0) + (hasImage ? imageHeight : 0)
+        const height = baseContainerHeight + heightOfRows + attachmentsHeight
 
         return height
     }
@@ -113,14 +110,14 @@ export default ({peer_id}: MessagesProps) => {
     return (
             <View style={styles.messagesList}>
                 <BigList
-                    inverted
+                    inverted={true}
                     sections={messages}
                     // @ts-ignore
                     itemHeight={getHeightForItem}
                     renderItem={(item) => renderItem(item.item)}
                     renderSectionHeader={renderSectionHeader}
                     //stickySectionHeadersEnabled={true}
-                    invertStickyHeaders={false}
+                    invertStickyHeaders={true}
                     sectionHeaderHeight={30}
                     placeholderComponent={placeholder}
                     contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}

@@ -11,6 +11,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../models";
 import FastImage from "react-native-fast-image";
 import {TimeAgo} from "./TimeAgo";
+import {translate, TxKeyPath} from "../../i18n";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -29,24 +30,19 @@ const getLastMessageText = (last_message) => {
 
     if (!attachments) return 'None'
 
-    const first_attachment = attachments![0]
+    if (attachments.length > 1) {
+        return `${attachments.length} ${translate(`common.attachments_types.many`)}`
+    }
 
-    if (!first_attachment) return 'Вложение'
+    const first_attachment = attachments[0]
 
-    if (first_attachment?.type === 'photo') return 'Фотография'
-    if (first_attachment?.type === 'sticker') return 'Стикер'
-    if (first_attachment?.type === 'audio_message') return 'Голосовое сообщение'
-    if (first_attachment?.type === 'audio') return 'Аудиозапись'
-    if (first_attachment?.type === 'video') return 'Видео'
-    if (first_attachment?.type === 'link') return 'Ссылка'
-    if (first_attachment?.type === 'wall') return 'Запись'
-    if (first_attachment?.type === 'poll') return 'Опрос'
+    return translate(`common.attachments_types.${first_attachment?.type}` as TxKeyPath, {
+        defaultValue: "common.attachments_types.default",
 
-    return 'Вложение'
+    })
 }
 
 const onOpen = (conversation, photo, title) => {
-
     import('../../navigators').then((n) => {
         n.navigate('conversation', {conversation, photo, title})
     })

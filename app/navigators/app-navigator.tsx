@@ -22,6 +22,7 @@ import {Header} from "../components";
 import ConversationsScreen from "../screens/Messenger/ConversationsScreen/ConversationsScreen";
 import SettingsModal from "../features/SettingsModal";
 import FastImage from "react-native-fast-image";
+import {translate} from "../i18n";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -66,7 +67,7 @@ const AppStack = () => {
                 isLoggedIn ? (
                     <>
                         <Stack.Screen name="messenger" component={ConversationsScreen} options={{
-                            title: 'Мессенджер', headerTransparent: true, animationTypeForReplace: 'push',
+                            title: `${translate('ConversationsScreen.title')}`, headerTransparent: true, animationTypeForReplace: 'push',
                             headerLeft: () => {
                                 const modalRef = useRef(null)
                                 const imgSource = {
@@ -87,16 +88,7 @@ const AppStack = () => {
                                         </TouchableOpacity>
                                     </View>
                                 )
-                            },
-                            headerRight: (props => {
-                                const logout = async () => {
-                                    await dispatch.user.logout()
-
-                                    navigate('login')
-                                }
-
-                                return null // <Button title={'Выход'} onPress={logout} />
-                            }),
+                            }
                         }}/>
                         <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (
                             {headerBackVisible: true, headerBackTitleVisible: false, headerTitleAlign: 'left', headerShown: true, headerRight: () => {
@@ -123,7 +115,15 @@ const AppStack = () => {
                                 },
                             })} />
                     </>
-                ) : <Stack.Screen name="login" component={LoginScreen} options={{title: 'Войдите', headerLargeTitle: true, headerTransparent: true}}/>
+                ) : <Stack.Screen
+                    name="login"
+                    component={LoginScreen}
+                    options={
+                        {
+                            title: `${translate('LoginScreen.title')}`,
+                            headerLargeTitle: true,
+                            headerTransparent: true
+                        }}/>
             }
         </Stack.Navigator>
     )

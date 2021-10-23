@@ -3,6 +3,7 @@ import React, {memo, useEffect, useLayoutEffect, useState} from "react";
 import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
+import {Attachments} from "./Attachments/Attachments";
 
 export type MessageItemProps = {
     message: MessagesMessage
@@ -32,12 +33,6 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
 
     }, [profiles, groups])
 
-    if (message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo') {
-        // console.log(message.attachments[0].photo.sizes[0].url)
-    }
-
-    const attachmentWnH = 200
-
     return (
         <View key={`${peer}`} style={{...styles.messageContainer, flexDirection: !isMine ? 'row' : 'row-reverse', ...style}}>
             {
@@ -53,16 +48,7 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                     <View style={{margin: 0}}>
                         <View style={{flexDirection: 'column'}}>
                             {message.text.length > 0 && <Text style={styles.messageText} textBreakStrategy={'simple'}>{message.text}</Text>}
-                            {message.attachments && message.attachments.length > 0 && message.attachments[0].type === 'photo' ?
-                                (
-                                    <View style={{width: 200, height: 200}}>
-                                        <FastImage
-                                            resizeMode={'stretch'}
-                                            style={{width: 200, height: 200, maxWidth: attachmentWnH, maxHeight: attachmentWnH}}
-                                            source={{uri: message.attachments[0].photo.sizes[0].url || '', cache: 'immutable'}}/>
-                                    </View>
-                                        ) : null
-                            }
+                            <Attachments attachments={message.attachments} />
                         </View>
                         <View style={styles.timeContainer}>
                             <Text style={styles.timeText}>

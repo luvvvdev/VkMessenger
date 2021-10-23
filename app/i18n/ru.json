@@ -4,7 +4,20 @@
     "cancel": "Отмена",
     "back": "Назад",
     "search": "Поиск",
-    "clear": "Очистить"
+    "clear": "Очистить",
+    "attachments_types": {
+      "photo": "Фото",
+      "sticker": "Стикер",
+      "audio_message": "Голосовое сообщение",
+      "audio": "Музыка",
+      "video": "Видео",
+      "link": "Ссылка",
+      "wall": "Запись",
+      "poll": "Опрос",
+      "gift": "Подарок",
+      "default": "Вложение",
+      "many": "вложения"
+    }
   },
   "ConversationsScreen": {
     "title": "Мессенджер"
@@ -19,5 +32,8 @@
     "debug_clear_all": "Очистить все",
     "debug_clear_conversations": "Очистить кэш бесед",
     "debug_clear_messages": "Очистить кэш сообщений"
+  },
+  "LoginScreen": {
+    "title": "Войдите"
   }
 }
