@@ -1,6 +1,7 @@
-import React, {useLayoutEffect, useState} from "react";
+import React, {memo, useLayoutEffect, useState} from "react";
 import {Text} from "react-native";
 import {differenceInMinutes, format, formatDistanceToNowStrict, isSameYear, isToday} from "date-fns";
+import {MessagesMessage} from "../../types/vk";
 
 const getDate = (last_message) => {
     const messageDate = last_message.date * 1000
@@ -12,7 +13,7 @@ const getDate = (last_message) => {
     return format(messageDate, 'dd.MM.yyyy')
 }
 
-export const TimeAgo = ({last_message}) => {
+export const TimeAgo = memo(({last_message}: MessagesMessage) => {
     const [time, setTime] = useState(getDate(last_message))
 
     useLayoutEffect(() => {
@@ -26,4 +27,4 @@ export const TimeAgo = ({last_message}) => {
     }, [])
 
     return <Text style={{color: 'gray'}}>{' '}· {time}</Text>
-}
+}, ((prevProps, nextProps) => prevProps.date === nextProps.date))

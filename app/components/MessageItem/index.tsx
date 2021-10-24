@@ -1,9 +1,11 @@
 import {ActivityIndicator, StyleSheet, Text, View, ViewStyle} from "react-native";
-import React, {memo, useEffect, useLayoutEffect, useState} from "react";
+import React, {memo, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
 import {Attachments} from "./Attachments/Attachments";
+import _ from "lodash";
+import {getPeerById} from "../../utils/getPeerById";
 
 export type MessageItemProps = {
     message: MessagesMessage
@@ -12,38 +14,28 @@ export type MessageItemProps = {
         profiles: UsersUserFull[]
         groups: GroupsGroupFull[]
     },
+    isNextMessageByCurrentId: boolean
+    prevMessageByCurrentId: boolean
     myId: number
 }
 
-const getPeerById = (id: number, profiles, groups) => {
-    if (profiles && groups) return id > 0 ? profiles.find((profile) => profile.id === id) || null : groups.find((group => group.id === id)) || null;
-
-    return null
-}
-
-const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: MessageItemProps) => {
-    const [peer, setPeer] = useState<UsersUserFull | GroupsGroupFull | null>(null)
+const MessageItem = ({message, style, isNextMessageByCurrentId, prevMessageByCurrentId, extraData: {profiles, groups}, myId}: MessageItemProps) => {
+    const peer: UsersUserFull | GroupsGroupFull | null = useMemo(() => getPeerById(message.from_id), [groups, profiles])
 
     const isMine = message.from_id === myId
 
-    useEffect(() => {
-        const _peer = getPeerById(message.from_id, profiles, groups)
-
-        setPeer(_peer)
-
-    }, [profiles, groups])
-
     return (
-        <View key={`${peer}`} style={{...styles.messageContainer, flexDirection: !isMine ? 'row' : 'row-reverse', ...style}}>
+        <View style={{...styles.messageContainer, paddingLeft: !isMine && prevMessageByCurrentId ? 25 : 0, flexDirection: !isMine ? 'row' : 'row-reverse', ...style}}>
             {
-                !isMine && (
+                !isMine && !prevMessageByCurrentId  ? (
                     <FastImage
                       source={{uri: peer?.photo_100, priority: FastImage.priority.high, cache: 'immutable'}}
                         style={styles.senderAvatar}
                     />
-                    )
+                    ) : null
             }
-            <View style={styles.contentContainer}>
+            {message.loaded === false ? <ActivityIndicator /> : null}
+            <View style={[styles.contentContainer]}>
                 <View style={{minWidth: 0}}>
                     <View style={{margin: 0}}>
                         <View style={{flexDirection: 'column'}}>
@@ -59,7 +51,6 @@ const MessageItem = ({message, style, extraData: {profiles, groups}, myId}: Mess
                 </View>
             </View>
             <View>
-                {message.loaded === false ? <ActivityIndicator /> : null}
             </View>
         </View>
     )
@@ -89,4 +80,9 @@ const styles = StyleSheet.create({
     }
 })
 
-export default memo(MessageItem)
+export default memo(MessageItem, ((prevProps, nextProps) => {
+    const prevMessage = prevProps.message
+    const nextMessage = nextProps.message
+
+    return _.isEqual(prevMessage, nextMessage)
+}))

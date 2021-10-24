@@ -12,6 +12,8 @@ import {RootState} from "../../models";
 import FastImage from "react-native-fast-image";
 import {TimeAgo} from "./TimeAgo";
 import {translate, TxKeyPath} from "../../i18n";
+import _ from "lodash";
+import {getPeerById} from "../../utils/getPeerById";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -28,7 +30,7 @@ const getLastMessageText = (last_message) => {
 
     const {attachments} = last_message
 
-    if (!attachments) return 'None'
+    if (!attachments) return ''
 
     if (attachments.length > 1) {
         return `${attachments.length} ${translate(`common.attachments_types.many`)}`
@@ -36,9 +38,10 @@ const getLastMessageText = (last_message) => {
 
     const first_attachment = attachments[0]
 
+    // console.log(first_attachment?.type, attachments, `common.attachments_types.${first_attachment?.type}`)
+
     return translate(`common.attachments_types.${first_attachment?.type}` as TxKeyPath, {
         defaultValue: "common.attachments_types.default",
-
     })
 }
 
@@ -48,39 +51,35 @@ const onOpen = (conversation, photo, title) => {
     })
 }
 
-const getConversationName = (conversation, profiles, groups) => {
+const getConversationName = (conversation, peer) => {
     switch (conversation.peer.type) {
         case 'user':
-            const profile = profiles.find((profile) => profile.id === conversation.peer.id)
-
-            return `${profile?.first_name} ${profile?.last_name}`
+            //const profile = peer.find((profile) => profile.id === conversation.peer.id)
+            return `${peer?.first_name} ${peer?.last_name}`
         case 'group':
-            const group = groups.find(group => group.id === conversation.peer.local_id)
-            return `${group?.name}`
-        case 'chat':
+            // const group = peer.find(group => group.id === conversation.peer.local_id)
+            return `${peer?.name}`
+        default:
             return conversation.chat_settings?.title
     }
 }
 
-const getPhotoUrl = (conversation, profiles, groups) => {
+const getPhotoUrl = (conversation, peer) => {
     switch (conversation.peer.type) {
-        case 'user':
-            const profile = profiles.find((profile) => profile.id === conversation.peer.id)
-            return profile?.photo_100
-        case 'group':
-            const group = groups.find(group => group.id === conversation.peer.local_id)
-            return group?.photo_200
-        case 'chat':
+        case 'user' || 'group':
+            // const profile = peer.find((profile) => profile.id === conversation.peer.id)
+            return peer?.photo_100
+        default:
             return conversation.chat_settings?.photo?.photo_100 || conversation.chat_settings?.photo?.photo_50
     }
 }
 
 const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
-    const {profiles, groups} = useSelector<RootState, ProfilesAndGroups>(({conversations}) => ({profiles: conversations.profiles || [], groups: conversations.groups || []}))
     const {conversation, last_message} = data
+    const peer = getPeerById(conversation.peer.id)
 
-    const conversationPhotoUrl = getPhotoUrl(conversation, profiles, groups)
-    const conversationName = getConversationName(conversation, profiles, groups)
+    const conversationPhotoUrl = getPhotoUrl(conversation, peer)
+    const conversationName = getConversationName(conversation, peer)
 
     const imgSource = {
         method: 'GET',
@@ -103,7 +102,9 @@ const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
             </View>
         </TouchableOpacity>
     )
-})
+},
+    ((prevProps,
+      nextProps) => _.isEqual(prevProps.data.conversation, nextProps.data.conversation)))
 
 const styles = StyleSheet.create({
     container: {

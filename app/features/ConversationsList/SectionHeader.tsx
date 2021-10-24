@@ -11,7 +11,11 @@ const SectionHeader = ({title}: {title: string}) => {
 }
 const styles = StyleSheet.create({
     sectionHeaderContainer: {
-        width: '100%', marginTop: 5, marginBottom: 10, alignItems: 'center'
+        width: '100%',
+        marginTop: 5,
+        marginBottom: 10,
+        alignItems: 'center',
+        // transform: [{translateY: -1}]
     },
     headerText: {
         color: 'darkgray', fontSize: 12,

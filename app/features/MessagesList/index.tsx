@@ -39,11 +39,7 @@ export default ({peer_id}: MessagesProps) => {
 
         const groupedMessages: {[key: string]: MessagesMessage[]} = _.groupBy<MessagesMessage[], string>(messages, (item) => startOfDay(item.date * 1000).toUTCString())
 
-        const sectionedMessages: Array<MessagesMessage[]> = []
-
-        Object.keys(groupedMessages).forEach((key, index) => {
-            sectionedMessages.push(groupedMessages[key])
-        })
+        const sectionedMessages: Array<MessagesMessage[]> = Object.values(groupedMessages)
 
         return sectionedMessages
     })
@@ -59,12 +55,25 @@ export default ({peer_id}: MessagesProps) => {
             })
     }, [])
 
-    const renderItem = (data: MessagesMessage) => (
-                <MessageItem
-                    message={data} myId={myId || 0}
-                    extraData={{profiles: profiles || [], groups: groups || []}}
-                    style={{marginBottom: 10}} />
-    )
+    const renderItem = (data: MessagesMessage, section: number | undefined, index: number) => {
+
+        const nextMessage = typeof section !== 'undefined' ? (messages[section][index + 1] || messages[section + 1][0]) : null
+        const prevMessage = typeof section !== 'undefined' ? (messages[section][index - 1]) : null
+        //messages[section - 1][messages[section-1].length-1]
+
+
+        const nextMessageByCurrentAuthor = nextMessage ? nextMessage.from_id === data.from_id : false
+        const prevMessageByCurrentAuthor = prevMessage ? prevMessage.from_id === data.from_id : false
+
+        return (
+            <MessageItem
+                message={data} myId={myId || 0}
+                isNextMessageByCurrentId={nextMessageByCurrentAuthor}
+                prevMessageByCurrentId={prevMessageByCurrentAuthor}
+                extraData={{profiles: profiles || [], groups: groups || []}}
+                style={{marginBottom: 10}} />
+        )
+    }
 
     const keyExtractor = (item: MessagesMessage) => (`message-${item.from_id}-${item.id}`)
 
@@ -100,7 +109,11 @@ export default ({peer_id}: MessagesProps) => {
     }
 
     const placeholder = (
-        <View style={styles.messagesListLoadingContainer}>
+        <View style={[styles.messagesList, {
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column'}
+            ]}>
             <ActivityIndicator />
         </View>
     )
@@ -114,11 +127,14 @@ export default ({peer_id}: MessagesProps) => {
                     sections={messages}
                     // @ts-ignore
                     itemHeight={getHeightForItem}
-                    renderItem={(item) => renderItem(item.item)}
+                    renderItem={(item) => renderItem(item.item, item.section,  item.index)}
+
+                    sectionFooterHeight={30}
                     renderSectionHeader={renderSectionHeader}
-                    //stickySectionHeadersEnabled={true}
-                    invertStickyHeaders={true}
+                    stickySectionHeadersEnabled={true}
+                    //invertStickyHeaders={true}
                     sectionHeaderHeight={30}
+
                     placeholderComponent={placeholder}
                     contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}
                     keyExtractor={keyExtractor}

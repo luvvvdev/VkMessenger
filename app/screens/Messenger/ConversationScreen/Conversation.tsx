@@ -4,7 +4,7 @@ import {
     View,
     StyleSheet
 } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Messages from '../../../features/MessagesList'
 import {MessagesMessage} from "../../../types/vk";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,6 +20,7 @@ const getNewMessageId = (lastMessageId) => {
 }
 
 const ConversationScreen = (props) => {
+    const messageInputRef = useRef<TextInput>(null)
     const peerId = props.route.params.conversation.peer.id
 
     const dispatch = useDispatch<Dispatch>()
@@ -37,13 +38,12 @@ const ConversationScreen = (props) => {
     const myId = useSelector<RootState>((state) => state.user.user_data?.id)
     const [textMessage, setTextMessage] = useState<string>('')
 
-    useEffect(() => {
-        console.log('Last Message ID', lastMessageId)
-    }, [lastMessageId])
-
     const onMessageSend = () => {
         if (textMessage === '') return
+
         setTextMessage('')
+        setTimeout(() => messageInputRef.current?.focus(), 100)
+
         const rid = Math.ceil(Date.now() / 1000)
 
         dispatch.history.sendMessage({
@@ -62,7 +62,16 @@ const ConversationScreen = (props) => {
     return <KeyboardAvoidingView behavior={'position'} keyboardVerticalOffset={95}>
             <Messages peer_id={peerId} />
             <View style={styles.messageInputContainer}>
-                <TextInput autoFocus={true} style={styles.messageInput} onSubmitEditing={onMessageSend} value={textMessage} onChangeText={(text) => setTextMessage(text)}  placeholder={'Сообщение'}/>
+                <TextInput
+                    ref={messageInputRef}
+                    autoFocus={true}
+                    style={styles.messageInput}
+                    onSubmitEditing={onMessageSend}
+                    value={textMessage}
+                    onChangeText={(text) => {
+                        setTextMessage(text)
+                    }}
+                    placeholder={'Сообщение'}/>
             </View>
     </KeyboardAvoidingView>
 }

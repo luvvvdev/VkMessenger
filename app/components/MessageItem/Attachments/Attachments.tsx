@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from "react-native";
 import FastImage from "react-native-fast-image";
-import React from "react";
+import React, {memo} from "react";
 import {MessagesMessageAttachment} from "../../../types/vk";
 import _ from "lodash";
 import {getAttachmentsHeight} from "../../../utils/getAttachmentsHeight";
@@ -14,7 +14,7 @@ type AttachmentsProps = {
     attachments?: MessagesMessageAttachment[]
 }
 
-export const Attachments = ({attachments}: AttachmentsProps) => {
+export const Attachments = memo(({attachments}: AttachmentsProps) => {
 
     if (!attachments) return null
 
@@ -27,7 +27,7 @@ export const Attachments = ({attachments}: AttachmentsProps) => {
         <FastImage
             resizeMode={'cover'}
             style={{marginLeft: !isSecond ? 5 : 0}}
-            source={{uri: attachment.photo.sizes[3].url || '', cache: 'cacheOnly'}}/>
+            source={{uri: attachment.photo.sizes[3].url || '', cache: 'immutable', priority: FastImage.priority.high}}/>
     )
 
     const children = attachments.map((attachment, index, arr) => {
@@ -56,7 +56,7 @@ export const Attachments = ({attachments}: AttachmentsProps) => {
             {rows}
         </View>
     )
-}
+})
 
 const styles = StyleSheet.create({
     attachmentsContainer: {
