@@ -25,6 +25,7 @@ import SettingsModal from "../features/SettingsModal";
 import FastImage from "react-native-fast-image";
 import {translate} from "../i18n";
 import {Avatar} from "../components/Avatar/Avatar";
+import {getPeerById} from "../utils/getPeerById";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -115,6 +116,18 @@ const AppStack = () => {
                                     const conversation = (route.params! as any).conversation
                                     const type = conversation.peer.type
 
+                                    let photo = conversation.chat_settings?.photo?.photo_100
+
+                                    if (type !== 'chat') {
+                                        const peer = getPeerById(conversation.peer.id)
+
+                                        if (type === 'group') {
+                                            photo = peer?.photo_100
+                                        } else if (type === 'user') {
+                                            photo = peer?.photo_100
+                                        }
+                                    }
+
                                     let underTitle = ''
 
                                     switch (type) {
@@ -136,7 +149,7 @@ const AppStack = () => {
                                         justifyContent: 'flex-start',
                                         flexDirection: 'row'}}>
                                         <Avatar
-                                            url={(route.params! as any).photo}
+                                            url={photo}
                                             // @ts-ignore
                                             size={35}
                                             style={{marginRight: 10}}/>
@@ -146,14 +159,20 @@ const AppStack = () => {
                                                 // lineBreakMode={'tail'}
                                                 ellipsizeMode={'tail'}
                                                 style={{
-                                                    width: '75%',
+                                                    width: 150,
                                                     fontWeight: 'bold',
                                                     fontSize: 16,
                                                     color: PlatformColor('label')
                                                 }}>
                                                 {`${(route.params! as any).title.toString()}`}
                                             </Text>
-                                            <Text style={{color: PlatformColor('secondaryLabel')}}>{underTitle}</Text>
+                                            {
+                                                underTitle.length > 0 && (
+                                                    <Text style={{color: PlatformColor('secondaryLabel')}}>
+                                                        {underTitle}
+                                                    </Text>
+                                                )
+                                            }
                                         </View>
                                     </View>
                                 )

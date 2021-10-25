@@ -44,7 +44,7 @@ export default ({peer_id}: MessagesProps) => {
         return sectionedMessages
     })
 
-    const {profiles, groups} = useSelector((state: RootState) => ({profiles: state.conversations.profiles, groups: state.conversations.groups}))
+    // const {profiles, groups} = useSelector((state: RootState) => ({profiles: state.conversations.profiles, groups: state.conversations.groups}))
 
     useEffect(() => {
         dispatch.history.get({peer_id, offset: 0, count: 200})
@@ -59,10 +59,25 @@ export default ({peer_id}: MessagesProps) => {
 
     const renderItem = (data: MessagesMessage, section: number | undefined, index: number) => {
 
-        const nextMessage = typeof section !== 'undefined' ? (messages[section][index + 1] || messages[section + 1][0]) : null
-        const prevMessage = typeof section !== 'undefined' ? (messages[section][index - 1]) : null
-        //messages[section - 1][messages[section-1].length-1]
+        let nextMessage: MessagesMessage | null = null
+        let prevMessage: MessagesMessage | null = null
 
+        if (typeof section !== 'undefined') {
+            nextMessage = messages[section][index + 1]
+
+            const nextSection = messages[section + 1]
+
+            if (!nextMessage && nextSection) {
+                nextMessage = nextSection[0]
+            }
+
+            prevMessage = messages[section][index - 1]
+
+            const prevSection = messages[section - 1]
+            if (!prevMessage && prevSection) {
+                prevMessage = prevSection[prevSection.length - 1]
+            }
+        }
 
         const nextMessageByCurrentAuthor = nextMessage ? nextMessage.from_id === data.from_id : false
         const prevMessageByCurrentAuthor = prevMessage ? prevMessage.from_id === data.from_id : false
@@ -137,6 +152,8 @@ export default ({peer_id}: MessagesProps) => {
 
                     footerHeight={50}
                     renderFooter={loadingMore ? () => <ActivityIndicator /> : undefined}
+
+                    columnWrapperStyle={{marginBottom: 5}}
                 />
             </View>
     )

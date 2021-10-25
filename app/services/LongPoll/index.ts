@@ -93,9 +93,10 @@ class LongPollService {
             // console.log(serverData)
 
             if (response.kind !== 'ok' || response.data.error) {
+
+                console.log(response)
                 // @ts-ignore
-                throw new LongPollError('Failed connection', response)
-                return
+                throw new LongPollError('Failed connection', JSON.stringify(response))
             }
 
             // @ts-ignore

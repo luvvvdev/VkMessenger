@@ -6,7 +6,7 @@ import {
     View,
 } from "react-native";
 import React, {memo} from "react";
-import {MessagesConversationWithMessage} from "../../types/vk";
+import {GroupsGroupFull, MessagesConversation, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
 import FastImage from "react-native-fast-image";
 import {TimeAgo} from "./TimeAgo";
 import {translate, TxKeyPath} from "../../i18n";
@@ -53,9 +53,11 @@ const getConversationName = (conversation, peer) => {
     }
 }
 
-const getPhotoUrl = (conversation, peer) => {
+const getPhotoUrl = (conversation: MessagesConversation, peer: UsersUserFull | GroupsGroupFull | null) => {
     switch (conversation.peer.type) {
-        case 'user' || 'group':
+        case 'group':
+            return peer?.photo_100
+        case 'user':
             return peer?.photo_100
         default:
             return conversation.chat_settings?.photo?.photo_100 || conversation.chat_settings?.photo?.photo_50

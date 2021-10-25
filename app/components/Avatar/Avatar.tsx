@@ -16,7 +16,9 @@ const gradients = [
     ['#ffdc50', '#f2b40b'],
     ['#78e070', '#46b864'],
     ['#78f1fa', '#46bddb'],
-    ['#e664fa', '#a73ddb']
+    ['#e664fa', '#a73ddb'],
+    ['#66ccff', '#3f8ae0'],
+    ['#bac2cc', '#8c97a3']
 ]
 
 const emojis = [`🚀`, `🦄`, `🏳‍🌈`, `🍔`, `🍩`, `🍭`, `🍿`, `🍫`, `💰`, `💊`, `🎈`, `🌈`]
@@ -35,10 +37,11 @@ export const Avatar = memo(({url, size, style}: AvatarProps) => {
 
     if (!url) return (
         <View
-            // start={{x: 0.11, y: 0}}
-            // colors={colors}
-            style={{...styles.initialAvatar, ...styles.avatar, ...calculatedStyles}}>
-            <Text style={{textAlign: 'center'}}>{emoji}</Text>
+            style={{...styles.avatar, ...styles.initialAvatar, ...calculatedStyles}}
+        >
+            <LinearGradient colors={colors} style={{width: '100%', height: '100%', ...styles.initialAvatar}}>
+                <Text style={{textAlign: 'center', fontSize: 20}}>{emoji}</Text>
+            </LinearGradient>
         </View>
     )
 
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     avatar: {
         backgroundColor: PlatformColor('secondarySystemBackground'),
         borderRadius: 666,
+        overflow: 'hidden'
     },
     initialAvatar: {
         justifyContent: 'center',

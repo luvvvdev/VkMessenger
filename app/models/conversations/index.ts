@@ -47,7 +47,9 @@ export const conversations = createModel<RootModel>()({
                 // console.log(global.api)
                 const response = await global.api.getConversations()
 
-                if (response.kind !== 'ok' || !response.data.response) return
+                if (response.kind !== 'ok' || !response.data.response) {
+                    throw new Error('Cant get Conversations')
+                }
 
                 const items = response.data.response.items
 
