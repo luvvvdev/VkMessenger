@@ -4,7 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React, {useRef} from "react"
+import React, {memo, useRef} from "react"
 import {
     Button,
     Text, TouchableOpacity,
@@ -24,6 +24,7 @@ import ConversationsScreen from "../screens/Messenger/ConversationsScreen/Conver
 import SettingsModal from "../features/SettingsModal";
 import FastImage from "react-native-fast-image";
 import {translate} from "../i18n";
+import {Avatar} from "../components/Avatar/Avatar";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -111,26 +112,51 @@ const AppStack = () => {
                                     return (<Button title={'Clear'} onPress={fullRefresh} />)
                                 },
                                 headerTitle: () => {
-                                    return (
-                                            <View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
-                                                <FastImage
-                                                    source={{uri: (route.params! as any).photo}}
-                                                    style={{backgroundColor: PlatformColor('secondarySystemBackground'),
-                                                        marginRight: 10,
-                                                        height: 35,
-                                                        width: 35,
-                                                        borderRadius: 100
-                                                    }}/>
-                                                <Text
-                                                    style={{
-                                                        fontWeight: 'bold',
-                                                        fontSize: 17,
-                                                        color: PlatformColor('label')
-                                                    }}>
-                                                    {`${(route.params! as any).title.toString()}`}
-                                                </Text>
-                                            </View>
-                                    )
+                                    const conversation = (route.params! as any).conversation
+                                    const type = conversation.peer.type
+
+                                    let underTitle = ''
+
+                                    switch (type) {
+                                        case 'user':
+                                            underTitle = 'online'
+                                            break
+                                        case 'chat':
+                                            underTitle = `${conversation.chat_settings.members_count} members`
+                                            break
+                                        default:
+                                            break
+                                    }
+
+                                return (
+                                    <View style={{
+                                        display: 'flex',
+                                        width: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-start',
+                                        flexDirection: 'row'}}>
+                                        <Avatar
+                                            url={(route.params! as any).photo}
+                                            // @ts-ignore
+                                            size={35}
+                                            style={{marginRight: 10}}/>
+                                        <View>
+                                            <Text
+                                                numberOfLines={1}
+                                                // lineBreakMode={'tail'}
+                                                ellipsizeMode={'tail'}
+                                                style={{
+                                                    width: '75%',
+                                                    fontWeight: 'bold',
+                                                    fontSize: 16,
+                                                    color: PlatformColor('label')
+                                                }}>
+                                                {`${(route.params! as any).title.toString()}`}
+                                            </Text>
+                                            <Text style={{color: PlatformColor('secondaryLabel')}}>{underTitle}</Text>
+                                        </View>
+                                    </View>
+                                )
                                 },
                             })} />
                     </>

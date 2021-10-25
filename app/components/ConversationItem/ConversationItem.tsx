@@ -12,6 +12,7 @@ import {TimeAgo} from "./TimeAgo";
 import {translate, TxKeyPath} from "../../i18n";
 import _ from "lodash";
 import {getPeerById} from "../../utils/getPeerById";
+import {Avatar} from "../Avatar/Avatar";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -68,16 +69,11 @@ const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
     const conversationPhotoUrl = getPhotoUrl(conversation, peer)
     const conversationName = getConversationName(conversation, peer)
 
-    const imgSource = {
-        method: 'GET',
-        uri: conversationPhotoUrl
-    }
-
     return (
         <TouchableOpacity onPress={() => onOpen(conversation, conversationPhotoUrl, conversationName)}>
             <View style={styles.container}>
                 <View style={styles.leadingPart}>
-                    <FastImage style={styles.image as any} source={imgSource} />
+                    <Avatar url={conversationPhotoUrl} size={55} style={{marginRight: 10}}/>
                     <View>
                         <Text style={styles.userName}>{`${conversationName}`}</Text>
                         <View style={styles.lastMessageContainer}>
