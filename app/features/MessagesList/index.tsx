@@ -1,4 +1,4 @@
-import {ActivityIndicator, Animated, StyleSheet, View} from "react-native";
+import {ActivityIndicator, Animated, LogBox, StyleSheet, View} from "react-native";
 import React, {useEffect, useRef} from "react";
 import {MessagesMessage} from "../../types/vk";
 import MessageItem from "../../components/MessageItem";
@@ -53,6 +53,8 @@ export default ({peer_id}: MessagesProps) => {
                 dispatch.history.clear({peer_id})
                 navigate('messenger')
             })
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+
     }, [])
 
     const renderItem = (data: MessagesMessage, section: number | undefined, index: number) => {
@@ -71,7 +73,8 @@ export default ({peer_id}: MessagesProps) => {
                 isNextMessageByCurrentId={nextMessageByCurrentAuthor}
                 prevMessageByCurrentId={prevMessageByCurrentAuthor}
                 extraData={{profiles: profiles || [], groups: groups || []}}
-                style={{marginBottom: 10}} />
+                style={{marginBottom: 10}}
+            />
         )
     }
 
@@ -95,17 +98,21 @@ export default ({peer_id}: MessagesProps) => {
 
         const msg = messages[section][item]
 
-        const baseContainerHeight = 60
-        const rowMaxSymbolsCount = 37
-        const heightOfRow = 20 // height for one row
 
-        const heightOfRows = msg.text.length > 0 ? msg.text.length / rowMaxSymbolsCount * heightOfRow : 0
+        const rowMaxSymbolsCount = 35
+        const heightOfRow = 14.5 // height for one row
+
+        const textRowsWithoutLast = msg.text.length - 1
+
+        const heightOfRows = textRowsWithoutLast > 0 ? textRowsWithoutLast / rowMaxSymbolsCount * heightOfRow : 0
 
         const attachmentsHeight = getAttachmentsHeight(msg.attachments)
 
-        const height = baseContainerHeight + heightOfRows + attachmentsHeight
+        const baseContainerHeight = attachmentsHeight === 0 ? 50 : (attachmentsHeight > 0 ? 18 : 0)
 
-        return height
+        const height = baseContainerHeight + heightOfRows + attachmentsHeight + 15
+
+        return Math.ceil(height)
     }
 
     const placeholder = (
@@ -136,15 +143,14 @@ export default ({peer_id}: MessagesProps) => {
                     sectionHeaderHeight={30}
 
                     placeholderComponent={placeholder}
-                    contentContainerStyle={{paddingLeft: 20, paddingRight: 20}}
                     keyExtractor={keyExtractor}
                     onEndReached={onEndReached}
                     onEndReachedThreshold={0.3}
 
                     removeClippedSubviews={true}
                     batchSizeThreshold={0.5}
-                    footerHeight={50}
 
+                    footerHeight={50}
                     renderFooter={loadingMore ? () => <ActivityIndicator /> : undefined}
                 />
             </View>
@@ -153,11 +159,14 @@ export default ({peer_id}: MessagesProps) => {
 
 const styles = StyleSheet.create({
     messagesList: {
-       height: '94%',
-        width: '100%'
+        // width: '94.5%',
+        // height: 1,
+        flexGrow: 1,
+        flex: 0,
+        flexShrink: 1,
     },
     messagesListLoadingContainer: {
-        height: '97%',
+        flexGrow: 2,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

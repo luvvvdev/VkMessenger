@@ -8,7 +8,15 @@ import {translate} from "../../../i18n";
 
 const Conversations = () => (
     <View>
-        <TextField style={{marginBottom: 20, marginTop: 5}} variant={'primary'} placeholder={`${translate('common.search')}`}/>
+        <TextField
+            style={{
+                marginBottom: 20,
+                marginTop: 5,
+                marginLeft: 15,
+                marginRight: 15
+            }}
+            variant={'primary'}
+            placeholder={`${translate('common.search')}`}/>
         <Lazy>
             <ConversationsList />
         </Lazy>

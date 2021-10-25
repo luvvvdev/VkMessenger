@@ -1,26 +1,32 @@
-import React from 'react'
-import {StyleProp, TextInput, TextInputProps, TextStyle} from "react-native";
+import React, {forwardRef} from 'react'
+import {PlatformColor, StyleProp, TextInput, TextInputProps, TextStyle} from "react-native";
 
 interface TextFieldProps extends TextInputProps {
-    variant: TextFieldVariant
+    variant: TextFieldVariant;
 }
 
 type TextFieldVariant = 'primary' | 'transparent'
 
-const TextField = ({variant, style, ...rest}: TextFieldProps) => {
+const TextField = forwardRef<TextInput, TextFieldProps>(({variant, style, ...rest}: TextFieldProps, ref) => {
     const variants: Record<TextFieldVariant, StyleProp<TextStyle>> = {
         primary: {
-            backgroundColor: '#EBEBEB',
+            backgroundColor: PlatformColor('secondarySystemBackground'),
             padding: 10,
-            borderRadius: 8,
-
+            borderRadius: 8
         },
         transparent: {
             backgroundColor: 'transparent'
         }
     }
 
-    return <TextInput style={{...variants[variant] as object, ...style as object}} {...rest} placeholderTextColor={'#AFB3C4'}/>
-}
+    return (
+        <TextInput
+            ref={ref}
+            style={[{...variants[variant] as object, ...style as object}, {color: PlatformColor('label')}]}
+            placeholderTextColor={PlatformColor('placeholderText')}
+            {...rest}
+        />
+    )
+})
 
 export {TextField}

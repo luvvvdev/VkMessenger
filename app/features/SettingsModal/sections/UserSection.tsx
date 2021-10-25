@@ -1,16 +1,20 @@
 import React from "react";
-import * as UIKit from 'react-native-ios-kit'
 import {useDispatch} from "react-redux";
 import {Dispatch} from "../../../models";
+import {SectionRow} from "../types";
+import {Section} from "../Section";
+import {translate} from "../../../i18n";
 
 export const UserSection = () => {
     const dispatch = useDispatch<Dispatch>()
 
+    const rows: SectionRow[] = [
+        {title: `${translate('SettingsModal.night_mode')}`},
+        {title: `${translate('SettingsModal.online')}`},
+        {title: `${translate('SettingsModal.logout')}`, onPress: dispatch.user.logout}
+    ]
+
     return (
-        <UIKit.TableView>
-            <UIKit.RowItem title={'Ночной режим'}/>
-            <UIKit.NavigationRow title={'Онлайн'} info={'Все'}/>
-            <UIKit.RowItem title={'Выход'} onPress={dispatch.user.logout}/>
-        </UIKit.TableView>
+        <Section rows={rows} />
     )
 }

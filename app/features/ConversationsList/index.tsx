@@ -41,7 +41,11 @@ const ConversationsList = () => {
         <View style={{width: '100%'}}>
             {
                !loading ? (
-                    <FlatList showsHorizontalScrollIndicator={false} extraData={[conversations]} data={conversations.items} renderItem={renderItem} />
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        extraData={[conversations]}
+                        data={conversations.items}
+                        renderItem={renderItem} />
                 ) : (
                    <View>
                        <ActivityIndicator />

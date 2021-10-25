@@ -1,6 +1,7 @@
 import React, {forwardRef} from "react";
 import * as Modal from 'react-native-ios-modal/lib/commonjs'
 import {
+    PlatformColor,
     ScrollView, StyleSheet,
     Text,
     View
@@ -11,8 +12,6 @@ import {RootState} from "../../models";
 import {UserSection} from "./sections/UserSection";
 import {DeveloperSection} from "./sections/DeveloperSection";
 
-// console.log(Object.keys(UIKit))
-
 const SettingsModal = forwardRef((props, ref) => {
     const userData = useSelector((state: RootState) => state.user.user_data)
 
@@ -22,7 +21,7 @@ const SettingsModal = forwardRef((props, ref) => {
     }
 
     return (
-        <Modal.ModalView ref={ref} isModalBGBlurred={false} isModalBGTransparent={false}>
+        <Modal.ModalView ref={ref} modalId={'settings'} containerStyle={{backgroundColor: PlatformColor('tertiaryBackgroundSystem')}} isModalBGBlurred={false} isModalBGTransparent={false}>
             <>
                 <ScrollView>
                     <View style={styles.userViewContainer}>
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     userAvatar: {
         height: 80,
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         borderRadius: 999,
         marginBottom: 10
     },
-    userName: {fontSize: 20, fontWeight: '600'}
+    userName: {fontSize: 20, fontWeight: '600', color: PlatformColor('label')}
 })
 
 export default SettingsModal

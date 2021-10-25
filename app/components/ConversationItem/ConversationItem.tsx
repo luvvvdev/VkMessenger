@@ -1,14 +1,12 @@
 import {
-    ImageStyle,
+    ImageStyle, PlatformColor,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
 import React, {memo} from "react";
-import {GroupsGroupFull, MessagesConversationWithMessage, UsersUserFull} from "../../types/vk";
-import {useSelector} from "react-redux";
-import {RootState} from "../../models";
+import {MessagesConversationWithMessage} from "../../types/vk";
 import FastImage from "react-native-fast-image";
 import {TimeAgo} from "./TimeAgo";
 import {translate, TxKeyPath} from "../../i18n";
@@ -19,13 +17,7 @@ type ConversationItemProps = {
     data: MessagesConversationWithMessage
 }
 
-type ProfilesAndGroups = {
-    profiles: UsersUserFull[]
-    groups: GroupsGroupFull[]
-}
-
 const getLastMessageText = (last_message) => {
-    //console.log('message text', last_message)
     if (last_message.text) return last_message.text
 
     const {attachments} = last_message
@@ -37,8 +29,6 @@ const getLastMessageText = (last_message) => {
     }
 
     const first_attachment = attachments[0]
-
-    // console.log(first_attachment?.type, attachments, `common.attachments_types.${first_attachment?.type}`)
 
     return translate(`common.attachments_types.${first_attachment?.type}` as TxKeyPath, {
         defaultValue: "common.attachments_types.default",
@@ -54,10 +44,8 @@ const onOpen = (conversation, photo, title) => {
 const getConversationName = (conversation, peer) => {
     switch (conversation.peer.type) {
         case 'user':
-            //const profile = peer.find((profile) => profile.id === conversation.peer.id)
             return `${peer?.first_name} ${peer?.last_name}`
         case 'group':
-            // const group = peer.find(group => group.id === conversation.peer.local_id)
             return `${peer?.name}`
         default:
             return conversation.chat_settings?.title
@@ -67,7 +55,6 @@ const getConversationName = (conversation, peer) => {
 const getPhotoUrl = (conversation, peer) => {
     switch (conversation.peer.type) {
         case 'user' || 'group':
-            // const profile = peer.find((profile) => profile.id === conversation.peer.id)
             return peer?.photo_100
         default:
             return conversation.chat_settings?.photo?.photo_100 || conversation.chat_settings?.photo?.photo_50
@@ -113,7 +100,9 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 10
+        marginBottom: 10,
+        paddingRight: 15,
+        paddingLeft: 15,
     },
     image: {
         height: 55,
@@ -128,20 +117,25 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     userName: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: '600',
         width: 260,
-        marginBottom: 4
+        marginBottom: 4,
+        color: PlatformColor('label')
     },
     textMessage: {
         maxWidth: 200,
         maxHeight: '100%',
-        color: 'gray',
+        color: PlatformColor('secondaryLabel'),
     },
     trailingPart: {
 
     },
-    lastMessageContainer: {width: 260, display: "flex", flexDirection: 'row'}
+    lastMessageContainer: {
+        width: 260,
+        display: "flex",
+        flexDirection: 'row'
+    }
 })
 
 export {ConversationItem, ConversationItemProps}

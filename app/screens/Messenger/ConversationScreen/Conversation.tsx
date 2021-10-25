@@ -2,13 +2,18 @@ import {
     KeyboardAvoidingView,
     TextInput,
     View,
-    StyleSheet
+    StyleSheet, Appearance, PlatformColor
 } from "react-native";
 import React, {useEffect, useRef, useState} from "react";
 import Messages from '../../../features/MessagesList'
 import {MessagesMessage} from "../../../types/vk";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootModel, RootState} from "../../../models";
+import {TextField} from "../../../components/TextField/TextField";
+import {SafeAreaView} from 'react-native-safe-area-context'
+import Icon from "react-native-vector-icons/Feather";
+import {BlurView} from "@react-native-community/blur";
+import {BView} from "../../../components/BlurView/BlurView";
 // const Messages = React.lazy(() => import('../../../features/MessagesList'))
 
 const getNewMessageId = (lastMessageId) => {
@@ -59,38 +64,82 @@ const ConversationScreen = (props) => {
         })
     }
 
-    return <KeyboardAvoidingView behavior={'position'} keyboardVerticalOffset={95}>
-            <Messages peer_id={peerId} />
-            <View style={styles.messageInputContainer}>
-                <TextInput
-                    ref={messageInputRef}
-                    autoFocus={true}
-                    style={styles.messageInput}
-                    onSubmitEditing={onMessageSend}
-                    value={textMessage}
-                    onChangeText={(text) => {
-                        setTextMessage(text)
-                    }}
-                    placeholder={'Сообщение'}/>
+    return <KeyboardAvoidingView behavior={'position'} keyboardVerticalOffset={70}>
+            <View style={styles.conversationContainer}>
+                <Messages peer_id={peerId} />
+                <BView>
+                    <SafeAreaView style={styles.footerContainer} edges={['bottom']}>
+                        <View style={styles.footerAction}>
+                            <Icon name={'paperclip'} size={20} color={PlatformColor('link')}/>
+                        </View>
+                        <View>
+                            <TextField
+                                ref={messageInputRef}
+                                //autoFocus={true}
+                                style={styles.messageInput}
+                                onSubmitEditing={onMessageSend}
+                                value={textMessage}
+                                onChangeText={(text) => setTextMessage(text)}
+                                placeholder={'Сообщение'}
+                                variant={'primary'}
+                                multiline={true}
+                                textAlignVertical={'bottom'}
+                                textBreakStrategy={'highQuality'}
+                                scrollEnabled={true}
+                                collapsable={true}
+                                numberOfLines={6}
+                                keyboardType={'default'}
+                                returnKeyType={'next'}
+                            />
+                        </View>
+                        <View style={styles.footerAction}>
+                            <Icon name={'mic'} size={20} color={PlatformColor('link')}/>
+                        </View>
+                    </SafeAreaView>
+                </BView>
             </View>
     </KeyboardAvoidingView>
 }
 
 const styles = StyleSheet.create({
-    messageInputContainer: {
-        height: 40,
-        //marginTop: 5,
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
+    conversationContainer: {
+        flexDirection: "column",
+        height: '100%',
+        // flexGrow: 1,
+        // overflow: "hidden",
+    },
+    footerContainer: {
+        flexGrow: 0,
+        flexShrink: 2,
+        flex: 0,
         flexDirection: 'row',
-        paddingRight: 20,
-        paddingLeft: 20
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        paddingVertical: 8,
+        maxWidth: '100%',
+        backgroundColor: 'transparent'
+        // paddingVertical: 5,
+    },
+    footerAction: {
+        flexGrow: 1,
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginBottom: 5,
+        maxHeight: 20
     },
     messageInput: {
-        width: '100%',
+        //maxWidth: '100%',
+        //minWidth: '100%',
         padding: 10,
-        backgroundColor: 'whitesmoke'}
+        width: 300,
+        margin: 0,
+        minHeight: 30,
+        maxHeight: 80,
+        flexGrow: 1,
+        flexShrink: 1,
+    },
 })
 
 export default ConversationScreen

@@ -327,6 +327,8 @@ PODS:
     - glog
   - react-native-background-actions (2.6.5):
     - React-Core
+  - react-native-blur (0.8.0):
+    - React
   - react-native-flipper (0.113.0):
     - React-Core
   - react-native-ios-modal (0.1.8):
@@ -418,8 +420,6 @@ PODS:
   - RNScreens (3.4.0):
     - React-Core
     - React-RCTImage
-  - RNSpringScrollView (3.0.2):
-    - React
   - RNVectorIcons (8.1.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -493,6 +493,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-background-actions (from `../node_modules/react-native-background-actions`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-ios-modal (from `../node_modules/react-native-ios-modal`)
   - react-native-performance (from `../node_modules/react-native-performance/ios`)
@@ -516,7 +517,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNSpringScrollView (from `../node_modules/react-native-spring-scrollview`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - "UMCore (from `../node_modules/@unimodules/core/ios`)"
@@ -600,6 +600,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-background-actions:
     :path: "../node_modules/react-native-background-actions"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
   react-native-ios-modal:
@@ -646,8 +648,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keychain"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSpringScrollView:
-    :path: "../node_modules/react-native-spring-scrollview"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   UMAppLoader:
@@ -703,6 +703,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8c0517dee5e8c70cd6c3066f20213ff7ce54f176
   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
   react-native-background-actions: a466fde06b54e52adf037ca9b217df460596f120
+  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-flipper: 2a212eb0fead9ae9b42d1eb75604757cdf36f2bb
   react-native-ios-modal: 2894324e2590b0d5c50572370ccc4d640596e0e7
   react-native-performance: 6bd6cfac80594775fb782405fceaaf206becf53b
@@ -726,7 +727,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
-  RNSpringScrollView: e354167d96f2c3d2f20b186990b2c3946987cb3c
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815

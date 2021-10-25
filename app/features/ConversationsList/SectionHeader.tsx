@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
         // transform: [{translateY: -1}]
     },
     headerText: {
-        color: 'darkgray', fontSize: 12,
+        color: 'darkgray',
+        fontSize: 12,
     }
 })
 

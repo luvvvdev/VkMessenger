@@ -10,6 +10,7 @@ import {
     Text, TouchableOpacity,
     useColorScheme,
     View,
+    PlatformColor
 } from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -55,7 +56,7 @@ const AppStack = () => {
             screenOptions={({navigation, route}) => ({
                 headerShown: true,
                 contentStyle: {
-                    backgroundColor: 'white'
+                    backgroundColor: PlatformColor('systemBackground')
                 },
                 headerTransparent: true,
                 headerTintColor: 'white',
@@ -82,7 +83,12 @@ const AppStack = () => {
                                             (modalRef.current as any)?.setVisibility(true)
                                         }}>
                                             <FastImage
-                                                style={{height: 25, width: 25, backgroundColor: 'gray', borderRadius: 999}}
+                                                style={{
+                                                    height: 25,
+                                                    width: 25,
+                                                    borderRadius: 999,
+                                                    backgroundColor: 'gray',
+                                                }}
                                                 source={imgSource}
                                             />
                                         </TouchableOpacity>
@@ -108,8 +114,8 @@ const AppStack = () => {
 
                                     return (
                                             <View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
-                                                <FastImage source={{uri: (route.params! as any).photo}} style={{backgroundColor: 'gray', marginRight: 10, height: 30, width: 30, borderRadius: 100}}/>
-                                                <Text style={{fontWeight: 'bold'}}>{`${(route.params! as any).title.toString()}`}</Text>
+                                                <FastImage source={{uri: (route.params! as any).photo}} style={{backgroundColor: 'transparent', marginRight: 10, height: 35, width: 35, borderRadius: 100}}/>
+                                                <Text style={{fontWeight: 'bold', fontSize: 17, color: PlatformColor('label')}}>{`${(route.params! as any).title.toString()}`}</Text>
                                             </View>
                                     )
                                 },

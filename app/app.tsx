@@ -25,7 +25,6 @@ import {startLongPoll, stopLongPoll} from "./services/LongPoll/background";
 import BackgroundService from "react-native-background-actions";
 import VK from "react-native-vkontakte-login";
 
-import * as UIKit from 'react-native-ios-kit'
 import {PersistGate} from 'redux-persist/lib/integration/react'
 
 import {getPersistor} from "@rematch/persist";
@@ -95,7 +94,6 @@ function App() {
   // otherwise, we're ready to render the app
 
   return (
-        <UIKit.ThemeProvider>
           <Provider store={store}>
             <SafeAreaProvider initialMetrics={null}>
                 <AppNavigator
@@ -104,7 +102,6 @@ function App() {
                 />
             </SafeAreaProvider>
           </Provider>
-        </UIKit.ThemeProvider>
   )
 }
 

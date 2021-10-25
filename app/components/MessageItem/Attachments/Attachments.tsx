@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View} from "react-native";
+import {FlatList, LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
 import FastImage from "react-native-fast-image";
-import React, {memo} from "react";
+import React, {memo, useEffect} from "react";
 import {MessagesMessageAttachment} from "../../../types/vk";
 import _ from "lodash";
 import {getAttachmentsHeight} from "../../../utils/getAttachmentsHeight";
@@ -23,40 +23,49 @@ export const Attachments = memo(({attachments}: AttachmentsProps) => {
     const attachmentWidth = attachments.length === 1 ? 220 : 150
     const attachmentStyle = {...styles.attachment, width: attachmentWidth, maxWidth: attachmentWidth}
 
-    const renderPhoto = (attachment: MessagesMessageAttachment, isSecond: boolean) => (
-        <FastImage
-            resizeMode={'cover'}
-            style={{marginLeft: !isSecond ? 5 : 0}}
-            source={{uri: attachment.photo.sizes[3].url || '', cache: 'immutable', priority: FastImage.priority.high}}/>
-    )
 
-    const children = attachments.map((attachment, index, arr) => {
-        let child: React.ReactNode = null;
+    const renderPhoto = (attachment: MessagesMessageAttachment, isSecond: boolean) => {
+        const source = {
+            headers: {
+                access_key: attachment.photo.access_key
+            },
+            uri: attachment.photo.sizes[0].url || '',
+            // cache: 'immutable',
+            priority: FastImage.priority.high}
 
-        switch (attachment.type) {
-            case "photo":
-                child = renderPhoto(attachment, index % 2 === 0 ? true : false)
-                break;
-            default:
-                child = <View style={{height: '100%', width: 150, backgroundColor: 'gray'}}></View>
-                break;
-        }
+        return (
+            <FastImage
+                resizeMode={'cover'}
+                //style={{marginLeft: !isSecond ? 5 : 0}}
+                source={source}/>
+        )
+    }
 
-        return <View style={attachmentStyle} key={`attachment-${attachment.type}-${index}`}>{child}</View>
-    })
-
-    const rows = _.chunk(children, 2).map((c, i, arr) => (
+    /*const rows = _.chunk(children, 2).map((c, i, arr) => (
         <View style={{flexDirection: 'row', marginBottom: arr[i + 1] ? 5 : 0}} key={`attachments-row-${i}`}>
             {c}
         </View>
-    ))
+    ))*/
 
     return (
-        <View style={[styles.attachmentsContainer, {height}]}>
-            {rows}
-        </View>
+        <ScrollView horizontal={true}>
+            <FlatList numColumns={2} data={attachments} renderItem={({item: attachment, index}) => {
+                let child: React.ReactNode = null;
+
+                switch (attachment.type) {
+                    case "photo":
+                        child = renderPhoto(attachment, index % 2 === 0 ? true : false)
+                        break;
+                    default:
+                        child = <View style={{height: '100%', width: 150, backgroundColor: 'gray'}}></View>
+                        break;
+                }
+
+                return <View style={attachmentStyle} key={`attachment-${attachment.type}-${index}`}>{child}</View>
+            }} />
+        </ScrollView>
     )
-})
+}, ((prevProps, nextProps) => _.isEqual(prevProps, nextProps)))
 
 const styles = StyleSheet.create({
     attachmentsContainer: {

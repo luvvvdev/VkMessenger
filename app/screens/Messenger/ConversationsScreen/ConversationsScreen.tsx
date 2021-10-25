@@ -1,12 +1,8 @@
 import React from "react";
-import Screen from "../../../components/Screen";
-
-const Conversations = React.lazy(() => import('./Conversations'))
+import Conversations from './Conversations'
 
 const ConversationsScreen = (props) => (
-    <Screen>
-        <Conversations {...props}/>
-    </Screen>
+        <Conversations {...props} />
 )
 
 export default ConversationsScreen
