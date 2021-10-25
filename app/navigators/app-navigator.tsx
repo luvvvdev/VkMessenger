@@ -111,11 +111,24 @@ const AppStack = () => {
                                     return (<Button title={'Clear'} onPress={fullRefresh} />)
                                 },
                                 headerTitle: () => {
-
                                     return (
                                             <View style={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
-                                                <FastImage source={{uri: (route.params! as any).photo}} style={{backgroundColor: 'transparent', marginRight: 10, height: 35, width: 35, borderRadius: 100}}/>
-                                                <Text style={{fontWeight: 'bold', fontSize: 17, color: PlatformColor('label')}}>{`${(route.params! as any).title.toString()}`}</Text>
+                                                <FastImage
+                                                    source={{uri: (route.params! as any).photo}}
+                                                    style={{backgroundColor: PlatformColor('secondarySystemBackground'),
+                                                        marginRight: 10,
+                                                        height: 35,
+                                                        width: 35,
+                                                        borderRadius: 100
+                                                    }}/>
+                                                <Text
+                                                    style={{
+                                                        fontWeight: 'bold',
+                                                        fontSize: 17,
+                                                        color: PlatformColor('label')
+                                                    }}>
+                                                    {`${(route.params! as any).title.toString()}`}
+                                                </Text>
                                             </View>
                                     )
                                 },

@@ -2,7 +2,7 @@ import {
     KeyboardAvoidingView,
     TextInput,
     View,
-    StyleSheet, Appearance, PlatformColor
+    StyleSheet, Appearance, PlatformColor, TouchableHighlight
 } from "react-native";
 import React, {useEffect, useRef, useState} from "react";
 import Messages from '../../../features/MessagesList'
@@ -47,6 +47,7 @@ const ConversationScreen = (props) => {
         if (textMessage === '') return
 
         setTextMessage('')
+        messageInputRef.current?.clear()
         setTimeout(() => messageInputRef.current?.focus(), 100)
 
         const rid = Math.ceil(Date.now() / 1000)
@@ -70,14 +71,20 @@ const ConversationScreen = (props) => {
                 <BView>
                     <SafeAreaView style={styles.footerContainer} edges={['bottom']}>
                         <View style={styles.footerAction}>
-                            <Icon name={'paperclip'} size={20} color={PlatformColor('link')}/>
+                            <View style={{
+                                // backgroundColor: textMessage.length === 0 ? 'transparent' : PlatformColor('link'),
+                                padding: 6,
+                                borderRadius: 60
+                            }}>
+                                <Icon name={'paperclip'} size={18} color={PlatformColor('link')}/>
+                            </View>
                         </View>
                         <View>
                             <TextField
                                 ref={messageInputRef}
                                 //autoFocus={true}
                                 style={styles.messageInput}
-                                onSubmitEditing={onMessageSend}
+                                // onSubmitEditing={}
                                 value={textMessage}
                                 onChangeText={(text) => setTextMessage(text)}
                                 placeholder={'Сообщение'}
@@ -89,11 +96,26 @@ const ConversationScreen = (props) => {
                                 collapsable={true}
                                 numberOfLines={6}
                                 keyboardType={'default'}
-                                returnKeyType={'next'}
+                                // returnKeyType={'next'}
                             />
                         </View>
                         <View style={styles.footerAction}>
-                            <Icon name={'mic'} size={20} color={PlatformColor('link')}/>
+                            <TouchableHighlight
+                                onPress={onMessageSend}
+                                underlayColor={PlatformColor('secondarySystemBackground')}>
+                                <View style={{
+                                    backgroundColor: textMessage.length === 0 ? 'transparent' : PlatformColor('link'),
+                                    padding: 6,
+                                    borderRadius: 60
+                                }}>
+                            {
+                                textMessage.length === 0 ? (
+                                    <Icon name={'mic'} size={18} color={PlatformColor('link')}/>
+                                ) :
+                                    <Icon name={'corner-right-up'} size={16} color={'white'}/>
+                            }
+                                </View>
+                            </TouchableHighlight>
                         </View>
                     </SafeAreaView>
                 </BView>
@@ -126,18 +148,19 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginBottom: 5,
-        maxHeight: 20
+        marginBottom: 0,
+        maxHeight: 30,
     },
     messageInput: {
         //maxWidth: '100%',
         //minWidth: '100%',
-        padding: 10,
+        // padding: 10,
         width: 300,
         margin: 0,
-        minHeight: 30,
+        minHeight: 15,
+        // height: 30,
         maxHeight: 80,
-        flexGrow: 1,
+        // flexGrow: 1,
         flexShrink: 1,
     },
 })

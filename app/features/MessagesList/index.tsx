@@ -10,7 +10,7 @@ import startOfDay from 'date-fns/startOfDay'
 import {format, isSameYear, isToday} from "date-fns";
 import BigList from 'react-native-big-list'
 import SectionHeader from "../ConversationsList/SectionHeader";
-import {getAttachmentsHeight} from "../../utils/getAttachmentsHeight";
+import {calculateHeight} from "../../utils/calculateMessageHeight";
 
 type MessagesProps = {
     peer_id: number
@@ -72,7 +72,6 @@ export default ({peer_id}: MessagesProps) => {
                 message={data} myId={myId || 0}
                 isNextMessageByCurrentId={nextMessageByCurrentAuthor}
                 prevMessageByCurrentId={prevMessageByCurrentAuthor}
-                extraData={{profiles: profiles || [], groups: groups || []}}
                 style={{marginBottom: 10}}
             />
         )
@@ -98,21 +97,7 @@ export default ({peer_id}: MessagesProps) => {
 
         const msg = messages[section][item]
 
-
-        const rowMaxSymbolsCount = 35
-        const heightOfRow = 14.5 // height for one row
-
-        const textRowsWithoutLast = msg.text.length - 1
-
-        const heightOfRows = textRowsWithoutLast > 0 ? textRowsWithoutLast / rowMaxSymbolsCount * heightOfRow : 0
-
-        const attachmentsHeight = getAttachmentsHeight(msg.attachments)
-
-        const baseContainerHeight = attachmentsHeight === 0 ? 50 : (attachmentsHeight > 0 ? 18 : 0)
-
-        const height = baseContainerHeight + heightOfRows + attachmentsHeight + 15
-
-        return Math.ceil(height)
+        return calculateHeight(msg.text)
     }
 
     const placeholder = (
@@ -137,7 +122,7 @@ export default ({peer_id}: MessagesProps) => {
                     renderItem={(item) => renderItem(item.item, item.section,  item.index)}
 
                     sectionFooterHeight={30}
-                    renderSectionHeader={renderSectionHeader}
+                    renderSectionFooter={renderSectionHeader}
                     stickySectionHeadersEnabled={true}
                     //invertStickyHeaders={true}
                     sectionHeaderHeight={30}
