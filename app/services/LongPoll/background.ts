@@ -7,7 +7,7 @@ const backgroundLongPolling = async (taskData) => {
     global.lp = lp
 
     try {
-        await global.lp.connect()
+        // await global.lp.connect()
         await global.lp.lookupUpdates()
     } catch (e) {
         console.error(e)

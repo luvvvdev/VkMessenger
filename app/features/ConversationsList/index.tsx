@@ -1,10 +1,13 @@
 import {ConversationItem} from "../../components/ConversationItem/ConversationItem";
-import {ActivityIndicator, FlatList, View} from "react-native";
+import {ActivityIndicator, FlatList, SafeAreaView, Text, View} from "react-native";
 import React, {useEffect, useLayoutEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../../models";
 import {ConversationsState} from "../../models/conversations";
 import FastImage from "react-native-fast-image";
+import BigList, {BigListRenderItemInfo} from "react-native-big-list";
+import {MessagesConversationWithMessage} from "../../types/vk";
+import _ from 'lodash'
 
 const ConversationsList = () => {
     const dispatch = useDispatch<Dispatch>()
@@ -15,18 +18,21 @@ const ConversationsList = () => {
     const getConversations = () => dispatch.conversations.get().then(() => {
 
         if (conversations.profiles && conversations.groups) {
-            const profilesPhotos = conversations.profiles?.map((profile) => ({uri: profile.photo_100})).filter((src) => typeof src.uri !== 'undefined')
-            const groupsPhotos = conversations.groups?.map((group) => ({uri: group.photo_100})).filter((src) => typeof src.uri !== 'undefined')
+            const profilesPhotos = _.compact(conversations.profiles?.map((profile) => ({uri: profile.photo_100})))
+            const groupsPhotos = _.compact(conversations.groups?.map((group) => ({uri: group.photo_100})))
 
             FastImage.preload([...profilesPhotos, ...groupsPhotos])
         }
     })
 
     useEffect(() => {
-        getConversations()
+        if (conversations.items.length === 0) {
+            getConversations()
+        }
     }, [])
 
-    const renderItem = ({index, item}) => {
+    const renderItem = (data: BigListRenderItemInfo<MessagesConversationWithMessage>) => {
+        const item = data.item
 
         if (!item.conversation) {
             console.log('error VALUE', item.conversation)
@@ -38,22 +44,19 @@ const ConversationsList = () => {
     }
 
     return (
-        <View style={{width: '100%'}}>
-            {
-               !loading ? (
-                    <FlatList
+        <SafeAreaView>
+            <View style={{width: '100%', height: '100%'}}>
+                    <BigList
+                        refreshing={loading}
                         showsHorizontalScrollIndicator={false}
-                        extraData={[conversations]}
+                        itemHeight={65}
+                        removeClippedSubviews={true}
                         data={conversations.items}
-                        renderItem={renderItem} />
-                ) : (
-                   <View>
-                       <ActivityIndicator />
-                   </View>
-               )
-            }
-
-        </View>
+                        renderItem={renderItem}
+                        renderEmpty={() => <Text>Empty</Text>}
+                    />
+            </View>
+        </SafeAreaView>
     )
 }
 

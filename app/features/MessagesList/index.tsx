@@ -9,7 +9,7 @@ import * as _ from 'lodash'
 import startOfDay from 'date-fns/startOfDay'
 import {format, isSameYear, isToday} from "date-fns";
 import BigList from 'react-native-big-list'
-import SectionHeader from "../ConversationsList/SectionHeader";
+import SectionHeader from "./SectionHeader";
 import {calculateHeight} from "../../utils/calculateMessageHeight";
 
 type MessagesProps = {
@@ -44,17 +44,15 @@ export default ({peer_id}: MessagesProps) => {
         return sectionedMessages
     })
 
-    // const {profiles, groups} = useSelector((state: RootState) => ({profiles: state.conversations.profiles, groups: state.conversations.groups}))
-
     useEffect(() => {
-        dispatch.history.get({peer_id, offset: 0, count: 200})
-            .catch((error) => {
-                console.log('error')
-                dispatch.history.clear({peer_id})
-                navigate('messenger')
-            })
-        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-
+        if (messages.length === 0) {
+            dispatch.history.get({peer_id, offset: 0, count: 200})
+                .catch((error) => {
+                    console.log('error')
+                    dispatch.history.clear({peer_id})
+                    navigate('messenger')
+                })
+        }
     }, [])
 
     const renderItem = (data: MessagesMessage, section: number | undefined, index: number) => {
@@ -112,7 +110,9 @@ export default ({peer_id}: MessagesProps) => {
 
         const msg = messages[section][item]
 
-        return calculateHeight(msg.text)
+        const hasReply = msg.fwd_messages ? msg.fwd_messages.length > 0 : false
+
+        return calculateHeight(msg.text, 325, 15, 0, hasReply)
     }
 
     const placeholder = (

@@ -15,6 +15,8 @@ import {
   MessagesGetHistoryParams, MessagesGetLongPollHistoryParams,
   MessagesSendResponse
 } from "../../types/vk";
+import axios from 'axios'
+import rax from 'retry-axios'
 
 /**
  * Manages all requests to the API.
@@ -56,8 +58,7 @@ export class Api {
       access_token = data.access_token
     }
 
-    // construct the apisauce instance
-    this.apisauce = create({
+    const axiosInstance = axios.create({
       baseURL: this.config.url,
       timeout: this.config.timeout,
       headers: {
@@ -67,6 +68,47 @@ export class Api {
       params: {
         access_token, v, lang: 'ru'
       }
+    })
+
+    axiosInstance.defaults.raxConfig = {
+      instance: axiosInstance,
+      // Retry 3 times on requests that return a response (500, etc) before giving up.  Defaults to 3.
+      retry: 3,
+
+      // Retry twice on errors that don't return a response (ENOTFOUND, ETIMEDOUT, etc).
+      noResponseRetries: 2,
+
+      // Milliseconds to delay at first.  Defaults to 100. Only considered when backoffType is 'static'
+      retryDelay: 1000,
+
+      // HTTP methods to automatically retry.  Defaults to:
+      // ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT']
+      httpMethodsToRetry: ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'],
+
+      // The response status codes to retry.  Supports a double
+      // array with a list of ranges.  Defaults to:
+      // [[100, 199], [429, 429], [500, 599]]
+      statusCodesToRetry: [[100, 199], [429, 429], [500, 599]],
+
+      // You can set the backoff type.
+      // options are 'exponential' (default), 'static' or 'linear'
+      backoffType: 'exponential',
+
+      // You can detect when a retry is happening, and figure out how many
+      // retry attempts have been made
+      onRetryAttempt: err => {
+        const cfg = rax.getConfig(err);
+        console.log(`Retry attempt #${cfg?.currentRetryAttempt}`);
+      }
+    };
+
+    const raxn = rax.attach(axiosInstance)
+
+    console.log('rax attached', raxn)
+
+    // construct the apisauce instance
+    this.apisauce = create({
+      axiosInstance: axiosInstance,
     })
 
     global.api = this as Api

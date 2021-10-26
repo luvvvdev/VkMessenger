@@ -6,7 +6,8 @@ export const calculateHeight = (
     text,
     maxWidth = 325,
     lineHeight = 15,
-    attachmentsCount = 0
+    attachmentsCount = 0,
+    hasReply = false
 ) => {
     // max messageItem width * 0.12
     const rowLength = calculateRowMaxSymbols(maxWidth);
@@ -32,5 +33,7 @@ export const calculateHeight = (
         }
     }
 
-    return baseHeight + attachmentsHeight + rowsHeight;
+    const embedHeight = 5 + ((25 + 5) * 2);
+
+    return  baseHeight + attachmentsHeight + rowsHeight + (hasReply ? embedHeight : 0);
 };

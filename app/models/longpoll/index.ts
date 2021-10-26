@@ -2,12 +2,7 @@ import {createModel} from "@rematch/core";
 import {RootModel} from "../index";
 
 type LongPollState = {
-    server: string | null
-    key: string | null
-    failed?: number | null
     ts: number | null
-    updates: Array<any>[]
-    active: boolean
 }
 
 enum LongPollEvents {
@@ -28,12 +23,7 @@ enum LongPollEvents {
 }
 
 const initialState: LongPollState = {
-    server: null,
-    key: null,
     ts: null,
-    updates: [],
-    failed: null,
-    active: false
 };
 
 /*handleUpdates: async (payload, state) => {

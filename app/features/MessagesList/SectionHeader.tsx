@@ -1,14 +1,12 @@
 import {StyleSheet, Text, View} from "react-native";
 import React from "react";
 
-const SectionHeader = ({title}: {title: string}) => {
+const SectionHeader = ({title}: {title: string}) => (
+    <View style={styles.sectionHeaderContainer}>
+        <Text style={styles.headerText}>{title}</Text>
+    </View>
+)
 
-    return (
-        <View style={styles.sectionHeaderContainer}>
-            <Text style={styles.headerText}>{title}</Text>
-        </View>
-    )
-}
 const styles = StyleSheet.create({
     sectionHeaderContainer: {
         width: '100%',

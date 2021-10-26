@@ -53,6 +53,8 @@ export const conversations = createModel<RootModel>()({
 
                 const items = response.data.response.items
 
+                // console.log(items)
+
                 dispatch.conversations.update({...response.data.response, items})
 
                 //dispatch.conversations.setLoading(false)

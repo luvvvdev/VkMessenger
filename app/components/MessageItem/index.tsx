@@ -1,6 +1,6 @@
 import {PlatformColor, StyleSheet, Text, View, ViewStyle} from "react-native";
 import React, {memo, ReactNode, useMemo} from "react";
-import {GroupsGroupFull, MessagesMessage, UsersUserFull} from "../../types/vk";
+import {GroupsGroupFull, MessagesForeignMessage, MessagesMessage, UsersUserFull} from "../../types/vk";
 import {format} from "date-fns";
 import FastImage from "react-native-fast-image"
 import {Attachments} from "./Attachments/Attachments";
@@ -8,6 +8,8 @@ import _ from "lodash";
 import {getPeerById} from "../../utils/getPeerById";
 import {MessageLoader} from "./Loader";
 import {LinearGradient} from "expo-linear-gradient";
+import {EmbedMessage} from "./EmbedMessage";
+import {getPeerType, PeerTypes} from "../../utils/peerType";
 
 export type MessageItemProps = {
     message: MessagesMessage
@@ -36,13 +38,51 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
         style={[styles.senderAvatar, {alignSelf: 'flex-end'}]}
     />
 
+    let hasReply = message.fwd_messages && message.fwd_messages.length > 0
+    let replyMessage: MessagesForeignMessage
+    let replyAuthor: UsersUserFull | GroupsGroupFull | null
+    let replyAuthorType: PeerTypes
+
+    let replyAuthorName: string
+    let replyText: string
+
+    if (hasReply) {
+        hasReply = true
+        replyMessage = message.fwd_messages![0]
+        replyAuthorType = getPeerType(replyMessage.from_id)
+
+        const author = getPeerById(replyMessage.from_id)
+
+        replyAuthor = author
+
+        switch (replyAuthorType) {
+            case "user":
+                replyAuthorName = `${replyAuthor?.first_name} ${replyAuthor?.last_name}`
+                break
+            case "group":
+                replyAuthorName = `${replyAuthor?.name}`
+                break
+            default:
+                replyAuthorName = `Not defined type name`
+        }
+
+        replyText = replyMessage.text
+    }
+
+    //<EmbedMessage author={me} text={}
+
+    const textMessageColor = isMine ? 'white' : PlatformColor('label')
+
     const content = (
                 <View>
+                    {
+                        hasReply && (<EmbedMessage author={replyAuthorName!} text={replyText!} textColor={textMessageColor} />)
+                    }
                     {
                         message.text.length > 0 && (
                             <Text
                                 style={[styles.messageText, {
-                                    color: isMine ? 'white' : PlatformColor('label')
+                                    color: textMessageColor
                                 }]}
                                 // lineBreakMode={'clip'}
                                 // textBreakStrategy={'simple'}
@@ -69,11 +109,11 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
     let messageComponent: ReactNode;
 
     if (!isMine) {
-        messageComponent = React.createElement(View, {
-            style: [styles.messageContent, {
-                backgroundColor: PlatformColor('secondarySystemBackground')
-            }]
-        }, content)
+        messageComponent = <View style={[styles.messageContent, {
+            backgroundColor: PlatformColor('secondarySystemBackground')
+        }]}>
+            {content}
+        </View>
     } else {
         //background-image: linear-gradient( 109.5deg,  rgba(47,71,230,1) 11.2%, rgba(109,44,232,1) 99.8% );
         messageComponent = React.createElement(LinearGradient, {
@@ -86,7 +126,7 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
 
     return <View style={[styles.messageItem, calculatedMessageContainerStyles]}>
         { needToRenderAvatar ? avatar : null }
-        {messageComponent}
+        { messageComponent }
         { message.loaded === false ? <MessageLoader /> : null }
     </View>
 }

@@ -3,6 +3,8 @@ import {Api} from "../api/api";
 import {Store, store} from "../../models";
 import {Message} from "../../entities/Message";
 import _ from 'lodash'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {MessagesGetLongPollHistoryResponse, MessagesMessage} from "../../types/vk";
 type TLongPollActions = 'lp_service_init' | TLongPollConnectionActions | TLongPollUpdatesActions
 type TLongPollConnectionActions = 'lp_server_connect' | 'lp_server_connect_ok' | 'lp_server_connect_failed' | 'lp_server_reconnect'
 type TLongPollUpdatesActions = 'lp_updates_check' | 'lp_updates_check_failed' | 'lp_updates_check_ok' | 'update'
@@ -113,16 +115,16 @@ class LongPollService {
             return
         } catch (error) {
             console.error(error)
-            return this.reconnect(error, 'lp_server_connect_failed')
+            // return this.reconnect(error, 'lp_server_connect_failed')
         }
     }
 
-    private reconnect(error: Error, event: TLongPollActions) {
+    /* private reconnect(error: Error, event: TLongPollActions) {
+        console.log('longpoll reconnect start')
         this.emit(event, error)
 
         const retry = setInterval(async () => {
             if (this.retries === 3 || !this.failed) {
-                this.emit(event, error)
 
                 this.active = false
                 return clearInterval(retry)
@@ -130,10 +132,16 @@ class LongPollService {
 
             this.retries += 1
 
+            console.log('longpoll reconnect try:', this.retries)
+
             this.emit('lp_server_reconnect', {retries: this.retries, reason: error, event})
 
             await this.connect()
         }, 5000)
+    }*/
+
+    onReconnected = () => {
+
     }
 
     private onUpdates({ts, updates}: {ts: number, updates: Array<any[]>}) {
@@ -227,9 +235,50 @@ class LongPollService {
     }
 
     private async getHistoryUpdates() {
-        const response = await this.api.getLongPollHistory({ts: this.ts!, lp_version: 12})
+        const state = this.store.getState()
 
-        console.log('this.getHistoryUpdates()', response)
+        const lastTs = await this.getLastTs()
+
+        if (!lastTs) {
+            return console.log('historyLoad', 'cant get TS')
+        }
+
+        const lastConversation = state.conversations.items[0]
+
+        if (!lastConversation) {
+            return
+        }
+
+        const lastMessageId = lastConversation.last_message.id
+
+        const response = await this.api.getLongPollHistory({
+            ts: lastTs, lp_version: 12,
+            msgs_limit: 200, events_limit: 1000,
+            max_msg_id: lastMessageId})
+
+        if (response.kind !== 'ok' || (response.kind === 'ok' && !response.data.response)) {
+            return
+        }
+
+        console.log('this.getHistoryUpdates()', JSON.stringify(response.data.response))
+
+        const data = response.data.response
+
+        this.handleHistoryUpdates(data)
+    }
+
+    private handleHistoryUpdates = (data: MessagesGetLongPollHistoryResponse | undefined) => {
+        if (!data) return
+
+        const dispatch = this.store.dispatch
+
+        const messages = data.messages
+
+        if (messages.count > 0) {
+            _.forEach(messages.items, (message: MessagesMessage) => {
+                dispatch.history.addMessage({message})
+            })
+        }
     }
 
     // call it only if connected
@@ -268,9 +317,20 @@ class LongPollService {
         return {ts, updates}
     }
 
+    saveTs = (ts: number): Promise<void> => AsyncStorage.setItem('lp_last_ts', `${ts}`)
+
+    getLastTs = async (): Promise<number | null> => {
+        const lastTs = await AsyncStorage.getItem('lp_last_ts')
+
+        return lastTs ? Number(lastTs) : null
+    }
+
     async lookupUpdates() {
         // console.log(this.active, this.server, this.failed, this.ts)
-        if (!this.server || this.failed) return
+
+        if (!this.server || this.failed) {
+            await this.connect()
+        }
 
         // console.log(this.active)
         if (!this.active) await this.getHistoryUpdates()
@@ -282,6 +342,8 @@ class LongPollService {
 
             const {ts, updates} = await this.getUpdates()
 
+            await this.saveTs(ts)
+
             await this.onUpdates({ts, updates: updates || []})
 
             await this.lookupUpdates()
@@ -290,7 +352,7 @@ class LongPollService {
             if (!userStore.login_data || !userStore.user_data) return
 
             if (this.failed === 4) return console.error(error)
-            return this.reconnect(error, 'lp_updates_check_failed')
+            // return this.reconnect(error, 'lp_updates_check_failed')
         }
     }
 

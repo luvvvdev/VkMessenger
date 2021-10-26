@@ -70,7 +70,9 @@ const AppStack = () => {
                 isLoggedIn ? (
                     <>
                         <Stack.Screen name="messenger" component={ConversationsScreen} options={{
-                            title: `${translate('ConversationsScreen.title')}`, headerTransparent: true, animationTypeForReplace: 'push',
+                            title: `${translate('ConversationsScreen.title')}`,
+                            headerTransparent: true,
+                            animationTypeForReplace: 'push',
                             headerLeft: () => {
                                 const modalRef = useRef(null)
                                 const imgSource = {
