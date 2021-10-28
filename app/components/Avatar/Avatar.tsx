@@ -30,7 +30,7 @@ export const Avatar = memo(({url, size, style}: AvatarProps) => {
     const source: Source = {
         uri: url,
         priority: FastImage.priority.high,
-        cache: 'cacheOnly'
+        cache: 'immutable'
     }
 
     const calculatedStyles = {height: size, width: size, ...style}

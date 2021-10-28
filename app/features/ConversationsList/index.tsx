@@ -12,21 +12,22 @@ import _ from 'lodash'
 const ConversationsList = () => {
     const dispatch = useDispatch<Dispatch>()
 
-    const conversations = useSelector<RootState, ConversationsState>((state) => state.conversations)
+    const {profiles, groups} = useSelector<RootState, ConversationsState>((state) => state.conversations)
+    const conversations = useSelector<RootState, MessagesConversationWithMessage[]>((state) => state.conversations.items)
     const loading = useSelector<RootState, boolean>((state) => state.loading.effects.conversations.get.loading!)
 
     const getConversations = () => dispatch.conversations.get().then(() => {
 
-        if (conversations.profiles && conversations.groups) {
-            const profilesPhotos = _.compact(conversations.profiles?.map((profile) => ({uri: profile.photo_100})))
-            const groupsPhotos = _.compact(conversations.groups?.map((group) => ({uri: group.photo_100})))
+        if (profiles && groups) {
+            const profilesPhotos = _.compact(profiles?.map((profile) => ({uri: profile.photo_100})))
+            const groupsPhotos = _.compact(groups?.map((group) => ({uri: group.photo_100})))
 
             FastImage.preload([...profilesPhotos, ...groupsPhotos])
         }
     })
 
     useEffect(() => {
-        if (conversations.items.length === 0) {
+        if (conversations.length === 0) {
             getConversations()
         }
     }, [])
@@ -46,15 +47,21 @@ const ConversationsList = () => {
     return (
         <SafeAreaView>
             <View style={{width: '100%', height: '100%'}}>
+                {!loading ?
                     <BigList
-                        refreshing={loading}
+                        // key={`${conversations}`}
                         showsHorizontalScrollIndicator={false}
                         itemHeight={65}
                         removeClippedSubviews={true}
-                        data={conversations.items}
+                        data={conversations}
                         renderItem={renderItem}
-                        renderEmpty={() => <Text>Empty</Text>}
-                    />
+                        // extraData={[conversations]}
+                        // renderEmpty={() => <Text>Empty</Text>}
+                    /> :
+                        (<View>
+                            <ActivityIndicator />
+                        </View>)
+                }
             </View>
         </SafeAreaView>
     )

@@ -11,16 +11,16 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, {useEffect, useLayoutEffect} from "react"
+import React, {useEffect, useLayoutEffect, useState} from "react"
 import {
   SafeAreaProvider,
 } from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
 import { useBackButtonHandler, AppNavigator, canExit } from "./navigators"
 import VKLogin from 'react-native-vkontakte-login'
-import {Provider} from 'react-redux'
+import {Provider, useSelector} from 'react-redux'
 import {Api} from "./services/api/api";
-import {store} from "./models";
+import {RootState, store} from "./models";
 import {startLongPoll, stopLongPoll} from "./services/LongPoll/background";
 import BackgroundService from "react-native-background-actions";
 import VK from "react-native-vkontakte-login";
@@ -48,14 +48,9 @@ setupServices()
  * This is the root component of our app.
  */
 
-const subscribeUpdates = async () => {
-  if (global.lp_started || BackgroundService.isRunning() || !(await VK.isLoggedIn())) return
 
-  await startLongPoll()
-}
 
 function App() {
-  // const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
   useBackButtonHandler(canExit)
   /*
   * const {
@@ -73,14 +68,6 @@ function App() {
       await initFonts() // expo
       // setupRootStore().then(setRootStore)
     })()
-  }, [])
-
-  useLayoutEffect(() => {
-    subscribeUpdates()
-
-    return () => {
-      stopLongPoll()
-    }
   }, [])
 
   // Before we show the app, we have to wait for our state to be ready.

@@ -1,4 +1,4 @@
-import {DeviceEventEmitter, DeviceEventEmitterStatic} from "react-native";
+import {Alert, DeviceEventEmitter, DeviceEventEmitterStatic} from "react-native";
 import {Api} from "../api/api";
 import {Store, store} from "../../models";
 import {Message} from "../../entities/Message";
@@ -156,9 +156,9 @@ class LongPollService {
     private onNewMessage(message: Message) {
         console.log('New MessageItem', message)
 
-        this.store.dispatch.conversations.editLastMessage({message}).catch((e) => {
+        setTimeout(() => this.store.dispatch.conversations.editLastMessage({message}).catch((e) => {
             console.error(e)
-        })
+        }), 500)
 
         const messageHistory = this.store.getState().history.items[message.peer_id]
 
@@ -235,6 +235,7 @@ class LongPollService {
     }
 
     private async getHistoryUpdates() {
+        console.log('history load..')
         const state = this.store.getState()
 
         const lastTs = await this.getLastTs()
@@ -251,12 +252,15 @@ class LongPollService {
 
         const lastMessageId = lastConversation.last_message.id
 
+        console.log('last message updates history', lastConversation.last_message)
+
         const response = await this.api.getLongPollHistory({
             ts: lastTs, lp_version: 12,
             msgs_limit: 200, events_limit: 1000,
             max_msg_id: lastMessageId})
 
         if (response.kind !== 'ok' || (response.kind === 'ok' && !response.data.response)) {
+            console.error('history updates error', response)
             return
         }
 
@@ -274,9 +278,23 @@ class LongPollService {
 
         const messages = data.messages
 
+        console.log('messages count: ', messages.count)
+
         if (messages.count > 0) {
-            _.forEach(messages.items, (message: MessagesMessage) => {
-                dispatch.history.addMessage({message})
+            const groupedMessages: {[peer_id: number]: MessagesMessage[]} = _.groupBy(messages.items, (v: MessagesMessage) => v.peer_id)
+
+            _.forEach(Object.keys(groupedMessages), async (peer_id: number) => {
+                const messages = groupedMessages[peer_id]
+
+                messages.forEach((message) => {
+                    console.log('add message')
+                    dispatch.history.addMessage({message})
+                })
+
+                const lastMessage = _.last(messages)
+
+                this.store.dispatch.conversations.editLastMessage({message: lastMessage})
+                    .catch((e) => console.error(e))
             })
         }
     }
@@ -328,16 +346,26 @@ class LongPollService {
     async lookupUpdates() {
         // console.log(this.active, this.server, this.failed, this.ts)
 
+        console.log('lookup updates')
+
         if (!this.server || this.failed) {
-            await this.connect()
+            try {
+                await this.connect()
+            } catch (e) {
+                console.log('error connect')
+            }
         }
 
         // console.log(this.active)
-        if (!this.active) await this.getHistoryUpdates()
+        if (!this.active) {
+            console.log('start history update')
+            await this.getHistoryUpdates()
+        }
 
         this.active = true
 
         try {
+            console.log('check updates...')
             this.emit('lp_updates_check')
 
             const {ts, updates} = await this.getUpdates()
@@ -351,8 +379,8 @@ class LongPollService {
             const userStore = store.getState().user
             if (!userStore.login_data || !userStore.user_data) return
 
-            if (this.failed === 4) return console.error(error)
-            // return this.reconnect(error, 'lp_updates_check_failed')
+            if (this.failed === 4) return Alert.alert('LongPoll Error', error)
+            return setTimeout(() => this.lookupUpdates(), 5000)
         }
     }
 

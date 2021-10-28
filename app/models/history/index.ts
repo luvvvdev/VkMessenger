@@ -45,12 +45,7 @@ const history = createModel<RootModel>()({
     state: initialState,
     reducers: {
         reset: () => (initialState),
-        update: (state, payload: UpdateHistoryReducerPayload) => {
-            const updatedItems = state.items
-            updatedItems[payload.peer_id] = payload.history
-
-            return ({...state, current_id: state.current_id, items: updatedItems})
-        },
+        update: (state, payload: HistoryState) => (payload),
         push: (state, payload: {peer_id: number, history: any}) => ({...state, current_id: payload.peer_id, items: {...state.items, [payload.peer_id]: payload.history} }),
         clear: (state, payload: {peer_id: number}) => {
             const newItems = state.items
@@ -73,17 +68,6 @@ const history = createModel<RootModel>()({
             const targetHistory = state.items[message.peer_id]
 
             if (!targetHistory) return state
-
-            /* const existsMessageIndex = state.items[message.peer_id].items.findIndex((m) => m.id === message.id)
-            // const existsMessage = state.items[message.peer_id].items[existsMessageIndex]
-
-            if (existsMessageIndex > 0) {
-                console.log('message is exists')
-                delete state.items[message.peer_id].items[existsMessageIndex]
-                state.items[message.peer_id].items[existsMessageIndex] = message
-
-                // return {...state, items: {[message.peer_id]: {...state.items[message.peer_id], count: state.items[message.peer_id].items.length + 1, items: [message, ...state.items[message.peer_id].items]}}}
-            }*/
 
             return {...state, items: {[message.peer_id]: {...state.items[message.peer_id], count: state.items[message.peer_id].count + 1, items: [message, ...state.items[message.peer_id].items]}}}
         },

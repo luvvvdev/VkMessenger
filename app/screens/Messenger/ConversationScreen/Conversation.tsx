@@ -4,7 +4,7 @@ import {
     View,
     StyleSheet, Appearance, PlatformColor, TouchableHighlight
 } from "react-native";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import Messages from '../../../features/MessagesList'
 import {MessagesMessage} from "../../../types/vk";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,6 +14,9 @@ import {SafeAreaView} from 'react-native-safe-area-context'
 import Icon from "react-native-vector-icons/Feather";
 import {BlurView} from "@react-native-community/blur";
 import {BView} from "../../../components/BlurView/BlurView";
+import {startLongPoll, stopLongPoll} from "../../../services/LongPoll/background";
+import BackgroundService from "react-native-background-actions";
+import VK from "react-native-vkontakte-login";
 // const Messages = React.lazy(() => import('../../../features/MessagesList'))
 
 const getNewMessageId = (lastMessageId) => {

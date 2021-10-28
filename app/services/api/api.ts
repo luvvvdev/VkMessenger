@@ -188,7 +188,7 @@ export class Api {
   async getLongPollServer(): Promise<GetLongPollServerResult> {
     try {
       const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getLongPollServer`, {
-        need_pts: 1, lp_version: 3
+        need_pts: 1, lp_version: 5
       })
 
       // the typical ways to die when calling an api

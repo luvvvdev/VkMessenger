@@ -89,7 +89,9 @@ const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
     )
 },
     ((prevProps,
-      nextProps) => _.isEqual(prevProps.data.conversation, nextProps.data.conversation)))
+      nextProps) =>
+        (_.isEqual(prevProps.data, nextProps.data) || _.isEqual(prevProps.data.last_message, nextProps.data.last_message))
+    ))
 
 const styles = StyleSheet.create({
     container: {
