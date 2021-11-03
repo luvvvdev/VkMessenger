@@ -110,7 +110,7 @@ export default ({peer_id}: MessagesProps) => {
 
         const msg = messages[section][item]
 
-        const hasReply = msg.fwd_messages ? msg.fwd_messages.length > 0 : false
+        const hasReply = Boolean(msg.reply_message)
 
         return calculateHeight(msg.text, 325, 15, 0, hasReply)
     }

@@ -17,6 +17,7 @@ type MessagesLongPollUpdatesResponse = {
     ts: number,
     updates?: any[]
     failed?: number
+    pts: number
 }
 
 export type VkResponse<T> = {response?: T, error?: BaseError}
@@ -31,6 +32,6 @@ export type GetUserResult = ApiRes<UsersGetResponse>
 export type GetHistoryResult = ApiRes<MessagesGetHistoryExtendedResponse>
 export type PostMessageResult = ApiRes<MessagesSendResponse>
 export type GetLongPollServerResult = ApiRes<MessagesGetLongPollServerResponse>
-export type GetLongPollUpdatesResult = {kind: 'ok', data: MessagesLongPollUpdatesResponse}
+export type GetLongPollUpdatesResult = GeneralApiProblem | {kind: 'ok', data: MessagesLongPollUpdatesResponse}
 export type GetLongPollHistoryResult = ApiRes<MessagesGetLongPollHistoryResponse>
 // export type GetLongPollUpdatesResult = ApiRes<GroupsGet>

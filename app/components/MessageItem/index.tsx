@@ -38,7 +38,7 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
         style={[styles.senderAvatar, {alignSelf: 'flex-end'}]}
     />
 
-    let hasReply = message.fwd_messages && message.fwd_messages.length > 0
+    let hasReply = Boolean(message.reply_message)
     let replyMessage: MessagesForeignMessage
     let replyAuthor: UsersUserFull | GroupsGroupFull | null
     let replyAuthorType: PeerTypes
@@ -48,7 +48,8 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
 
     if (hasReply) {
         hasReply = true
-        replyMessage = message.fwd_messages![0]
+        // @ts-ignore
+        replyMessage = message.reply_message
         replyAuthorType = getPeerType(replyMessage.from_id)
 
         const author = getPeerById(replyMessage.from_id)
@@ -137,14 +138,14 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         alignItems: "flex-start",
         flexDirection: "row",
-        paddingHorizontal: 10,
+        paddingHorizontal: 5,
         paddingVertical: 3,
         width: '100%'
     },
     messageContent: {
         backgroundColor: "whitesmoke",
         paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 8,
         height: "100%",
         borderRadius: 10,
         position: "relative",

@@ -33,7 +33,7 @@ export const calculateHeight = (
         }
     }
 
-    const embedHeight = 5 + ((25 + 5) * 2);
+    const embedHeight = 5 + ((14 + 5) * 2);
 
     return  baseHeight + attachmentsHeight + rowsHeight + (hasReply ? embedHeight : 0);
 };

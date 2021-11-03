@@ -11,6 +11,7 @@ import {
 } from "./api.types";
 import VKLogin from "react-native-vkontakte-login";
 import {
+  MessagesGetByConversationMessageIdResponse,
   MessagesGetConversationsByIdExtendedResponse,
   MessagesGetHistoryParams, MessagesGetLongPollHistoryParams,
   MessagesSendResponse
@@ -108,7 +109,8 @@ export class Api {
 
     // construct the apisauce instance
     this.apisauce = create({
-      axiosInstance: axiosInstance,
+      // @ts-ignore
+      axiosInstance: axiosInstance
     })
 
     global.api = this as Api
@@ -197,6 +199,7 @@ export class Api {
         if (problem) return problem
       }
 
+      console.log('long poll server data', response.data)
       return { kind: "ok", data: response.data } as GetLongPollServerResult
     } catch (e) {
       return {kind: "bad-data"}
@@ -205,7 +208,7 @@ export class Api {
 
   async getLongPollUpdates(server: string, key: string, ts: number): Promise<GetLongPollUpdatesResult> {
       const response: ApiResponse<any, any> = await this.apisauce.get(`https://${server}`, {
-        act: 'a_check', key, ts, wait: 60, mode: 234, version: 12
+        act: 'a_check', key, ts, wait: 60, mode: 2 | 8 | 32 | 64 | 128 | 512, version: 12
       }, {baseURL: undefined})
 
       // the typical ways to die when calling an api
@@ -230,6 +233,24 @@ export class Api {
     }
 
     return { kind: "ok", data: response.data } as GetLongPollHistoryResult
+  }
+
+  async getMessageByConversationId(peer_id: number, conversation_id: number) {
+    try {
+      const response: ApiResponse<VkResponse<MessagesGetByConversationMessageIdResponse>, any> = await this.apisauce.get(`/method/messages.getByConversationMessageId`, {
+        extended: true, conversation_message_ids: [conversation_id], peer_id
+      })
+
+      // the typical ways to die when calling an api
+      if (!response.ok || response.data?.error) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
   }
 
   async getConversationsById(peer_ids: number[]): Promise<GetConversationsByIdResult> {

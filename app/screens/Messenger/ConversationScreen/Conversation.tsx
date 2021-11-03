@@ -79,7 +79,7 @@ const ConversationScreen = (props) => {
                                 padding: 6,
                                 borderRadius: 60
                             }}>
-                                <Icon name={'paperclip'} size={18} color={PlatformColor('link')}/>
+                                <Icon name={'paperclip'} size={20} color={PlatformColor('link')}/>
                             </View>
                         </View>
                         <View>
@@ -93,7 +93,7 @@ const ConversationScreen = (props) => {
                                 placeholder={'Сообщение'}
                                 variant={'primary'}
                                 multiline={true}
-                                textAlignVertical={'bottom'}
+                                textAlignVertical={'center'}
                                 textBreakStrategy={'highQuality'}
                                 scrollEnabled={true}
                                 collapsable={true}
@@ -113,7 +113,7 @@ const ConversationScreen = (props) => {
                                 }}>
                             {
                                 textMessage.length === 0 ? (
-                                    <Icon name={'mic'} size={18} color={PlatformColor('link')}/>
+                                    <Icon name={'mic'} size={20} color={PlatformColor('link')}/>
                                 ) :
                                     <Icon name={'corner-right-up'} size={16} color={'white'}/>
                             }
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         marginBottom: 0,
-        maxHeight: 30,
+        maxHeight: 32,
     },
     messageInput: {
         //maxWidth: '100%',
@@ -160,11 +160,13 @@ const styles = StyleSheet.create({
         // padding: 10,
         width: 300,
         margin: 0,
-        minHeight: 15,
+        //minHeight: 15,
         // height: 30,
         maxHeight: 80,
         // flexGrow: 1,
         flexShrink: 1,
+        alignItems: 'center',
+        textAlignVertical: 'center'
     },
 })
 

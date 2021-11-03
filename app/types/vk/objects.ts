@@ -4374,6 +4374,7 @@ export interface MessagesLongpollParams {
 }
 
 export interface MessagesMessage {
+    reply_message?: MessagesForeignMessage
     /**
      * Only for messages from community. Contains user ID of community admin, who sent this message.
      */

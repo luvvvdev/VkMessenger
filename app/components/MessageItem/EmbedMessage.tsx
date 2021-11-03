@@ -12,7 +12,7 @@ export const EmbedMessage = ({author, text, textColor}: EmbedMessageProps) => {
     return (
         <View style={[styles.embedMessage]}>
             <View style={styles.embedMessageTextContainer}>
-                <Text style={[styles.embedMessageTextContent, {color: textColor}]}>
+                <Text numberOfLines={1} lineBreakMode={'tail'} style={[styles.embedMessageTextContent, {color: textColor, marginBottom: 0}]}>
                     {text}
                 </Text>
                 <Text style={[styles.embedMessageTextContent, styles.authorNameText, {color: textColor}]}>{author}</Text>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         paddingRight: 4,
         paddingVertical: 2,
         marginBottom: 5,
-        marginHorizontal: -4,
+        marginHorizontal: -2,
         position: "relative",
         overflow: "hidden",
         borderLeftWidth: 2,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         //whiteSpace: "nowrap",
         overflow: "hidden",
         fontSize: 13,
-        marginBottom: 5,
+        marginBottom: 3,
         // flex: 1
     },
     authorNameText: {

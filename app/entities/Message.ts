@@ -96,15 +96,13 @@ export class Message implements MessagesMessage {
     loading?: boolean
     error?: any
 
-    constructor(message: any) {
-        if (Array.isArray(message)) {
-            this.fromArray(message)
-        } else {
+    constructor(message?: any) {
+        if (message) {
             this.fromJSON(message)
         }
     }
 
-    private fromArray(event: any[]) {
+    async fromArray(event: any[]) {
         const state = store.getState() as RootState
         const currentUserId = state.user.login_data?.user_id
         let peerId = event[4]
@@ -113,6 +111,10 @@ export class Message implements MessagesMessage {
         let text = event[6]
         let messageFromId;
         const randomId = event[9]
+
+        const misc = event[8]
+
+        const replyConversationMessageId = misc.reply ? JSON.parse(misc.reply).conversation_message_id : null
 
         console.log(event, event[4])
 
@@ -139,8 +141,6 @@ export class Message implements MessagesMessage {
             return summands
         }
 
-
-
         const summands = getSummands() || []
 
         const isOutcoming = summands.includes(2)
@@ -159,6 +159,22 @@ export class Message implements MessagesMessage {
             case "email":
                 break
         }
+
+
+        console.log('replyConversationId', replyConversationMessageId)
+        if (replyConversationMessageId) {
+            const replyMessageResponse = await global.api.getMessageByConversationId(peerId, replyConversationMessageId)
+
+            if (replyMessageResponse.kind === 'ok' && replyMessageResponse.data.response
+                && replyMessageResponse.data.response.count > 0) {
+                const replyMessage = replyMessageResponse.data.response.items[0]
+
+                this.reply_message = replyMessage
+
+                console.log('replyMessage', replyMessage)
+            }
+        }
+        // global.api.get
 
         this.peer_id = peerId
         this.text = text
