@@ -13,12 +13,8 @@ const getDate = (last_message) => {
     return format(messageDate, 'dd.MM.yyyy')
 }
 
-export type TimeAgoProps = {
-    last_message: MessagesMessage
-}
-
-export const TimeAgo = memo(({last_message}: TimeAgoProps) => {
-    const [time, setTime] = useState(getDate(last_message))
+export const TimeAgo = ({last_message}: TimeAgoProps) => {
+    /* const [time, setTime] = useState(getDate(last_message))
 
     useLayoutEffect(() => {
         const int = setInterval(() => {
@@ -28,7 +24,11 @@ export const TimeAgo = memo(({last_message}: TimeAgoProps) => {
         return () => {
             clearInterval(int)
         }
-    }, [])
+    }, []) */
 
-    return <Text style={{color: PlatformColor('secondaryLabel')}}>{' '}· {time}</Text>
-}, ((prevProps, nextProps) => prevProps.last_message.date === nextProps.last_message.date))
+    return <Text style={{color: PlatformColor('secondaryLabel')}}>{' '}· {getDate(last_message)}</Text>
+}
+
+export type TimeAgoProps = {
+    last_message: MessagesMessage
+}

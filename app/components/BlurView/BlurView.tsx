@@ -3,7 +3,7 @@ import {Appearance} from "react-native";
 import React from "react";
 
 export const BView = ({children}) => (
-    <BlurView blurAmount={30} blurRadius={20} blurType={Appearance.getColorScheme() || 'light'}>
+    <BlurView blurAmount={80} blurRadius={20} blurType={Appearance.getColorScheme() || 'light'} reducedTransparencyFallbackColor="white">
         {children}
     </BlurView>
 )

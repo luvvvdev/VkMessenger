@@ -24,7 +24,7 @@ import ConversationsScreen from "../screens/Messenger/ConversationsScreen/Conver
 import SettingsModal from "../features/SettingsModal";
 import FastImage from "react-native-fast-image";
 import {translate} from "../i18n";
-import {Avatar} from "../components/Avatar/Avatar";
+import {Avatar, CustomAvatar} from "../components/Avatar/Avatar";
 import {getPeerById} from "../utils/getPeerById";
 
 /**
@@ -116,6 +116,10 @@ const AppStack = () => {
                                 },
                                 headerTitle: () => {
                                     const conversation = (route.params! as any).conversation
+                                    const customAvatar = useSelector<RootState, CustomAvatar | undefined>(state => {
+                                        return state.prefs.customAvatars[conversation.peer.id]
+                                    })
+
                                     const type = conversation.peer.type
 
                                     let photo = conversation.chat_settings?.photo?.photo_100
@@ -152,6 +156,7 @@ const AppStack = () => {
                                         flexDirection: 'row'}}>
                                         <Avatar
                                             url={photo}
+                                            custom={customAvatar}
                                             // @ts-ignore
                                             size={35}
                                             style={{marginRight: 10}}/>

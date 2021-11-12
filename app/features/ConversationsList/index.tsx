@@ -1,6 +1,6 @@
 import {ConversationItem} from "../../components/ConversationItem/ConversationItem";
 import {ActivityIndicator, FlatList, SafeAreaView, Text, View} from "react-native";
-import React, {useEffect, useLayoutEffect} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch, RootState} from "../../models";
 import {ConversationsState} from "../../models/conversations";
@@ -8,6 +8,16 @@ import FastImage from "react-native-fast-image";
 import BigList, {BigListRenderItemInfo} from "react-native-big-list";
 import {MessagesConversationWithMessage} from "../../types/vk";
 import _ from 'lodash'
+import {TextField} from "../../components/TextField/TextField";
+import {translate} from "../../i18n";
+
+const ListHeader = () => (
+    <View style={{marginHorizontal: 15, marginBottom: 15}}>
+        <TextField
+            variant={'primary'}
+            placeholder={`${translate('common.search')}`}/>
+    </View>
+)
 
 const ConversationsList = () => {
     const dispatch = useDispatch<Dispatch>()
@@ -17,7 +27,6 @@ const ConversationsList = () => {
     const loading = useSelector<RootState, boolean>((state) => state.loading.effects.conversations.get.loading!)
 
     const getConversations = () => dispatch.conversations.get().then(() => {
-
         if (profiles && groups) {
             const profilesPhotos = _.compact(profiles?.map((profile) => ({uri: profile.photo_100})))
             const groupsPhotos = _.compact(groups?.map((group) => ({uri: group.photo_100})))
@@ -49,14 +58,13 @@ const ConversationsList = () => {
             <View style={{width: '100%', height: '100%'}}>
                 {!loading ?
                     <BigList
-                        // key={`${conversations}`}
+                        renderHeader={() => <ListHeader />}
+                        headerHeight={55}
                         showsHorizontalScrollIndicator={false}
                         itemHeight={65}
                         removeClippedSubviews={true}
                         data={conversations}
                         renderItem={renderItem}
-                        // extraData={[conversations]}
-                        // renderEmpty={() => <Text>Empty</Text>}
                     /> :
                         (<View>
                             <ActivityIndicator />

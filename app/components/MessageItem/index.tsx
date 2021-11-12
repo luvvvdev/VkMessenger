@@ -92,6 +92,7 @@ const MessageItem = ({message, isNextMessageByCurrentId, prevMessageByCurrentId,
                             </Text>
                         )
                     }
+
                     <View style={styles.messageFooter}>
                         {
                             // <Text style={_styles.footerText}>ред.</Text>
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
     },
     messageContent: {
         backgroundColor: "whitesmoke",
-        paddingVertical: 10,
-        paddingHorizontal: 8,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
         height: "100%",
-        borderRadius: 10,
+        borderRadius: 15,
         position: "relative",
         maxWidth: 325 // 350 * 0.12 = 42 symbols
     },

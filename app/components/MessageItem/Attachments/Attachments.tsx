@@ -1,4 +1,13 @@
-import {FlatList, LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
+import {
+    FlatList,
+    LogBox,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+    VirtualizedList,
+} from "react-native";
 import FastImage from "react-native-fast-image";
 import React, {memo, useEffect} from "react";
 import {MessagesMessageAttachment} from "../../../types/vk";
@@ -14,8 +23,9 @@ type AttachmentsProps = {
     attachments?: MessagesMessageAttachment[]
 }
 
-export const Attachments = memo(({attachments}: AttachmentsProps) => {
+LogBox.ignoreLogs([/(?:console.error: VirtualizedLists should never be nested inside plain)/gm])
 
+export const Attachments = memo(({attachments}: AttachmentsProps) => {
     if (!attachments) return null
 
     const height = getAttachmentsHeight(attachments)
@@ -48,22 +58,20 @@ export const Attachments = memo(({attachments}: AttachmentsProps) => {
     ))*/
 
     return (
-        <ScrollView horizontal={true}>
-            <FlatList numColumns={2} data={attachments} renderItem={({item: attachment, index}) => {
-                let child: React.ReactNode = null;
+        <FlatList data={attachments} scrollEnabled={false} horizontal={false} renderItem={({item: attachment, index}) => {
+            let child: React.ReactNode = null;
 
-                switch (attachment.type) {
-                    case "photo":
-                        child = renderPhoto(attachment, index % 2 === 0 ? true : false)
-                        break;
-                    default:
-                        child = <View style={{height: '100%', width: 150, backgroundColor: 'gray'}}></View>
-                        break;
-                }
+            switch (attachment.type) {
+                case "photo":
+                    child = renderPhoto(attachment, index % 2 === 0 ? true : false)
+                    break;
+                default:
+                    child = <View style={{height: '100%', width: 150, backgroundColor: 'gray'}}></View>
+                    break;
+            }
 
-                return <View style={attachmentStyle} key={`attachment-${attachment.type}-${index}`}>{child}</View>
-            }} />
-        </ScrollView>
+            return <View style={attachmentStyle} key={`attachment-${attachment.type}-${index}`}>{child}</View>
+        }} />
     )
 }, ((prevProps, nextProps) => _.isEqual(prevProps, nextProps)))
 

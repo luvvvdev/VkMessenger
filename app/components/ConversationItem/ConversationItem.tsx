@@ -12,7 +12,10 @@ import {TimeAgo} from "./TimeAgo";
 import {translate, TxKeyPath} from "../../i18n";
 import _ from "lodash";
 import {getPeerById} from "../../utils/getPeerById";
-import {Avatar} from "../Avatar/Avatar";
+import {Avatar, CustomAvatar} from "../Avatar/Avatar";
+import {useDispatch, useSelector} from "react-redux";
+import {Dispatch, RootState} from "../../models";
+import {getCustomAvatar} from "../../utils/getCustomAvatar";
 
 type ConversationItemProps = {
     data: MessagesConversationWithMessage
@@ -66,16 +69,27 @@ const getPhotoUrl = (conversation: MessagesConversation, peer: UsersUserFull | G
 
 const ConversationItem = memo(({data, ...rest}: ConversationItemProps) => {
     const {conversation, last_message} = data
+
+    const dispatch = useDispatch<Dispatch>()
+    const customAvatar = useSelector<RootState, CustomAvatar | undefined>(state => {
+        return state.prefs.customAvatars[conversation.peer.id]
+    })
+
     const peer = getPeerById(conversation.peer.id)
 
     const conversationPhotoUrl = getPhotoUrl(conversation, peer)
+
     const conversationName = getConversationName(conversation, peer)
+
+    if (!conversationPhotoUrl && !customAvatar) {
+        dispatch.prefs.addAvatar({peer_id: conversation.peer.id, avatar: getCustomAvatar()})
+    }
 
     return (
         <TouchableOpacity onPress={() => onOpen(conversation, conversationPhotoUrl, conversationName)}>
             <View style={styles.container}>
                 <View style={styles.leadingPart}>
-                    <Avatar url={conversationPhotoUrl} size={55} style={{marginRight: 10}}/>
+                    <Avatar url={conversationPhotoUrl} custom={customAvatar} size={55} style={{marginRight: 10}}/>
                     <View>
                         <Text style={styles.userName}>{`${conversationName}`}</Text>
                         <View style={styles.lastMessageContainer}>

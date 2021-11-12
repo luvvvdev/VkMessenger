@@ -273,7 +273,6 @@ export class Api {
     }
   }
 
-
   async getConversations(): Promise<GetConversationsResult> {
     try {
       const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.getConversations`, {
@@ -294,5 +293,23 @@ export class Api {
     }
   }
 
+  async searchConversations(): Promise<GetConversationsResult> {
+    try {
+      const response: ApiResponse<any, any> = await this.apisauce.get(`/method/messages.searchConversations`, {
+        extended: true, offset: 0, count: 20
+      })
 
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      //console.log(response.data)
+
+      return { kind: "ok", data: response.data } as GetConversationsResult
+    } catch (e) {
+      return {kind: "bad-data"}
+    }
+  }
 }

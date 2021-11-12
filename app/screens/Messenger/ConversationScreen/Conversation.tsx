@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 8,
         maxWidth: '100%',
-        backgroundColor: 'transparent'
+        // backgroundColor: 'transparent'
         // paddingVertical: 5,
     },
     footerAction: {

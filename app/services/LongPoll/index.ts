@@ -105,26 +105,38 @@ class LongPollService {
         return storagePts
     }
 
-    async saveServer(server?: string, key?: string, ts?: number, pts?: number) {
-        this.server = server
-        this.key = key
-        this.ts = ts
-        this.pts = pts
+    async isServerCredsStored() {
+        const is = await AsyncStorage.getItem('lp_creds_saved')
 
-        const storageTs = await this.getTs()
-        const storagePts = await this.getPts()
+        return is ? Boolean(is) : false
+    }
 
-        if (storageTs) {
-            console.log('Loading TS from the store')
-            this.ts = storageTs
-        }
-        if (storagePts) {
-            console.log('Loading PTS from the store')
-            this.pts = storagePts
-        }
+    async saveServerCredsToStorage(credentials: ServerCredentials) {
+        await AsyncStorage.setItem('lp_creds_saved', `${true}`)
 
-        await this.savePts(pts)
-        await this.saveTs(ts)
+        await Promise.all(Object.keys(credentials).map(async (key) => {
+            await AsyncStorage.setItem(`lp_${key}`, `${credentials[key]}`)
+        }))
+    }
+
+    async getStorageServerCreds(keys: string[]): Promise<ServerCredentials | null> {
+        const creds: ServerCredentials = {}
+
+        await Promise.all(keys.map(async (key) => {
+            const value = await AsyncStorage.getItem(`lp_${key}`)
+
+            creds[key] = Number(value) ? Number(value) : String(value)
+        }))
+
+        return Object.keys(creds).length === 0 ? null : creds
+    }
+
+    async saveServer(creds: ServerCredentials) {
+        Object.keys(creds).forEach((key) => {
+            this[key] = creds[key]
+        })
+
+        await this.saveServerCredsToStorage(creds)
     }
 
     async getServerCredentials(): Promise<ServerCredentials> {
@@ -253,10 +265,9 @@ class LongPollService {
         console.log('history load..')
         const state = this.store.getState()
 
-        const lastTs = this.ts
-        const lastPts = this.pts
+        const {ts, pts} = await this.getServerCredentials()
 
-        if (!lastTs || !lastPts) {
+        if (!ts || !pts) {
             return console.error('historyLoad', 'cant get TS or PTS')
         }
 
@@ -271,7 +282,7 @@ class LongPollService {
         console.log('last message updates history', lastConversation.last_message)
 
         const response = await this.api.getLongPollHistory({
-            ts: lastTs, pts: lastPts,
+            ts, pts,
             lp_version: 12,
             msgs_limit: 200, events_limit: 1000,
             max_msg_id: lastMessageId
@@ -286,9 +297,9 @@ class LongPollService {
 
         const data = response.data.response
 
-        this.pts = data?.new_pts
+        console.log('history data', data?.history)
 
-        await this.savePts(data?.new_pts)
+        await this.saveServerCredsToStorage({pts: data?.new_pts})
 
         this.handleHistoryUpdates(data)
     }
@@ -338,10 +349,26 @@ class LongPollService {
         return {ts, updates, pts, failed}
     }
 
-    async connect() {
-        const {server, key, ts, pts} = await this.getServerCredentials()
+    async connect(rewriteCreds = false) {
+        let creds: ServerCredentials;
 
-        await this.saveServer(server, key, ts, pts)
+        const hasStoredCreds = await this.isServerCredsStored()
+
+        console.log('hasStoredCreds', hasStoredCreds)
+
+        if (hasStoredCreds && !rewriteCreds) {
+            const storedSavedCreds = await this.getStorageServerCreds(['server', 'ts', 'pts', 'key'])
+
+            creds = storedSavedCreds!
+        } else {
+            const newCreds = await this.getServerCredentials()
+
+            console.log('new creds', newCreds)
+
+            creds = newCreds
+        }
+
+        return await this.saveServer(creds)
     }
 
     async lookupUpdates() {
@@ -379,16 +406,16 @@ class LongPollService {
     async handleErrors(failed: number) {
         switch (failed) {
             case 1:
-                await this.getHistoryUpdates()
                 console.warn('Old history of updates, try get')
+                await this.getHistoryUpdates()
                 break
             case 2:
-                await this.connect()
                 console.warn('Property of key is expired, try reconnect')
+                await this.connect(true)
                 break
             case 3:
-                await this.getHistoryUpdates()
                 console.warn('Try to reconnect and get new history of updates')
+                await this.getHistoryUpdates()
                 break
             case 4:
                 console.error('Invalid LongPoll version number')

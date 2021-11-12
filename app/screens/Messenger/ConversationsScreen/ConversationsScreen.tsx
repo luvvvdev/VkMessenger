@@ -16,7 +16,6 @@ const ConversationsScreen = (props) => {
     const isLoggedIn = useSelector<RootState>((state) => Boolean(state.user.login_data?.access_token))
 
     useEffect(() => {
-        console.log('isLoggedIn', isLoggedIn)
         if (isLoggedIn) {
             console.log('subscribe updates')
             subscribeUpdates()
