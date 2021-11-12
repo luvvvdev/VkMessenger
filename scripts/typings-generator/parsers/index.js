@@ -1,13 +1,13 @@
-const { parseJSONSchema, parseJSONObject } = require('./json-schema');
+const { parseJSONSchema, parseJSONObject } = require("./json-schema")
 
-const { parseParameter, parseParameters } = require('./parameter');
-const parseResponses = require('./response');
+const { parseParameter, parseParameters } = require("./parameter")
+const parseResponses = require("./response")
 
 module.exports = {
-	parseJSONSchema,
-	parseJSONObject,
+  parseJSONSchema,
+  parseJSONObject,
 
-	parseParameter,
-	parseParameters,
-	parseResponses
-};
+  parseParameter,
+  parseParameters,
+  parseResponses,
+}

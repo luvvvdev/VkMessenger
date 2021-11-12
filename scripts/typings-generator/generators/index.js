@@ -1,7 +1,7 @@
-const TypesGenerator = require('./types');
-const InterfaceGenerator = require('./interface');
+const TypesGenerator = require("./types")
+const InterfaceGenerator = require("./interface")
 
 module.exports = {
-	TypesGenerator,
-	InterfaceGenerator
-};
+  TypesGenerator,
+  InterfaceGenerator,
+}

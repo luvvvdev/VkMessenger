@@ -1,10 +1,10 @@
-import {ReactNode} from "react";
+import { ReactNode } from "react"
 
 export type SectionRow = {
-    title: string
-    onPress?: () => void
-    leading?: {
-        icon?: ReactNode
-        color?: any
-    }
+  title: string
+  onPress?: () => void
+  leading?: {
+    icon?: ReactNode
+    color?: any
+  }
 }

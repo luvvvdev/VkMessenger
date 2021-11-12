@@ -1,7 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-const ReactNative = require('@callstack/repack');
+const path = require("path")
+const webpack = require("webpack")
+const TerserPlugin = require("terser-webpack-plugin")
+const ReactNative = require("@callstack/repack")
 
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
@@ -31,14 +31,14 @@ const ReactNative = require('@callstack/repack');
  * to specify your values, if the defaults don't suit your project.
  */
 
-const mode = ReactNative.getMode({ fallback: 'development' });
-const dev = mode === 'development';
-const context = ReactNative.getContext();
-const entry = ReactNative.getEntry();
-const platform = ReactNative.getPlatform({ fallback: process.env.PLATFORM });
-const minimize = ReactNative.isMinimizeEnabled({ fallback: !dev });
-const devServer = ReactNative.getDevServerOptions();
-const reactNativePath = ReactNative.getReactNativePath();
+const mode = ReactNative.getMode({ fallback: "development" })
+const dev = mode === "development"
+const context = ReactNative.getContext()
+const entry = ReactNative.getEntry()
+const platform = ReactNative.getPlatform({ fallback: process.env.PLATFORM })
+const minimize = ReactNative.isMinimizeEnabled({ fallback: !dev })
+const devServer = ReactNative.getDevServerOptions()
+const reactNativePath = ReactNative.getReactNativePath()
 
 /**
  * Depending on your Babel configuration you might want to keep it.
@@ -48,24 +48,24 @@ const reactNativePath = ReactNative.getReactNativePath();
  * to `development` or `production`. Otherwise your production code might be compiled with
  * in development mode by Babel.
  */
-process.env.BABEL_ENV = mode;
+process.env.BABEL_ENV = mode
 
 const getBabelOptions = () => {
   const plugins = [
     "@babel/plugin-transform-flow-strip-types",
     "@babel/proposal-object-rest-spread",
     "@babel/plugin-syntax-jsx",
-    [ "@babel/plugin-proposal-decorators", { "legacy": true } ],
-    [ "@babel/plugin-proposal-class-properties", { "loose": true } ]
+    ["@babel/plugin-proposal-decorators", { legacy: true }],
+    ["@babel/plugin-proposal-class-properties", { loose: true }],
   ]
 
-  if (devServer.hmr) plugins.push('module:react-refresh/babel')
+  if (devServer.hmr) plugins.push("module:react-refresh/babel")
 
   return {
     // rootMode: 'upward',
     /** Add React Refresh transform only when HMR is enabled. */
     presets: ["module:metro-react-native-babel-preset"], //"@babel/preset-flow"
-    plugins
+    plugins,
   }
 }
 
@@ -93,9 +93,9 @@ module.exports = {
   ],
   resolve: {
     fallback: {
-      "path": false,
+      path: false,
       stream: false,
-      constants: false
+      constants: false,
     },
     /**
      * `getResolveOptions` returns additional resolution configuration for React Native.
@@ -111,7 +111,7 @@ module.exports = {
      * structure. For simple/typical project you won't need it.
      */
     alias: {
-      'react-native': reactNativePath,
+      "react-native": reactNativePath,
     },
   },
   /**
@@ -123,9 +123,9 @@ module.exports = {
    */
   output: {
     clean: true,
-    path: path.join(__dirname, 'build', platform),
-    filename: 'index.bundle',
-    chunkFilename: '[name].chunk.bundle',
+    path: path.join(__dirname, "build", platform),
+    filename: "index.bundle",
+    chunkFilename: "[name].chunk.bundle",
     publicPath: ReactNative.getPublicPath(devServer),
   },
   /**
@@ -157,7 +157,7 @@ module.exports = {
      * https://github.com/babel/babel-loader#options
      */
     rules: [
-       {
+      {
         test: /\.[jt]sx?$/,
         include: [
           /node_modules(.*[/\\])+react/,
@@ -170,14 +170,11 @@ module.exports = {
           /node_modules(.*[/\\])+abort-controller/,
           /node_modules(.*[/\\])+@callstack[/\\]repack/,
         ],
-         exclude: [
-           /node_modules(.*[/\\])+@storybook/
-         ],
-         use: {
-          loader: 'babel-loader',
-           options: getBabelOptions()
-         },
-
+        exclude: [/node_modules(.*[/\\])+@storybook/],
+        use: {
+          loader: "babel-loader",
+          options: getBabelOptions(),
+        },
       },
       /**
        * Here you can adjust loader that will process your files.
@@ -190,8 +187,8 @@ module.exports = {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: getBabelOptions()
+          loader: "babel-loader",
+          options: getBabelOptions(),
         },
       },
 
@@ -202,7 +199,6 @@ module.exports = {
           loader: 'ts-loader',
         },
       },*/
-
 
       /**
        * This loader handles all static assets (images, video, audio and others), so that you can
@@ -215,11 +211,9 @@ module.exports = {
        * ```
        */
       {
-        test: ReactNative.getAssetExtensionsRegExp(
-            ReactNative.ASSET_EXTENSIONS
-        ),
+        test: ReactNative.getAssetExtensionsRegExp(ReactNative.ASSET_EXTENSIONS),
         use: {
-          loader: '@callstack/repack/assets-loader',
+          loader: "@callstack/repack/assets-loader",
           options: {
             platform,
             devServerEnabled: devServer.enabled,
@@ -268,7 +262,7 @@ module.exports = {
     new ReactNative.OutputPlugin({
       platform,
       devServerEnabled: devServer.enabled,
-      remoteChunksOutput: path.join(__dirname, 'build', platform, 'remote'),
+      remoteChunksOutput: path.join(__dirname, "build", platform, "remote"),
       localChunks: [/Async/],
       // remoteChunksOutput: path.resolve(__dirname, 'build', platform, 'chunks')
     }),
@@ -292,7 +286,7 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       exclude: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
       /**
        * Uncomment for faster builds but less accurate Source Maps
@@ -309,7 +303,7 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       include: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
       /**
        * Uncomment for faster builds but less accurate Source Maps
@@ -335,4 +329,4 @@ module.exports = {
       },
     }),
   ],
-};
+}

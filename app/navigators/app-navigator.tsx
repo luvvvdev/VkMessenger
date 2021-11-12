@@ -4,28 +4,25 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React, {memo, useRef} from "react"
-import {
-    Button,
-    Text, TouchableOpacity,
-    useColorScheme,
-    View,
-    PlatformColor
-} from "react-native";
+import React, { useRef } from "react"
+import { Button, Text, TouchableOpacity, useColorScheme, View, PlatformColor } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import {navigate, navigationRef} from "./navigation-utilities"
-import LoginScreen from "../screens/Login/LoginScreen";
-import {useDispatch, useSelector} from "react-redux";
-import {Dispatch, RootState} from "../models";
-import ConversationScreen from "../screens/Messenger/ConversationScreen/ConversationScreen";
-import {Header} from "../components";
-import ConversationsScreen from "../screens/Messenger/ConversationsScreen/ConversationsScreen";
-import SettingsModal from "../features/SettingsModal";
-import FastImage from "react-native-fast-image";
-import {translate} from "../i18n";
-import {Avatar, CustomAvatar} from "../components/Avatar/Avatar";
-import {getPeerById} from "../utils/getPeerById";
+import { navigate, navigationRef } from "./navigation-utilities"
+import LoginScreen from "../screens/Login/LoginScreen"
+import { useDispatch, useSelector } from "react-redux"
+import { Dispatch, RootState } from "../models"
+import ConversationScreen from "../screens/Messenger/ConversationScreen/ConversationScreen"
+import { Header } from "../components"
+import ConversationsScreen from "../screens/Messenger/CoversationsScreen/ConversationsScreen"
+import SettingsModal from "../features/SettingsModal"
+import FastImage from "react-native-fast-image"
+import { translate } from "../i18n"
+
+import HeaderRight from "../screens/Messenger/ConversationScreen/components/HeaderRight"
+import HeaderTitle from "../screens/Messenger/ConversationScreen/components/HeaderTitle"
+import ConversationsHeaderTitle from "../screens/Messenger/CoversationsScreen/components/HeaderTitle"
+import HeaderLeft from "../screens/Messenger/CoversationsScreen/components/HeaderLeft"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,164 +37,71 @@ import {getPeerById} from "../utils/getPeerById";
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type NavigatorParamList = {
-  messenger: undefined
-  login: undefined
-  conversation: undefined
+  Conversations: undefined
+  Login: undefined
+  Conversation: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
-    const isLoggedIn = useSelector((state: RootState) => Boolean(state.user.login_data?.access_token))
-    const userData = useSelector((state: RootState) => state.user.user_data)
-    const dispatch = useDispatch<Dispatch>()
+  const isLoggedIn = useSelector((state: RootState) => Boolean(state.user.login_data?.access_token))
+  const dispatch = useDispatch<Dispatch>()
 
-    return (
-        <Stack.Navigator
-            screenOptions={({navigation, route}) => ({
-                headerShown: true,
-                contentStyle: {
-                    backgroundColor: PlatformColor('systemBackground')
-                },
-                headerTransparent: true,
-                headerTintColor: 'white',
-                headerShadowVisible: false,
-                header: Header,
-            })}
-        >
-            {
-                isLoggedIn ? (
-                    <>
-                        <Stack.Screen name="messenger" component={ConversationsScreen} options={{
-                            title: `${translate('ConversationsScreen.title')}`,
-                            headerTransparent: true,
-                            animationTypeForReplace: 'push',
-                            headerLeft: () => {
-                                const modalRef = useRef(null)
-                                const imgSource = {
-                                    method: 'GET',
-                                    uri: userData?.photo_100
-                                }
-
-                                return (
-                                    <View>
-                                        <SettingsModal ref={modalRef} />
-                                        <TouchableOpacity onPress={() => {
-                                            (modalRef.current as any)?.setVisibility(true)
-                                        }}>
-                                            <FastImage
-                                                style={{
-                                                    height: 25,
-                                                    width: 25,
-                                                    borderRadius: 999,
-                                                    backgroundColor: 'gray',
-                                                }}
-                                                source={imgSource}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            }
-                        }}/>
-                        <Stack.Screen name="conversation" component={ConversationScreen} options={({route}) => (
-                            {headerBackVisible: true, headerBackTitleVisible: false, headerTitleAlign: 'left', headerShown: true, headerRight: () => {
-                                    const currentPeerId = useSelector<RootState, number | null>((state) => state.history.current_id)
-                                    const dispatch = useDispatch<Dispatch>()
-
-                                    if (!currentPeerId) return null
-
-                                    const fullRefresh = () => {
-                                        dispatch.history.clear({peer_id: currentPeerId})
-                                        dispatch.history.get({peer_id: currentPeerId, offset: 0})
-                                    }
-
-                                    return (<Button title={'Clear'} onPress={fullRefresh} />)
-                                },
-                                headerTitle: () => {
-                                    const conversation = (route.params! as any).conversation
-                                    const customAvatar = useSelector<RootState, CustomAvatar | undefined>(state => {
-                                        return state.prefs.customAvatars[conversation.peer.id]
-                                    })
-
-                                    const type = conversation.peer.type
-
-                                    let photo = conversation.chat_settings?.photo?.photo_100
-
-                                    if (type !== 'chat') {
-                                        const peer = getPeerById(conversation.peer.id)
-
-                                        if (type === 'group') {
-                                            photo = peer?.photo_100
-                                        } else if (type === 'user') {
-                                            photo = peer?.photo_100
-                                        }
-                                    }
-
-                                    let underTitle = ''
-
-                                    switch (type) {
-                                        case 'user':
-                                            underTitle = 'online'
-                                            break
-                                        case 'chat':
-                                            underTitle = `${conversation.chat_settings.members_count} members`
-                                            break
-                                        default:
-                                            break
-                                    }
-
-                                return (
-                                    <View style={{
-                                        display: 'flex',
-                                        width: '100%',
-                                        alignItems: 'center',
-                                        justifyContent: 'flex-start',
-                                        flexDirection: 'row'}}>
-                                        <Avatar
-                                            url={photo}
-                                            custom={customAvatar}
-                                            // @ts-ignore
-                                            size={35}
-                                            style={{marginRight: 10}}/>
-                                        <View>
-                                            <Text
-                                                numberOfLines={1}
-                                                // lineBreakMode={'tail'}
-                                                ellipsizeMode={'tail'}
-                                                style={{
-                                                    width: 150,
-                                                    fontWeight: 'bold',
-                                                    fontSize: 16,
-                                                    color: PlatformColor('label')
-                                                }}>
-                                                {`${(route.params! as any).title.toString()}`}
-                                            </Text>
-                                            {
-                                                underTitle.length > 0 && (
-                                                    <Text style={{color: PlatformColor('secondaryLabel')}}>
-                                                        {underTitle}
-                                                    </Text>
-                                                )
-                                            }
-                                        </View>
-                                    </View>
-                                )
-                                },
-                            })} />
-                    </>
-                ) : <Stack.Screen
-                    name="login"
-                    component={LoginScreen}
-                    options={
-                        {
-                            title: `${translate('LoginScreen.title')}`,
-                            headerLargeTitle: true,
-                            headerTransparent: true
-                        }}/>
-            }
-        </Stack.Navigator>
-    )
+  return (
+    <Stack.Navigator
+      screenOptions={({ navigation, route }) => ({
+        headerShown: true,
+        contentStyle: {
+          backgroundColor: PlatformColor("systemBackground"),
+        },
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: "red",
+        },
+        //headerBlurEffect: "extraLight",
+        headerShadowVisible: false,
+        header: Header,
+      })}
+    >
+      {!isLoggedIn && (
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: `${translate("LoginScreen.title")}`,
+            headerLargeTitle: true,
+            headerTransparent: true,
+          }}
+        />
+      )}
+      <Stack.Group>
+        <Stack.Screen
+          name="Conversations"
+          component={ConversationsScreen}
+          options={{
+            headerTitle: ConversationsHeaderTitle,
+            animationTypeForReplace: "push",
+            headerLeft: HeaderLeft,
+          }}
+        />
+        <Stack.Screen
+          name="Conversation"
+          component={ConversationScreen}
+          options={({ route }) => ({
+            headerBackVisible: true,
+            headerBackTitleVisible: false,
+            headerBlurEffect: "light",
+            headerTitleAlign: "left",
+            headerShown: true,
+            headerRight: HeaderRight,
+            headerTitle: () => <HeaderTitle route={route} />,
+          })}
+        />
+      </Stack.Group>
+    </Stack.Navigator>
+  )
 }
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
@@ -206,13 +110,13 @@ export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
 
   return (
-        <NavigationContainer
-            ref={navigationRef}
-            theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-            {...props}
-        >
-            <AppStack />
-        </NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+      {...props}
+    >
+      <AppStack />
+    </NavigationContainer>
   )
 }
 

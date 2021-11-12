@@ -21,6 +21,6 @@ export interface ApiConfig {
  * The default configuration for the app.
  */
 export const DEFAULT_API_CONFIG: ApiConfig = {
-  url: 'https://api.vk.com',
+  url: "https://api.vk.com",
   timeout: 10000,
 }

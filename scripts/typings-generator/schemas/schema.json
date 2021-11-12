@@ -11,11 +11,7 @@
     },
     "format": {
       "type": "string",
-      "enum": [
-        "json",
-        "int32",
-        "int64"
-      ]
+      "enum": ["json", "int32", "int64"]
     },
     "enumNames": {
       "type": "array",
@@ -28,9 +24,7 @@
     },
     "jsonReference": {
       "type": "object",
-      "required": [
-        "$ref"
-      ],
+      "required": ["$ref"],
       "additionalProperties": false,
       "properties": {
         "$ref": {
@@ -47,44 +41,19 @@
     },
     "parameterTypes": {
       "type": "string",
-      "enum": [
-        "array",
-        "boolean",
-        "integer",
-        "number",
-        "string"
-      ]
+      "enum": ["array", "boolean", "integer", "number", "string"]
     },
     "responseTypes": {
       "type": "string",
-      "enum": [
-        "array",
-        "boolean",
-        "integer",
-        "number",
-        "string",
-        "object"
-      ]
+      "enum": ["array", "boolean", "integer", "number", "string", "object"]
     },
     "responsePropertyTypes": {
       "type": "string",
-      "enum": [
-        "array",
-        "boolean",
-        "integer",
-        "number",
-        "string"
-      ]
+      "enum": ["array", "boolean", "integer", "number", "string"]
     },
     "itemTypes": {
       "type": "string",
-      "enum": [
-        "object",
-        "boolean",
-        "integer",
-        "number",
-        "string"
-      ]
+      "enum": ["object", "boolean", "integer", "number", "string"]
     },
     "parameter": {
       "type": "object",
@@ -140,14 +109,10 @@
           },
           "oneOf": [
             {
-              "required": [
-                "type"
-              ]
+              "required": ["type"]
             },
             {
-              "required": [
-                "$ref"
-              ]
+              "required": ["$ref"]
             }
           ],
           "additionalProperties": false
@@ -199,24 +164,17 @@
           "description": "Parameter description"
         }
       },
-      "required": [
-        "name",
-        "type"
-      ],
+      "required": ["name", "type"],
       "additionalProperties": false
     },
     "responseProperty": {
       "type": "object",
       "oneOf": [
         {
-          "required": [
-            "type"
-          ]
+          "required": ["type"]
         },
         {
-          "required": [
-            "$ref"
-          ]
+          "required": ["$ref"]
         }
       ],
       "properties": {
@@ -314,10 +272,7 @@
           "default": false
         }
       },
-      "required": [
-        "code",
-        "description"
-      ],
+      "required": ["code", "description"],
       "additionalProperties": false
     },
     "error_subcode": {
@@ -371,12 +326,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "open",
-              "user",
-              "group",
-              "service"
-            ],
+            "enum": ["open", "user", "group", "service"],
             "description": "Access token type"
           },
           "description": "Input parameters for method"
@@ -406,11 +356,7 @@
           "$ref": "#/definitions/methodErrors"
         }
       },
-      "required": [
-        "name",
-        "access_token_type",
-        "responses"
-      ],
+      "required": ["name", "access_token_type", "responses"],
       "additionalProperties": false
     }
   },

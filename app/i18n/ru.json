@@ -5,6 +5,8 @@
     "back": "Назад",
     "search": "Поиск",
     "clear": "Очистить",
+    "connecting": "Соединение",
+    "updating": "Обновление",
     "attachments_types": {
       "photo": "Фото",
       "sticker": "Стикер",

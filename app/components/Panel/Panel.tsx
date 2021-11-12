@@ -1,23 +1,19 @@
-import React, { ReactNode } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import React, { ReactNode } from "react"
+import { StyleProp, View, ViewStyle } from "react-native"
 
 type PanelProps = {
-  children: ReactNode,
-  title: string,
+  children: ReactNode
+  title: string
 }
 
-const Panel = ({children, title}: PanelProps) => {
+const Panel = ({ children, title }: PanelProps) => {
   const style: StyleProp<ViewStyle> = {
     paddingTop: 10,
     paddingBottom: 10,
-    width: '100%'
+    width: "100%",
   }
 
-  return (
-    <View style={style}>
-      {children}
-    </View>
-  )
+  return <View style={style}>{children}</View>
 }
 
-export {Panel}
+export { Panel }

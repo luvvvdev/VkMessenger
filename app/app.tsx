@@ -11,24 +11,22 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, {useEffect, useLayoutEffect, useState} from "react"
-import {
-  SafeAreaProvider,
-} from "react-native-safe-area-context"
+import React, { useEffect, useLayoutEffect, useState } from "react"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
 import { useBackButtonHandler, AppNavigator, canExit } from "./navigators"
-import VKLogin from 'react-native-vkontakte-login'
-import {Provider, useSelector} from 'react-redux'
-import {Api} from "./services/api/api";
-import {RootState, store} from "./models";
-import {startLongPoll, stopLongPoll} from "./services/LongPoll/background";
-import BackgroundService from "react-native-background-actions";
-import VK from "react-native-vkontakte-login";
+import VKLogin from "react-native-vkontakte-login"
+import { Provider, useSelector } from "react-redux"
+import { Api } from "./services/api/api"
+import { RootState, store } from "./models"
+import { startLongPoll, stopLongPoll } from "./services/LongPoll/background"
+import BackgroundService from "react-native-background-actions"
+import VK from "react-native-vkontakte-login"
 
-import {PersistGate} from 'redux-persist/lib/integration/react'
+import { PersistGate } from "redux-persist/lib/integration/react"
 
-import {getPersistor} from "@rematch/persist";
-import {Text, View} from "react-native";
+import { getPersistor } from "@rematch/persist"
+import { Text, View } from "react-native"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -48,8 +46,6 @@ setupServices()
  * This is the root component of our app.
  */
 
-
-
 function App() {
   useBackButtonHandler(canExit)
   /*
@@ -63,7 +59,6 @@ function App() {
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     VKLogin.initialize(2685278)
-
     ;(async () => {
       await initFonts() // expo
       // setupRootStore().then(setRootStore)
@@ -76,19 +71,19 @@ function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
- //  if (!rootStore || !isNavigationStateRestored) return null
+  //  if (!rootStore || !isNavigationStateRestored) return null
 
   // otherwise, we're ready to render the app
 
   return (
-          <Provider store={store}>
-            <SafeAreaProvider initialMetrics={null}>
-                <AppNavigator
-                    //initialState={initialNavigationState}
-                    //onStateChange={onNavigationStateChange}
-                />
-            </SafeAreaProvider>
-          </Provider>
+    <Provider store={store}>
+      <SafeAreaProvider initialMetrics={null}>
+        <AppNavigator
+        //initialState={initialNavigationState}
+        //onStateChange={onNavigationStateChange}
+        />
+      </SafeAreaProvider>
+    </Provider>
   )
 }
 

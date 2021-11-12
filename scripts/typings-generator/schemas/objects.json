@@ -238,11 +238,7 @@
         "link_type": {
           "type": "string",
           "description": "Link type",
-          "enum": [
-            "profile",
-            "group",
-            "app"
-          ]
+          "enum": ["profile", "group", "app"]
         }
       },
       "additionalProperties": false
@@ -288,11 +284,7 @@
           "$ref": "objects.json#/definitions/base_bool_int"
         }
       },
-      "required": [
-        "peer_id",
-        "sound",
-        "disabled_until"
-      ],
+      "required": ["peer_id", "sound", "disabled_until"],
       "additionalProperties": false
     },
     "account_push_params": {
@@ -418,29 +410,17 @@
     "account_push_params_mode": {
       "type": "string",
       "description": "Settings parameters",
-      "enum": [
-        "on",
-        "off",
-        "no_sound",
-        "no_text"
-      ]
+      "enum": ["on", "off", "no_sound", "no_text"]
     },
     "account_push_params_onoff": {
       "type": "string",
       "description": "Settings parameters",
-      "enum": [
-        "on",
-        "off"
-      ]
+      "enum": ["on", "off"]
     },
     "account_push_params_settings": {
       "type": "string",
       "description": "Settings parameters",
-      "enum": [
-        "on",
-        "off",
-        "fr_of_fr"
-      ]
+      "enum": ["on", "off", "fr_of_fr"]
     },
     "account_push_settings": {
       "type": "object",
@@ -503,10 +483,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "title",
-        "value"
-      ],
+      "required": ["title", "value"],
       "additionalProperties": false
     },
     "account_user_settings_interests": {
@@ -564,19 +541,12 @@
     "ads_access_role": {
       "type": "string",
       "description": "Current user's role",
-      "enum": [
-        "admin",
-        "manager",
-        "reports"
-      ]
+      "enum": ["admin", "manager", "reports"]
     },
     "ads_access_role_public": {
       "type": "string",
       "description": "Current user's role",
-      "enum": [
-        "manager",
-        "reports"
-      ]
+      "enum": ["manager", "reports"]
     },
     "ads_accesses": {
       "type": "object",
@@ -630,10 +600,7 @@
     "ads_account_type": {
       "type": "string",
       "description": "Account type",
-      "enum": [
-        "general",
-        "agency"
-      ]
+      "enum": ["general", "agency"]
     },
     "ads_ad": {
       "type": "object",
@@ -643,10 +610,7 @@
           "description": "Ad format"
         },
         "ad_platform": {
-          "type": [
-            "integer",
-            "string"
-          ],
+          "type": ["integer", "string"],
           "description": "Ad platform"
         },
         "all_limit": {
@@ -742,34 +706,14 @@
     "ads_ad_approved": {
       "type": "integer",
       "description": "Review status",
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "not moderated",
-        "pending moderation",
-        "approved",
-        "rejected"
-      ]
+      "enum": [0, 1, 2, 3],
+      "enumNames": ["not moderated", "pending moderation", "approved", "rejected"]
     },
     "ads_ad_cost_type": {
       "type": "integer",
       "description": "Cost type",
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "per clicks",
-        "per impressions",
-        "per actions",
-        "per impressions optimized"
-      ]
+      "enum": [0, 1, 2, 3],
+      "enumNames": ["per clicks", "per impressions", "per actions", "per impressions optimized"]
     },
     "ads_ad_layout": {
       "type": "object",
@@ -813,10 +757,7 @@
           "description": "URL of advertised object"
         },
         "preview_link": {
-          "type": [
-            "integer",
-            "string"
-          ],
+          "type": ["integer", "string"],
           "description": "link to preview an ad as it is shown on the website"
         },
         "title": {
@@ -843,16 +784,8 @@
     "ads_ad_status": {
       "type": "integer",
       "description": "Ad atatus",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "stopped",
-        "started",
-        "deleted"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["stopped", "started", "deleted"]
     },
     "ads_campaign": {
       "type": "object",
@@ -931,16 +864,8 @@
     "ads_campaign_status": {
       "type": "integer",
       "description": "Campaign status",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "stopped",
-        "started",
-        "deleted"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["stopped", "started", "deleted"]
     },
     "ads_campaign_type": {
       "type": "string",
@@ -973,10 +898,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "ads_client": {
@@ -999,12 +921,7 @@
           "description": "Client name"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "day_limit",
-        "all_limit"
-      ],
+      "required": ["id", "name", "day_limit", "all_limit"],
       "additionalProperties": false
     },
     "ads_criteria": {
@@ -1138,16 +1055,8 @@
     "ads_criteria_sex": {
       "type": "integer",
       "description": "Sex",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "any",
-        "male",
-        "female"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["any", "male", "female"]
     },
     "ads_demo_stats": {
       "type": "object",
@@ -1219,10 +1128,7 @@
           "description": "Time to refresh in seconds"
         }
       },
-      "required": [
-        "left",
-        "refresh"
-      ],
+      "required": ["left", "refresh"],
       "additionalProperties": false
     },
     "ads_link_status": {
@@ -1242,11 +1148,7 @@
           "description": "Link status"
         }
       },
-      "required": [
-        "status",
-        "description",
-        "redirect_url"
-      ],
+      "required": ["status", "description", "redirect_url"],
       "additionalProperties": false
     },
     "ads_lookalike_request": {
@@ -1283,9 +1185,7 @@
         },
         "source_type": {
           "type": "string",
-          "enum": [
-            "retargeting_group"
-          ],
+          "enum": ["retargeting_group"],
           "description": "Lookalike request source type"
         },
         "source_retargeting_group_id": {
@@ -1309,13 +1209,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "create_time",
-        "update_time",
-        "status",
-        "source_type"
-      ],
+      "required": ["id", "create_time", "update_time", "status", "source_type"],
       "additionalProperties": false
     },
     "ads_lookalike_request_save_audience_level": {
@@ -1351,21 +1245,13 @@
           "description": "Music artist photo"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "ads_object_type": {
       "type": "string",
       "description": "Object type",
-      "enum": [
-        "ad",
-        "campaign",
-        "client",
-        "office"
-      ]
+      "enum": ["ad", "campaign", "client", "office"]
     },
     "ads_paragraphs": {
       "type": "object",
@@ -1641,14 +1527,8 @@
     "ads_stats_sex_value": {
       "type": "string",
       "description": "Sex",
-      "enum": [
-        "f",
-        "m"
-      ],
-      "enumNames": [
-        "female",
-        "male"
-      ]
+      "enum": ["f", "m"],
+      "enumNames": ["female", "male"]
     },
     "ads_stats_views_times": {
       "type": "object",
@@ -1750,9 +1630,7 @@
           "description": "Recommended CPM value for 90% reach"
         }
       },
-      "required": [
-        "audience_count"
-      ],
+      "required": ["audience_count"],
       "additionalProperties": false
     },
     "ads_targ_suggestions": {
@@ -1833,12 +1711,7 @@
     "ads_targ_suggestions_schools_type": {
       "type": "string",
       "description": "School type",
-      "enum": [
-        "school",
-        "university",
-        "faculty",
-        "chair"
-      ]
+      "enum": ["school", "university", "faculty", "chair"]
     },
     "ads_target_group": {
       "type": "object",
@@ -1886,10 +1759,7 @@
           "$ref": "objects.json#/definitions/base_error"
         }
       },
-      "required": [
-        "user_id",
-        "is_success"
-      ],
+      "required": ["user_id", "is_success"],
       "additionalProperties": false
     },
     "ads_user_specification": {
@@ -1918,10 +1788,7 @@
           "default": null
         }
       },
-      "required": [
-        "user_id",
-        "role"
-      ],
+      "required": ["user_id", "role"],
       "additionalProperties": false
     },
     "ads_user_specification_cutted": {
@@ -1943,10 +1810,7 @@
           "default": null
         }
       },
-      "required": [
-        "user_id",
-        "role"
-      ],
+      "required": ["user_id", "role"],
       "additionalProperties": false
     },
     "ads_users": {
@@ -1963,10 +1827,7 @@
           "description": "User ID"
         }
       },
-      "required": [
-        "user_id",
-        "accesses"
-      ],
+      "required": ["user_id", "accesses"],
       "additionalProperties": false
     },
     "adsweb_getAdCategories_response_categories_category": {
@@ -1979,10 +1840,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "adsweb_getAdUnits_response_ad_units_ad_unit": {
@@ -1998,10 +1856,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "site_id"
-      ],
+      "required": ["id", "site_id"],
       "additionalProperties": false
     },
     "adsweb_getFraudHistory_response_entries_entry": {
@@ -2014,10 +1869,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "site_id",
-        "day"
-      ],
+      "required": ["site_id", "day"],
       "additionalProperties": false
     },
     "adsweb_getSites_response_sites_site": {
@@ -2036,9 +1888,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "adsweb_getStatistics_response_items_item": {
@@ -2097,11 +1947,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "type",
-        "images"
-      ],
+      "required": ["id", "type", "images"],
       "additionalProperties": false
     },
     "appWidgets_photos": {
@@ -2222,16 +2068,8 @@
     "apps_app_leaderboard_type": {
       "type": "integer",
       "description": "Leaderboard type",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "not supported",
-        "levels",
-        "points"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["not supported", "levels", "points"]
     },
     "apps_app_min": {
       "type": "object",
@@ -2290,11 +2128,7 @@
           "description": "URL of the app icon with 75 px in width"
         }
       },
-      "required": [
-        "id",
-        "title",
-        "type"
-      ],
+      "required": ["id", "title", "type"],
       "additionalProperties": false
     },
     "apps_app_type": {
@@ -2332,10 +2166,7 @@
           }
         }
       },
-      "required": [
-        "count",
-        "items"
-      ],
+      "required": ["count", "items"],
       "additionalProperties": false
     },
     "apps_leaderboard": {
@@ -2358,9 +2189,7 @@
           "description": "User ID"
         }
       },
-      "required": [
-        "user_id"
-      ],
+      "required": ["user_id"],
       "additionalProperties": false
     },
     "apps_scope": {
@@ -2389,9 +2218,7 @@
           "description": "Scope title"
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "additionalProperties": false
     },
     "audio_audio": {
@@ -2448,25 +2275,13 @@
           "description": "Performer name"
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "duration",
-        "artist",
-        "title"
-      ],
+      "required": ["id", "owner_id", "duration", "artist", "title"],
       "additionalProperties": false
     },
     "base_bool_int": {
       "type": "integer",
-      "enum": [
-        0,
-        1
-      ],
-      "enumNames": [
-        "no",
-        "yes"
-      ]
+      "enum": [0, 1],
+      "enumNames": ["no", "yes"]
     },
     "base_city": {
       "type": "object",
@@ -2481,10 +2296,7 @@
           "description": "City title"
         }
       },
-      "required": [
-        "id",
-        "title"
-      ],
+      "required": ["id", "title"],
       "additionalProperties": false
     },
     "base_comments_info": {
@@ -2522,10 +2334,7 @@
           "description": "Country title"
         }
       },
-      "required": [
-        "id",
-        "title"
-      ],
+      "required": ["id", "title"],
       "additionalProperties": false
     },
     "base_crop_photo": {
@@ -2541,11 +2350,7 @@
           "$ref": "objects.json#/definitions/base_crop_photo_rect"
         }
       },
-      "required": [
-        "photo",
-        "crop",
-        "rect"
-      ],
+      "required": ["photo", "crop", "rect"],
       "additionalProperties": false
     },
     "base_crop_photo_crop": {
@@ -2568,12 +2373,7 @@
           "description": "Coordinate Y of the right lower corner"
         }
       },
-      "required": [
-        "x",
-        "y",
-        "x2",
-        "y2"
-      ],
+      "required": ["x", "y", "x2", "y2"],
       "additionalProperties": false
     },
     "base_crop_photo_rect": {
@@ -2596,12 +2396,7 @@
           "description": "Coordinate Y of the right lower corner"
         }
       },
-      "required": [
-        "x",
-        "y",
-        "x2",
-        "y2"
-      ],
+      "required": ["x", "y", "x2", "y2"],
       "additionalProperties": false
     },
     "base_error": {
@@ -2662,10 +2457,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "latitude",
-        "longitude"
-      ],
+      "required": ["latitude", "longitude"],
       "additionalProperties": false
     },
     "base_gradient_point": {
@@ -2682,10 +2474,7 @@
           "description": "Point position"
         }
       },
-      "required": [
-        "position",
-        "color"
-      ],
+      "required": ["position", "color"],
       "additionalProperties": false
     },
     "base_image": {
@@ -2710,11 +2499,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "url",
-        "width",
-        "height"
-      ],
+      "required": ["url", "width", "height"],
       "additionalProperties": false
     },
     "base_likes": {
@@ -2753,11 +2538,7 @@
           "description": "Information whether current uer has liked the post"
         }
       },
-      "required": [
-        "count",
-        "user_likes",
-        "can_like"
-      ],
+      "required": ["count", "user_likes", "can_like"],
       "additionalProperties": false
     },
     "base_link": {
@@ -2823,9 +2604,7 @@
           "description": "Video from link"
         }
       },
-      "required": [
-        "url"
-      ],
+      "required": ["url"],
       "additionalProperties": false
     },
     "base_link_application": {
@@ -2913,31 +2692,19 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "type"
-      ]
+      "required": ["type"]
     },
     "base_link_button_action_type": {
       "type": "string",
       "description": "Action type",
-      "enum": [
-        "open_url"
-      ],
-      "enumNames": [
-        "open_url"
-      ]
+      "enum": ["open_url"],
+      "enumNames": ["open_url"]
     },
     "base_link_button_style": {
       "type": "string",
       "description": "Button style",
-      "enum": [
-        "primary",
-        "secondary"
-      ],
-      "enumNames": [
-        "primary",
-        "secondary"
-      ]
+      "enum": ["primary", "secondary"],
+      "enumNames": ["primary", "secondary"]
     },
     "base_link_product": {
       "type": "object",
@@ -2952,9 +2719,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "price"
-      ],
+      "required": ["price"],
       "additionalProperties": false
     },
     "base_link_product_category": {
@@ -2963,13 +2728,7 @@
     "base_link_product_status": {
       "type": "string",
       "description": "Status representation",
-      "enum": [
-        "active",
-        "blocked",
-        "sold",
-        "deleted",
-        "archived"
-      ]
+      "enum": ["active", "blocked", "sold", "deleted", "archived"]
     },
     "base_link_rating": {
       "type": "object",
@@ -3011,10 +2770,7 @@
           "description": "Object title"
         }
       },
-      "required": [
-        "id",
-        "title"
-      ],
+      "required": ["id", "title"],
       "additionalProperties": false
     },
     "base_object_count": {
@@ -3040,10 +2796,7 @@
           "description": "Object name"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "base_place": {
@@ -3099,12 +2852,8 @@
     },
     "base_property_exists": {
       "type": "integer",
-      "enum": [
-        1
-      ],
-      "enumNames": [
-        "Property exists"
-      ]
+      "enum": [1],
+      "enumNames": ["Property exists"]
     },
     "base_reposts_info": {
       "type": "object",
@@ -3130,9 +2879,7 @@
           "description": "Information whether current user has reposted the post"
         }
       },
-      "required": [
-        "count"
-      ],
+      "required": ["count"],
       "additionalProperties": false
     },
     "base_request_param": {
@@ -3151,16 +2898,8 @@
     },
     "base_sex": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "unknown",
-        "female",
-        "male"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["unknown", "female", "male"]
     },
     "base_sticker": {
       "type": "object",
@@ -3179,10 +2918,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "light",
-            "dark"
-          ],
+          "enum": ["light", "dark"],
           "description": "Type of animation script"
         },
         "url": {
@@ -3301,9 +3037,7 @@
           "description": "Upload URL"
         }
       },
-      "required": [
-        "upload_url"
-      ],
+      "required": ["upload_url"],
       "additionalProperties": false
     },
     "base_user_group_fields": {
@@ -3424,18 +3158,8 @@
     "board_default_order": {
       "type": "integer",
       "description": "Sort type",
-      "enum": [
-        1,
-        2,
-        -1,
-        -2
-      ],
-      "enumNames": [
-        "desc_updated",
-        "desc_created",
-        "asc_updated",
-        "asc_created"
-      ]
+      "enum": [1, 2, -1, -2],
+      "enumNames": ["desc_updated", "desc_created", "asc_updated", "asc_created"]
     },
     "board_topic": {
       "type": "object",
@@ -3518,12 +3242,7 @@
           "$ref": "objects.json#/definitions/base_likes_info"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date",
-        "text"
-      ],
+      "required": ["id", "from_id", "date", "text"],
       "additionalProperties": false
     },
     "board_topic_poll": {
@@ -3568,24 +3287,12 @@
           }
         }
       },
-      "required": [
-        "poll_id",
-        "owner_id",
-        "created",
-        "question",
-        "votes",
-        "answer_id",
-        "answers"
-      ],
+      "required": ["poll_id", "owner_id", "created", "question", "votes", "answer_id", "answers"],
       "additionalProperties": false
     },
     "callback_base": {
       "type": "object",
-      "required": [
-        "type",
-        "group_id",
-        "event_id"
-      ],
+      "required": ["type", "group_id", "event_id"],
       "properties": {
         "type": {
           "type": "string",
@@ -3630,11 +3337,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "topic_owner_id",
-        "topic_id",
-        "id"
-      ],
+      "required": ["topic_owner_id", "topic_id", "id"],
       "additionalProperties": false
     },
     "callback_confirmation": {
@@ -3668,10 +3371,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "amount",
-        "amount_without_fee"
-      ],
+      "required": ["amount", "amount_without_fee"],
       "additionalProperties": false
     },
     "callback_donut_money_withdraw_error": {
@@ -3682,9 +3382,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "reason"
-      ],
+      "required": ["reason"],
       "additionalProperties": false
     },
     "callback_donut_subscription_cancelled": {
@@ -3713,10 +3411,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "amount",
-        "amount_without_fee"
-      ],
+      "required": ["amount", "amount_without_fee"],
       "additionalProperties": false
     },
     "callback_donut_subscription_expired": {
@@ -3753,10 +3448,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "amount_old",
-        "amount_new"
-      ],
+      "required": ["amount_old", "amount_new"],
       "additionalProperties": false
     },
     "callback_donut_subscription_prolonged": {
@@ -3775,10 +3467,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "amount",
-        "amount_without_fee"
-      ],
+      "required": ["amount", "amount_without_fee"],
       "additionalProperties": false
     },
     "callback_group_change_photo": {
@@ -3792,10 +3481,7 @@
           "$ref": "objects.json#/definitions/photos_photo"
         }
       },
-      "required": [
-        "user_id",
-        "photo"
-      ],
+      "required": ["user_id", "photo"],
       "additionalProperties": false
     },
     "callback_group_change_settings": {
@@ -3809,10 +3495,7 @@
           "$ref": "objects.json#/definitions/base_bool_int"
         }
       },
-      "required": [
-        "user_id",
-        "self"
-      ],
+      "required": ["user_id", "self"],
       "additionalProperties": false
     },
     "callback_group_join": {
@@ -3825,21 +3508,12 @@
           "$ref": "objects.json#/definitions/callback_group_join_type"
         }
       },
-      "required": [
-        "user_id",
-        "join_type"
-      ],
+      "required": ["user_id", "join_type"],
       "additionalProperties": false
     },
     "callback_group_join_type": {
       "type": "string",
-      "enum": [
-        "join",
-        "unsure",
-        "accepted",
-        "approved",
-        "request"
-      ]
+      "enum": ["join", "unsure", "accepted", "approved", "request"]
     },
     "callback_group_leave": {
       "type": "object",
@@ -3856,29 +3530,13 @@
     },
     "callback_group_market": {
       "type": "integer",
-      "enum": [
-        0,
-        1
-      ],
-      "enumNames": [
-        "disabled",
-        "open"
-      ]
+      "enum": [0, 1],
+      "enumNames": ["disabled", "open"]
     },
     "callback_group_officer_role": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "none",
-        "moderator",
-        "editor",
-        "administrator"
-      ]
+      "enum": [0, 1, 2, 3],
+      "enumNames": ["none", "moderator", "editor", "administrator"]
     },
     "callback_group_officers_edit": {
       "type": "object",
@@ -3898,12 +3556,7 @@
           "$ref": "objects.json#/definitions/callback_group_officer_role"
         }
       },
-      "required": [
-        "admin_id",
-        "user_id",
-        "level_old",
-        "level_new"
-      ],
+      "required": ["admin_id", "user_id", "level_old", "level_new"],
       "additionalProperties": false
     },
     "callback_group_settings_changes": {
@@ -3987,13 +3640,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "liker_id",
-        "object_id",
-        "post_id",
-        "object_type",
-        "object_owner_id"
-      ],
+      "required": ["liker_id", "object_id", "post_id", "object_type", "object_owner_id"],
       "additionalProperties": false
     },
     "callback_market_comment": {
@@ -4020,11 +3667,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date"
-      ],
+      "required": ["id", "from_id", "date"],
       "additionalProperties": false
     },
     "callback_market_comment_delete": {
@@ -4045,12 +3688,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "owner_id",
-        "id",
-        "user_id",
-        "item_id"
-      ],
+      "required": ["owner_id", "id", "user_id", "item_id"],
       "additionalProperties": false
     },
     "callback_message_allow": {
@@ -4071,9 +3709,7 @@
               "$ref": "objects.json#/definitions/callback_message_allow_object"
             }
           },
-          "required": [
-            "object"
-          ]
+          "required": ["object"]
         }
       ],
       "additionalProperties": false
@@ -4089,10 +3725,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "user_id",
-        "key"
-      ],
+      "required": ["user_id", "key"],
       "additionalProperties": false
     },
     "callback_message_deny": {
@@ -4103,9 +3736,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "user_id"
-      ],
+      "required": ["user_id"],
       "additionalProperties": false
     },
     "callback_message_edit": {
@@ -4126,9 +3757,7 @@
               "$ref": "objects.json#/definitions/messages_message"
             }
           },
-          "required": [
-            "object"
-          ]
+          "required": ["object"]
         }
       ],
       "additionalProperties": false
@@ -4152,9 +3781,7 @@
               "$ref": "objects.json#/definitions/callback_message_object"
             }
           },
-          "required": [
-            "object"
-          ]
+          "required": ["object"]
         }
       ],
       "additionalProperties": false
@@ -4189,9 +3816,7 @@
               "$ref": "objects.json#/definitions/messages_message"
             }
           },
-          "required": [
-            "object"
-          ]
+          "required": ["object"]
         }
       ],
       "additionalProperties": false
@@ -4218,13 +3843,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date",
-        "text",
-        "photo_owner_id"
-      ],
+      "required": ["id", "from_id", "date", "text", "photo_owner_id"],
       "additionalProperties": false
     },
     "callback_photo_comment_delete": {
@@ -4247,12 +3866,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "user_id",
-        "photo_id"
-      ],
+      "required": ["id", "owner_id", "user_id", "photo_id"],
       "additionalProperties": false
     },
     "callback_poll_vote_new": {
@@ -4274,12 +3888,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "owner_id",
-        "poll_id",
-        "option_id",
-        "user_id"
-      ],
+      "required": ["owner_id", "poll_id", "option_id", "user_id"],
       "additionalProperties": false
     },
     "callback_qr_scan": {
@@ -4302,13 +3911,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "user_id",
-        "data",
-        "type",
-        "subtype",
-        "reread"
-      ],
+      "required": ["user_id", "data", "type", "subtype", "reread"],
       "additionalProperties": false
     },
     "callback_type": {
@@ -4382,12 +3985,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "admin_id",
-        "user_id",
-        "unblock_date",
-        "reason"
-      ],
+      "required": ["admin_id", "user_id", "unblock_date", "reason"],
       "additionalProperties": false
     },
     "callback_user_unblock": {
@@ -4406,11 +4004,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "admin_id",
-        "user_id",
-        "by_end_date"
-      ],
+      "required": ["admin_id", "user_id", "by_end_date"],
       "additionalProperties": false
     },
     "callback_video_comment": {
@@ -4434,13 +4028,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date",
-        "text",
-        "video_owner_id"
-      ],
+      "required": ["id", "from_id", "date", "text", "video_owner_id"],
       "additionalProperties": false
     },
     "callback_video_comment_delete": {
@@ -4462,12 +4050,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "user_id",
-        "video_id"
-      ],
+      "required": ["id", "owner_id", "user_id", "video_id"],
       "additionalProperties": false
     },
     "callback_wall_comment_delete": {
@@ -4489,12 +4072,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "owner_id",
-        "id",
-        "user_id",
-        "post_id"
-      ],
+      "required": ["owner_id", "id", "user_id", "post_id"],
       "additionalProperties": false
     },
     "calls_call": {
@@ -4530,22 +4108,13 @@
           "$ref": "objects.json#/definitions/calls_participants"
         }
       },
-      "required": [
-        "initiator_id",
-        "receiver_id",
-        "state",
-        "time"
-      ],
+      "required": ["initiator_id", "receiver_id", "state", "time"],
       "additionalProperties": false
     },
     "calls_end_state": {
       "type": "string",
       "description": "State in which call ended up",
-      "enum": [
-        "canceled_by_initiator",
-        "canceled_by_receiver",
-        "reached"
-      ]
+      "enum": ["canceled_by_initiator", "canceled_by_receiver", "reached"]
     },
     "calls_participants": {
       "type": "object",
@@ -4619,9 +4188,7 @@
           "description": "Information whether recommended to display reply button"
         }
       },
-      "required": [
-        "count"
-      ],
+      "required": ["count"],
       "additionalProperties": false
     },
     "database_city": {
@@ -4714,10 +4281,7 @@
           "description": "Station name"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "database_university": {
@@ -4791,25 +4355,13 @@
           }
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title",
-        "size",
-        "ext",
-        "date",
-        "type"
-      ],
+      "required": ["id", "owner_id", "title", "size", "ext", "date", "type"],
       "additionalProperties": false
     },
     "docs_doc_attachment_type": {
       "type": "string",
       "description": "Doc attachment type",
-      "enum": [
-        "doc",
-        "graffiti",
-        "audio_message"
-      ]
+      "enum": ["doc", "graffiti", "audio_message"]
     },
     "docs_doc_preview": {
       "type": "object",
@@ -4856,12 +4408,7 @@
           }
         }
       },
-      "required": [
-        "duration",
-        "link_mp3",
-        "link_ogg",
-        "waveform"
-      ],
+      "required": ["duration", "link_mp3", "link_ogg", "waveform"],
       "additionalProperties": false
     },
     "docs_doc_preview_graffiti": {
@@ -4883,11 +4430,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "src",
-        "width",
-        "height"
-      ],
+      "required": ["src", "width", "height"],
       "additionalProperties": false
     },
     "docs_doc_preview_photo": {
@@ -4924,12 +4467,7 @@
           "$ref": "objects.json#/definitions/photos_photo_sizes_type"
         }
       },
-      "required": [
-        "src",
-        "width",
-        "height",
-        "type"
-      ],
+      "required": ["src", "width", "height", "type"],
       "additionalProperties": false
     },
     "docs_doc_preview_video": {
@@ -4956,12 +4494,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "src",
-        "width",
-        "height",
-        "file_size"
-      ],
+      "required": ["src", "width", "height", "file_size"],
       "additionalProperties": false
     },
     "docs_doc_types": {
@@ -4981,11 +4514,7 @@
           "description": "Number of docs"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "count"
-      ],
+      "required": ["id", "name", "count"],
       "additionalProperties": false
     },
     "donut_donator_subscription_info": {
@@ -5003,18 +4532,10 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "active",
-            "expiring"
-          ]
+          "enum": ["active", "expiring"]
         }
       },
-      "required": [
-        "owner_id",
-        "next_payment_date",
-        "amount",
-        "status"
-      ],
+      "required": ["owner_id", "next_payment_date", "amount", "status"],
       "additionalProperties": false
     },
     "events_event_attach": {
@@ -5057,13 +4578,7 @@
           "description": "event start time"
         }
       },
-      "required": [
-        "id",
-        "is_favorite",
-        "text",
-        "friends",
-        "button_text"
-      ],
+      "required": ["id", "is_favorite", "text", "friends", "button_text"],
       "additionalProperties": false
     },
     "fave_bookmark": {
@@ -5101,23 +4616,12 @@
           "$ref": "objects.json#/definitions/video_video"
         }
       },
-      "required": [
-        "type",
-        "seen",
-        "added_date",
-        "tags"
-      ],
+      "required": ["type", "seen", "added_date", "tags"],
       "additionalProperties": false
     },
     "fave_bookmark_type": {
       "type": "string",
-      "enum": [
-        "post",
-        "video",
-        "product",
-        "article",
-        "link"
-      ]
+      "enum": ["post", "video", "product", "article", "link"]
     },
     "fave_page": {
       "type": "object",
@@ -5148,20 +4652,12 @@
           "$ref": "objects.json#/definitions/users_user_full"
         }
       },
-      "required": [
-        "type",
-        "description",
-        "tags"
-      ],
+      "required": ["type", "description", "tags"],
       "additionalProperties": false
     },
     "fave_page_type": {
       "type": "string",
-      "enum": [
-        "user",
-        "group",
-        "hints"
-      ]
+      "enum": ["user", "group", "hints"]
     },
     "fave_tag": {
       "type": "object",
@@ -5211,27 +4707,14 @@
           "minimum": 1
         }
       },
-      "required": [
-        "user_id",
-        "friend_status"
-      ],
+      "required": ["user_id", "friend_status"],
       "additionalProperties": false
     },
     "friends_friend_status_status": {
       "type": "integer",
       "description": "Friend status with the user",
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "not a friend",
-        "outcoming request",
-        "incoming request",
-        "is friend"
-      ]
+      "enum": [0, 1, 2, 3],
+      "enumNames": ["not a friend", "outcoming request", "incoming request", "is friend"]
     },
     "friends_friends_list": {
       "type": "object",
@@ -5245,10 +4728,7 @@
           "description": "List title"
         }
       },
-      "required": [
-        "name",
-        "id"
-      ],
+      "required": ["name", "id"],
       "additionalProperties": false
     },
     "friends_mutual_friend": {
@@ -5384,11 +4864,7 @@
     "gifts_gift_privacy": {
       "type": "integer",
       "description": "Gift privacy",
-      "enum": [
-        0,
-        1,
-        2
-      ],
+      "enum": [0, 1, 2],
       "enumNames": [
         "name and message for all",
         "name for all",
@@ -5508,9 +4984,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "groups_address_timetable": {
@@ -5569,10 +5043,7 @@
           "description": "Open time in minutes"
         }
       },
-      "required": [
-        "open_time",
-        "close_time"
-      ],
+      "required": ["open_time", "close_time"],
       "additionalProperties": false
     },
     "groups_address_work_info_status": {
@@ -5598,9 +5069,7 @@
           "description": "Main address id for group"
         }
       },
-      "required": [
-        "is_enabled"
-      ],
+      "required": ["is_enabled"],
       "additionalProperties": false
     },
     "groups_ban_info": {
@@ -5641,20 +5110,8 @@
     "groups_ban_info_reason": {
       "type": "integer",
       "description": "Ban reason",
-      "enum": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
-      "enumNames": [
-        "other",
-        "spam",
-        "verbal abuse",
-        "strong language",
-        "flood"
-      ]
+      "enum": [0, 1, 2, 3, 4],
+      "enumNames": ["other", "spam", "verbal abuse", "strong language", "flood"]
     },
     "groups_banned_item": {
       "$ref": "objects.json#/definitions/groups_owner_xtr_ban_info"
@@ -5681,22 +5138,10 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "unconfigured",
-            "failed",
-            "wait",
-            "ok"
-          ]
+          "enum": ["unconfigured", "failed", "wait", "ok"]
         }
       },
-      "required": [
-        "id",
-        "title",
-        "creator_id",
-        "url",
-        "secret_key",
-        "status"
-      ],
+      "required": ["id", "title", "creator_id", "url", "secret_key", "status"],
       "additionalProperties": false
     },
     "groups_callback_settings": {
@@ -5814,9 +5259,7 @@
           }
         }
       },
-      "required": [
-        "enabled"
-      ],
+      "required": ["enabled"],
       "additionalProperties": false
     },
     "groups_fields": {
@@ -6008,56 +5451,27 @@
           "$ref": "objects.json#/definitions/video_live_info"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "screen_name",
-        "is_closed"
-      ],
+      "required": ["id", "name", "screen_name", "is_closed"],
       "additionalProperties": false
     },
     "groups_group_access": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "open",
-        "closed",
-        "private"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["open", "closed", "private"]
     },
     "groups_group_admin_level": {
       "type": "integer",
       "description": "Level of current user's credentials as manager",
-      "enum": [
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "moderator",
-        "editor",
-        "administrator"
-      ]
+      "enum": [1, 2, 3],
+      "enumNames": ["moderator", "editor", "administrator"]
     },
     "groups_group_age_limits": {
       "type": "integer",
       "default": 1,
       "minimum": 0,
-      "enumNames": [
-        "unlimited",
-        "16 plus",
-        "18 plus"
-      ],
-      "enum": [
-        1,
-        2,
-        3
-      ]
+      "enumNames": ["unlimited", "16 plus", "18 plus"],
+      "enum": [1, 2, 3]
     },
     "groups_group_attach": {
       "type": "object",
@@ -6084,28 +5498,14 @@
           "description": "is favorite"
         }
       },
-      "required": [
-        "id",
-        "text",
-        "is_favorite",
-        "status",
-        "size"
-      ],
+      "required": ["id", "text", "is_favorite", "status", "size"],
       "additionalProperties": false
     },
     "groups_group_audio": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_group_ban_info": {
       "type": "object",
@@ -6143,10 +5543,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "groups_group_category_full": {
@@ -6178,12 +5575,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "name",
-        "page_count",
-        "page_previews"
-      ],
+      "required": ["id", "name", "page_count", "page_previews"],
       "additionalProperties": false
     },
     "groups_group_category_type": {
@@ -6196,25 +5588,14 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "groups_group_docs": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_group_full": {
       "type": "object",
@@ -6365,18 +5746,8 @@
             "wall": {
               "type": "integer",
               "description": "Information about wall status in community",
-              "enum": [
-                0,
-                1,
-                2,
-                3
-              ],
-              "enumNames": [
-                "disabled",
-                "open",
-                "limited",
-                "restricted"
-              ]
+              "enum": [0, 1, 2, 3],
+              "enumNames": ["disabled", "open", "limited", "restricted"]
             },
             "site": {
               "type": "string",
@@ -6464,27 +5835,12 @@
     },
     "groups_group_full_age_limits": {
       "type": "integer",
-      "enum": [
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "no",
-        "over 16",
-        "over 18"
-      ]
+      "enum": [1, 2, 3],
+      "enumNames": ["no", "over 16", "over 18"]
     },
     "groups_group_full_member_status": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5
-      ],
+      "enum": [0, 1, 2, 3, 4, 5],
       "enumNames": [
         "not a member",
         "member",
@@ -6497,19 +5853,7 @@
     "groups_group_full_section": {
       "type": "integer",
       "description": "Main section of community",
-      "enum": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        10,
-        35,
-        39,
-        43,
-        51
-      ],
+      "enum": [0, 1, 2, 3, 4, 5, 10, 35, 39, 43, 51],
       "enumNames": [
         "absent",
         "photos",
@@ -6526,49 +5870,21 @@
     },
     "groups_group_is_closed": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "open",
-        "closed",
-        "private"
-      ],
+      "enum": [0, 1, 2],
+      "enumNames": ["open", "closed", "private"],
       "description": "Information whether community is closed"
     },
     "groups_group_market_currency": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        643,
-        980,
-        398,
-        978,
-        840
-      ],
-      "enumNames": [
-        "russian rubles",
-        "ukrainian hryvnia",
-        "kazakh tenge",
-        "euro",
-        "us dollars"
-      ]
+      "enum": [643, 980, 398, 978, 840],
+      "enumNames": ["russian rubles", "ukrainian hryvnia", "kazakh tenge", "euro", "us dollars"]
     },
     "groups_group_photos": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_group_public_category_list": {
       "type": "object",
@@ -6590,58 +5906,13 @@
     },
     "groups_group_role": {
       "type": "string",
-      "enum": [
-        "moderator",
-        "editor",
-        "administrator",
-        "advertiser"
-      ]
+      "enum": ["moderator", "editor", "administrator", "advertiser"]
     },
     "groups_group_subject": {
       "type": "string",
       "enum": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42
       ],
       "enumNames": [
         "auto",
@@ -6691,16 +5962,8 @@
     "groups_group_suggested_privacy": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "none",
-        "all",
-        "subscribers"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["none", "all", "subscribers"]
     },
     "groups_group_tag": {
       "type": "object",
@@ -6740,79 +6003,37 @@
           "type": "integer"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "color"
-      ],
+      "required": ["id", "name", "color"],
       "additionalProperties": false
     },
     "groups_group_topics": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_group_type": {
       "type": "string",
       "description": "Community type",
-      "enum": [
-        "group",
-        "page",
-        "event"
-      ]
+      "enum": ["group", "page", "event"]
     },
     "groups_group_video": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_group_wall": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited",
-        "closed"
-      ]
+      "enum": [0, 1, 2, 3],
+      "enumNames": ["disabled", "open", "limited", "closed"]
     },
     "groups_group_wiki": {
       "type": "integer",
       "minimum": 0,
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "disabled",
-        "open",
-        "limited"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["disabled", "open", "limited"]
     },
     "groups_groups_array": {
       "type": "object",
@@ -6830,10 +6051,7 @@
           }
         }
       },
-      "required": [
-        "count",
-        "items"
-      ],
+      "required": ["count", "items"],
       "additionalProperties": false
     },
     "groups_links_item": {
@@ -6895,9 +6113,7 @@
           }
         }
       },
-      "required": [
-        "is_enabled"
-      ],
+      "required": ["is_enabled"],
       "additionalProperties": false
     },
     "groups_long_poll_events": {
@@ -7122,11 +6338,7 @@
           "description": "Number of the last event"
         }
       },
-      "required": [
-        "key",
-        "server",
-        "ts"
-      ],
+      "required": ["key", "server", "ts"],
       "additionalProperties": false
     },
     "groups_long_poll_settings": {
@@ -7144,10 +6356,7 @@
           "description": "Shows whether Long Poll is enabled"
         }
       },
-      "required": [
-        "is_enabled",
-        "events"
-      ],
+      "required": ["is_enabled", "events"],
       "additionalProperties": false
     },
     "groups_market_info": {
@@ -7193,11 +6402,7 @@
     "groups_market_state": {
       "type": "string",
       "description": "Declares state if market is enabled in group.",
-      "enum": [
-        "none",
-        "basic",
-        "advanced"
-      ]
+      "enum": ["none", "basic", "advanced"]
     },
     "groups_member_role": {
       "type": "object",
@@ -7216,26 +6421,17 @@
           "$ref": "objects.json#/definitions/groups_member_role_status"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "groups_member_role_permission": {
       "type": "string",
-      "enum": [
-        "ads"
-      ]
+      "enum": ["ads"]
     },
     "groups_member_role_status": {
       "type": "string",
       "description": "User's credentials as community admin",
-      "enum": [
-        "moderator",
-        "editor",
-        "administrator",
-        "creator"
-      ]
+      "enum": ["moderator", "editor", "administrator", "creator"]
     },
     "groups_member_status": {
       "type": "object",
@@ -7250,10 +6446,7 @@
           "minimum": 1
         }
       },
-      "required": [
-        "member",
-        "user_id"
-      ],
+      "required": ["member", "user_id"],
       "additionalProperties": false
     },
     "groups_member_status_full": {
@@ -7285,10 +6478,7 @@
           "minimum": 1
         }
       },
-      "required": [
-        "member",
-        "user_id"
-      ],
+      "required": ["member", "user_id"],
       "additionalProperties": false
     },
     "groups_online_status": {
@@ -7303,19 +6493,13 @@
           "$ref": "objects.json#/definitions/groups_online_status_type"
         }
       },
-      "required": [
-        "status"
-      ],
+      "required": ["status"],
       "additionalProperties": false
     },
     "groups_online_status_type": {
       "type": "string",
       "description": "Type of online status of group",
-      "enum": [
-        "none",
-        "online",
-        "answer_mark"
-      ]
+      "enum": ["none", "online", "answer_mark"]
     },
     "groups_owner_xtr_ban_info": {
       "type": "object",
@@ -7340,10 +6524,7 @@
     "groups_owner_xtr_ban_info_type": {
       "type": "string",
       "description": "Owner type",
-      "enum": [
-        "group",
-        "profile"
-      ]
+      "enum": ["group", "profile"]
     },
     "groups_photo_size": {
       "type": "object",
@@ -7359,21 +6540,13 @@
           "minimum": 0
         }
       },
-      "required": [
-        "width",
-        "height"
-      ],
+      "required": ["width", "height"],
       "additionalProperties": false
     },
     "groups_role_options": {
       "type": "string",
       "description": "User's credentials as community admin",
-      "enum": [
-        "moderator",
-        "editor",
-        "administrator",
-        "creator"
-      ]
+      "enum": ["moderator", "editor", "administrator", "creator"]
     },
     "groups_sections_list_item": {
       "type": "array",
@@ -7381,10 +6554,7 @@
       "minItems": 2,
       "description": "(index, title) tuples",
       "items": {
-        "type": [
-          "integer",
-          "string"
-        ]
+        "type": ["integer", "string"]
       }
     },
     "groups_settings_twitter": {
@@ -7392,18 +6562,13 @@
       "properties": {
         "status": {
           "type": "string",
-          "enum": [
-            "loading",
-            "sync"
-          ]
+          "enum": ["loading", "sync"]
         },
         "name": {
           "type": "string"
         }
       },
-      "required": [
-        "status"
-      ],
+      "required": ["status"],
       "additionalProperties": false
     },
     "groups_subject_item": {
@@ -7418,10 +6583,7 @@
           "description": "Subject title"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "groups_token_permission_setting": {
@@ -7435,10 +6597,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "setting",
-        "name"
-      ],
+      "required": ["setting", "name"],
       "additionalProperties": false
     },
     "groups_user_xtr_role": {
@@ -7509,11 +6668,7 @@
           "description": "Currency title"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "title"
-      ],
+      "required": ["id", "name", "title"],
       "additionalProperties": false
     },
     "market_market_album": {
@@ -7554,13 +6709,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title",
-        "count",
-        "updated_time"
-      ],
+      "required": ["id", "owner_id", "title", "count", "updated_time"],
       "additionalProperties": false
     },
     "market_market_category": {
@@ -7581,10 +6730,7 @@
           "$ref": "objects.json#/definitions/market_market_category_nested"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "market_market_category_old": {
@@ -7602,11 +6748,7 @@
           "$ref": "objects.json#/definitions/market_section"
         }
       },
-      "required": [
-        "id",
-        "name",
-        "section"
-      ],
+      "required": ["id", "name", "section"],
       "additionalProperties": false
     },
     "market_market_category_tree": {
@@ -7627,10 +6769,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "market_market_item": {
@@ -7703,30 +6842,14 @@
           "maxLength": 50
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title",
-        "description",
-        "price",
-        "category",
-        "availability"
-      ],
+      "required": ["id", "owner_id", "title", "description", "price", "category", "availability"],
       "additionalProperties": false
     },
     "market_market_item_availability": {
       "type": "integer",
       "description": "Information whether the item is available",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "available",
-        "removed",
-        "unavailable"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["available", "removed", "unavailable"]
     },
     "market_market_item_full": {
       "type": "object",
@@ -7847,15 +6970,7 @@
           "$ref": "objects.json#/definitions/base_link"
         }
       },
-      "required": [
-        "id",
-        "group_id",
-        "user_id",
-        "date",
-        "status",
-        "items_count",
-        "total_price"
-      ],
+      "required": ["id", "group_id", "user_id", "date", "status", "items_count", "total_price"],
       "additionalProperties": false
     },
     "market_order_item": {
@@ -7890,13 +7005,7 @@
           }
         }
       },
-      "required": [
-        "item_id",
-        "owner_id",
-        "price",
-        "quantity",
-        "item"
-      ],
+      "required": ["item_id", "owner_id", "price", "quantity", "item"],
       "additionalProperties": false
     },
     "market_price": {
@@ -7924,11 +7033,7 @@
           "description": "Textual representation of old price"
         }
       },
-      "required": [
-        "amount",
-        "currency",
-        "text"
-      ],
+      "required": ["amount", "currency", "text"],
       "additionalProperties": false
     },
     "market_section": {
@@ -7944,23 +7049,14 @@
           "description": "Section name"
         }
       },
-      "required": [
-        "id",
-        "name"
-      ],
+      "required": ["id", "name"],
       "additionalProperties": false
     },
     "market_services_view_type": {
       "type": "integer",
       "description": "Type of view. 1 - cards, 2 - rows",
-      "enum": [
-        1,
-        2
-      ],
-      "enumNames": [
-        "cards",
-        "rows"
-      ]
+      "enum": [1, 2],
+      "enumNames": ["cards", "rows"]
     },
     "messages_audio_message": {
       "type": "object",
@@ -8007,14 +7103,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "duration",
-        "waveform",
-        "link_ogg",
-        "link_mp3"
-      ],
+      "required": ["id", "owner_id", "duration", "waveform", "link_ogg", "link_mp3"],
       "additionalProperties": false
     },
     "messages_chat": {
@@ -8074,12 +7163,7 @@
           "description": "If provided photo is default"
         }
       },
-      "required": [
-        "id",
-        "type",
-        "admin_id",
-        "users"
-      ],
+      "required": ["id", "type", "admin_id", "users"],
       "additionalProperties": false
     },
     "messages_chat_full": {
@@ -8134,12 +7218,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "type",
-        "admin_id",
-        "users"
-      ],
+      "required": ["id", "type", "admin_id", "users"],
       "additionalProperties": false
     },
     "messages_chat_preview": {
@@ -8276,13 +7355,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "owner_id",
-        "title",
-        "state",
-        "active_ids",
-        "acl"
-      ],
+      "required": ["owner_id", "title", "state", "active_ids", "acl"],
       "additionalProperties": false
     },
     "messages_chat_settings_acl": {
@@ -8353,64 +7426,37 @@
         "invite": {
           "type": "string",
           "description": "Who can invite users to chat",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "change_info": {
           "type": "string",
           "description": "Who can change chat info",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "change_pin": {
           "type": "string",
           "description": "Who can change pinned message",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "use_mass_mentions": {
           "type": "string",
           "description": "Who can use mass mentions",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "see_invite_link": {
           "type": "string",
           "description": "Who can see invite link",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "call": {
           "type": "string",
           "description": "Who can make calls",
-          "enum": [
-            "owner",
-            "owner_and_admins",
-            "all"
-          ]
+          "enum": ["owner", "owner_and_admins", "all"]
         },
         "change_admins": {
           "type": "string",
           "description": "Who can change admins",
-          "enum": [
-            "owner",
-            "owner_and_admins"
-          ]
+          "enum": ["owner", "owner_and_admins"]
         }
       },
       "additionalProperties": false
@@ -8442,11 +7488,7 @@
     },
     "messages_chat_settings_state": {
       "type": "string",
-      "enum": [
-        "in",
-        "kicked",
-        "left"
-      ]
+      "enum": ["in", "kicked", "left"]
     },
     "messages_conversation": {
       "type": "object",
@@ -8497,9 +7539,7 @@
         },
         "special_service_type": {
           "type": "string",
-          "enum": [
-            "business_notify"
-          ]
+          "enum": ["business_notify"]
         },
         "message_request_data": {
           "$ref": "objects.json#/definitions/messages_message_request_data"
@@ -8525,12 +7565,7 @@
           "$ref": "objects.json#/definitions/messages_chat_settings"
         }
       },
-      "required": [
-        "peer",
-        "in_read",
-        "out_read",
-        "last_message_id"
-      ],
+      "required": ["peer", "in_read", "out_read", "last_message_id"],
       "additionalProperties": false
     },
     "messages_conversation_can_write": {
@@ -8543,9 +7578,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "allowed"
-      ],
+      "required": ["allowed"],
       "additionalProperties": false
     },
     "messages_conversation_member": {
@@ -8580,9 +7613,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "member_id"
-      ],
+      "required": ["member_id"],
       "additionalProperties": false
     },
     "messages_conversation_peer": {
@@ -8598,20 +7629,12 @@
           "$ref": "objects.json#/definitions/messages_conversation_peer_type"
         }
       },
-      "required": [
-        "id",
-        "type"
-      ],
+      "required": ["id", "type"],
       "additionalProperties": false
     },
     "messages_conversation_peer_type": {
       "type": "string",
-      "enum": [
-        "chat",
-        "email",
-        "user",
-        "group"
-      ],
+      "enum": ["chat", "email", "user", "group"],
       "description": "Peer type"
     },
     "messages_conversation_sort_id": {
@@ -8628,10 +7651,7 @@
           "description": "Minor id for sorting conversations"
         }
       },
-      "required": [
-        "major_id",
-        "minor_id"
-      ],
+      "required": ["major_id", "minor_id"],
       "additionalProperties": false
     },
     "messages_conversation_with_message": {
@@ -8644,9 +7664,7 @@
           "$ref": "objects.json#/definitions/messages_message"
         }
       },
-      "required": [
-        "conversation"
-      ],
+      "required": ["conversation"],
       "additionalProperties": false
     },
     "messages_foreign_message": {
@@ -8707,11 +7725,7 @@
           "description": "Additional data sent along with message for developer convenience"
         }
       },
-      "required": [
-        "date",
-        "from_id",
-        "text"
-      ],
+      "required": ["date", "from_id", "text"],
       "additionalProperties": false
     },
     "messages_forward": {
@@ -8762,10 +7776,7 @@
           }
         }
       },
-      "required": [
-        "count",
-        "items"
-      ],
+      "required": ["count", "items"],
       "additionalProperties": false
     },
     "messages_graffiti": {
@@ -8800,13 +7811,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "url",
-        "width",
-        "height"
-      ],
+      "required": ["id", "owner_id", "url", "width", "height"],
       "additionalProperties": false
     },
     "messages_history_attachment": {
@@ -8828,11 +7833,7 @@
           "description": "Forward level (optional)"
         }
       },
-      "required": [
-        "message_id",
-        "from_id",
-        "attachment"
-      ],
+      "required": ["message_id", "from_id", "attachment"],
       "additionalProperties": false
     },
     "messages_history_message_attachment": {
@@ -8872,9 +7873,7 @@
           "$ref": "objects.json#/definitions/base_link"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "messages_history_message_attachment_type": {
@@ -8917,10 +7916,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "one_time",
-        "buttons"
-      ],
+      "required": ["one_time", "buttons"],
       "additionalProperties": false
     },
     "messages_keyboard_button": {
@@ -8931,18 +7927,11 @@
         },
         "color": {
           "type": "string",
-          "enum": [
-            "default",
-            "positive",
-            "negative",
-            "primary"
-          ],
+          "enum": ["default", "positive", "negative", "primary"],
           "description": "Button color"
         }
       },
-      "required": [
-        "action"
-      ],
+      "required": ["action"],
       "additionalProperties": false
     },
     "messages_keyboard_button_action": {
@@ -8978,9 +7967,7 @@
           "$ref": "objects.json#/definitions/messages_template_action_type_names"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "messages_last_activity": {
@@ -8995,10 +7982,7 @@
           "description": "Time when user was online in Unixtime"
         }
       },
-      "required": [
-        "online",
-        "time"
-      ],
+      "required": ["online", "time"],
       "additionalProperties": false
     },
     "messages_longpoll_messages": {
@@ -9038,11 +8022,7 @@
           "description": "Persistent timestamp"
         }
       },
-      "required": [
-        "server",
-        "key",
-        "ts"
-      ],
+      "required": ["server", "key", "ts"],
       "additionalProperties": false
     },
     "messages_message": {
@@ -9154,14 +8134,7 @@
           "description": "Is silent message, push without sound"
         }
       },
-      "required": [
-        "date",
-        "from_id",
-        "id",
-        "out",
-        "peer_id",
-        "text"
-      ],
+      "required": ["date", "from_id", "id", "out", "peer_id", "text"],
       "additionalProperties": false
     },
     "messages_message_action": {
@@ -9194,9 +8167,7 @@
           "$ref": "objects.json#/definitions/messages_message_action_status"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "messages_message_action_photo": {
@@ -9218,11 +8189,7 @@
           "description": "URL of the preview image with 50px in width"
         }
       },
-      "required": [
-        "photo_50",
-        "photo_100",
-        "photo_200"
-      ],
+      "required": ["photo_50", "photo_100", "photo_200"],
       "additionalProperties": false
     },
     "messages_message_action_status": {
@@ -9296,9 +8263,7 @@
           "$ref": "objects.json#/definitions/polls_poll"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "messages_message_attachment_type": {
@@ -9424,13 +8389,7 @@
           "$ref": "objects.json#/definitions/messages_keyboard"
         }
       },
-      "required": [
-        "id",
-        "date",
-        "from_id",
-        "peer_id",
-        "text"
-      ],
+      "required": ["id", "date", "from_id", "peer_id", "text"],
       "additionalProperties": false
     },
     "messages_push_settings": {
@@ -9457,10 +8416,7 @@
           "description": "Information whether the mass mentions (like '@all', '@online') are disabled"
         }
       },
-      "required": [
-        "disabled_forever",
-        "no_sound"
-      ],
+      "required": ["disabled_forever", "no_sound"],
       "additionalProperties": false
     },
     "messages_send_user_ids_response_item": {
@@ -9481,10 +8437,7 @@
           "$ref": "objects.json#/definitions/base_message_error"
         }
       },
-      "required": [
-        "peer_id",
-        "message_id"
-      ],
+      "required": ["peer_id", "message_id"],
       "additionalProperties": false
     },
     "messages_template_action_type_names": {
@@ -9522,13 +8475,7 @@
     },
     "newsfeed_comments_filters": {
       "type": "string",
-      "enum": [
-        "post",
-        "photo",
-        "video",
-        "topic",
-        "note"
-      ]
+      "enum": ["post", "photo", "video", "topic", "note"]
     },
     "newsfeed_event_activity": {
       "type": "object",
@@ -9561,12 +8508,7 @@
           "description": "event start time"
         }
       },
-      "required": [
-        "text",
-        "button_text",
-        "friends",
-        "member_status"
-      ],
+      "required": ["text", "button_text", "friends", "member_status"],
       "additionalProperties": false
     },
     "newsfeed_filters": {
@@ -9586,14 +8528,7 @@
     },
     "newsfeed_ignore_item_type": {
       "type": "string",
-      "enum": [
-        "wall",
-        "tag",
-        "profilephoto",
-        "video",
-        "photo",
-        "audio"
-      ],
+      "enum": ["wall", "tag", "profilephoto", "video", "photo", "audio"],
       "enumNames": [
         "post on the wall",
         "tag on a photo",
@@ -9655,11 +8590,7 @@
           "description": "Date when item has been added in Unixtime"
         }
       },
-      "required": [
-        "type",
-        "source_id",
-        "date"
-      ],
+      "required": ["type", "source_id", "date"],
       "additionalProperties": false
     },
     "newsfeed_item_digest": {
@@ -9688,11 +8619,7 @@
             },
             "template": {
               "type": "string",
-              "enum": [
-                "list",
-                "grid",
-                "single"
-              ],
+              "enum": ["list", "grid", "single"],
               "description": "type of digest"
             },
             "header": {
@@ -9717,14 +8644,10 @@
         },
         "style": {
           "type": "string",
-          "enum": [
-            "primary"
-          ]
+          "enum": ["primary"]
         }
       },
-      "required": [
-        "title"
-      ],
+      "required": ["title"],
       "additionalProperties": false
     },
     "newsfeed_item_digest_footer": {
@@ -9732,10 +8655,7 @@
       "properties": {
         "style": {
           "type": "string",
-          "enum": [
-            "text",
-            "button"
-          ]
+          "enum": ["text", "button"]
         },
         "text": {
           "type": "string",
@@ -9745,10 +8665,7 @@
           "$ref": "objects.json#/definitions/newsfeed_item_digest_button"
         }
       },
-      "required": [
-        "style",
-        "text"
-      ],
+      "required": ["style", "text"],
       "additionalProperties": false
     },
     "newsfeed_item_digest_full_item": {
@@ -9768,19 +8685,13 @@
         },
         "style": {
           "type": "string",
-          "enum": [
-            "default",
-            "inversed",
-            "spotlight"
-          ]
+          "enum": ["default", "inversed", "spotlight"]
         },
         "post": {
           "$ref": "objects.json#/definitions/wall_wallpost"
         }
       },
-      "required": [
-        "post"
-      ],
+      "required": ["post"],
       "additionalProperties": false
     },
     "newsfeed_item_digest_header": {
@@ -9796,19 +8707,13 @@
         },
         "style": {
           "type": "string",
-          "enum": [
-            "singleline",
-            "multiline"
-          ]
+          "enum": ["singleline", "multiline"]
         },
         "button": {
           "$ref": "objects.json#/definitions/newsfeed_item_digest_button"
         }
       },
-      "required": [
-        "style",
-        "title"
-      ],
+      "required": ["style", "title"],
       "additionalProperties": false
     },
     "newsfeed_item_digest_item": {
@@ -10034,10 +8939,7 @@
               "description": "Post text"
             }
           },
-          "required": [
-            "post_id",
-            "text"
-          ]
+          "required": ["post_id", "text"]
         }
       ],
       "additionalProperties": false
@@ -10184,10 +9086,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "question",
-        "type"
-      ],
+      "required": ["question", "type"],
       "additionalProperties": false
     },
     "newsfeed_item_wallpost_feedback_answer": {
@@ -10200,27 +9099,17 @@
           "type": "string"
         }
       },
-      "required": [
-        "title",
-        "id"
-      ],
+      "required": ["title", "id"],
       "additionalProperties": false
     },
     "newsfeed_item_wallpost_feedback_type": {
       "type": "string",
-      "enum": [
-        "buttons",
-        "stars"
-      ]
+      "enum": ["buttons", "stars"]
     },
     "newsfeed_item_wallpost_type": {
       "type": "string",
       "description": "Post type",
-      "enum": [
-        "post",
-        "copy",
-        "reply"
-      ]
+      "enum": ["post", "copy", "reply"]
     },
     "newsfeed_list": {
       "type": "object",
@@ -10234,10 +9123,7 @@
           "description": "List title"
         }
       },
-      "required": [
-        "id",
-        "title"
-      ],
+      "required": ["id", "title"],
       "additionalProperties": false
     },
     "newsfeed_list_full": {
@@ -10393,14 +9279,7 @@
           "description": "URL of the page with note preview"
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "comments",
-        "date",
-        "title",
-        "view_url"
-      ],
+      "required": ["id", "owner_id", "comments", "date", "title", "view_url"],
       "additionalProperties": false
     },
     "notes_note_comment": {
@@ -10435,14 +9314,7 @@
           "description": "Comment author's ID"
         }
       },
-      "required": [
-        "id",
-        "uid",
-        "nid",
-        "oid",
-        "date",
-        "message"
-      ],
+      "required": ["id", "uid", "nid", "oid", "date", "message"],
       "additionalProperties": false
     },
     "notifications_feedback": {
@@ -10585,12 +9457,7 @@
       "properties": {
         "code": {
           "type": "integer",
-          "enum": [
-            1,
-            2,
-            3,
-            4
-          ],
+          "enum": [1, 2, 3, 4],
           "enumNames": [
             "notifications disabled",
             "flood control per hour",
@@ -10639,10 +9506,7 @@
           "description": "URI for validation"
         }
       },
-      "required": [
-        "error",
-        "error_description"
-      ],
+      "required": ["error", "error_description"],
       "additionalProperties": false
     },
     "orders_amount": {
@@ -10818,20 +9682,8 @@
       "properties": {
         "state": {
           "type": "integer",
-          "enum": [
-            1,
-            2,
-            3,
-            4,
-            5
-          ],
-          "enumNames": [
-            "banned",
-            "adult",
-            "hidden",
-            "deleted",
-            "blacklisted"
-          ]
+          "enum": [1, 2, 3, 4, 5],
+          "enumNames": ["banned", "adult", "hidden", "deleted", "blacklisted"]
         },
         "description": {
           "type": "string",
@@ -10842,16 +9694,8 @@
     },
     "pages_privacy_settings": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2
-      ],
-      "enumNames": [
-        "community managers only",
-        "community members only",
-        "everyone"
-      ]
+      "enum": [0, 1, 2],
+      "enumNames": ["community managers only", "community members only", "everyone"]
     },
     "pages_wikipage": {
       "type": "object",
@@ -10899,14 +9743,7 @@
           "$ref": "objects.json#/definitions/pages_privacy_settings"
         }
       },
-      "required": [
-        "id",
-        "group_id",
-        "title",
-        "views",
-        "who_can_view",
-        "who_can_edit"
-      ],
+      "required": ["id", "group_id", "title", "views", "who_can_view", "who_can_edit"],
       "additionalProperties": false
     },
     "pages_wikipage_full": {
@@ -11033,13 +9870,7 @@
           "description": "Last editor name"
         }
       },
-      "required": [
-        "id",
-        "length",
-        "date",
-        "editor_id",
-        "editor_name"
-      ],
+      "required": ["id", "length", "date", "editor_id", "editor_name"],
       "additionalProperties": false
     },
     "photos_comment_xtr_pid": {
@@ -11095,13 +9926,7 @@
           "$ref": "objects.json#/definitions/comment_thread"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date",
-        "text",
-        "pid"
-      ],
+      "required": ["id", "from_id", "date", "text", "pid"],
       "additionalProperties": false
     },
     "photos_image": {
@@ -11129,19 +9954,7 @@
     "photos_image_type": {
       "type": "string",
       "description": "Photo's type.",
-      "enum": [
-        "s",
-        "m",
-        "x",
-        "l",
-        "o",
-        "p",
-        "q",
-        "r",
-        "y",
-        "z",
-        "w"
-      ]
+      "enum": ["s", "m", "x", "l", "o", "p", "q", "r", "y", "z", "w"]
     },
     "photos_photo": {
       "type": "object",
@@ -11229,13 +10042,7 @@
           "description": "Whether photo has attached tag links"
         }
       },
-      "required": [
-        "id",
-        "album_id",
-        "owner_id",
-        "date",
-        "has_tags"
-      ],
+      "required": ["id", "album_id", "owner_id", "date", "has_tags"],
       "additionalProperties": false
     },
     "photos_photo_album": {
@@ -11276,14 +10083,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title",
-        "created",
-        "updated",
-        "size"
-      ],
+      "required": ["id", "owner_id", "title", "created", "updated", "size"],
       "additionalProperties": false
     },
     "photos_photo_album_full": {
@@ -11353,14 +10153,7 @@
           "$ref": "objects.json#/definitions/base_bool_int"
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title",
-        "created",
-        "updated",
-        "size"
-      ],
+      "required": ["id", "owner_id", "title", "created", "updated", "size"],
       "additionalProperties": false
     },
     "photos_photo_falseable": {
@@ -11454,12 +10247,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "album_id",
-        "owner_id",
-        "date"
-      ],
+      "required": ["id", "album_id", "owner_id", "date"],
       "additionalProperties": false
     },
     "photos_photo_full_xtr_real_offset": {
@@ -11579,12 +10367,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "album_id",
-        "owner_id",
-        "date"
-      ],
+      "required": ["id", "album_id", "owner_id", "date"],
       "additionalProperties": false
     },
     "photos_photo_sizes": {
@@ -11614,12 +10397,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "url",
-        "width",
-        "height",
-        "type"
-      ],
+      "required": ["url", "width", "height", "type"],
       "additionalProperties": false
     },
     "photos_photo_sizes_type": {
@@ -11742,11 +10520,7 @@
           "description": "Group ID"
         }
       },
-      "required": [
-        "upload_url",
-        "album_id",
-        "user_id"
-      ],
+      "required": ["upload_url", "album_id", "user_id"],
       "additionalProperties": false
     },
     "photos_photo_xtr_real_offset": {
@@ -11851,12 +10625,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "album_id",
-        "owner_id",
-        "date"
-      ],
+      "required": ["id", "album_id", "owner_id", "date"],
       "additionalProperties": false
     },
     "photos_photo_xtr_tag_info": {
@@ -11966,12 +10735,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "album_id",
-        "owner_id",
-        "date"
-      ],
+      "required": ["id", "album_id", "owner_id", "date"],
       "additionalProperties": false
     },
     "photos_tags_suggestion_item": {
@@ -12015,18 +10779,11 @@
         },
         "action": {
           "type": "string",
-          "enum": [
-            "confirm",
-            "decline",
-            "show_tags"
-          ]
+          "enum": ["confirm", "decline", "show_tags"]
         },
         "style": {
           "type": "string",
-          "enum": [
-            "primary",
-            "secondary"
-          ]
+          "enum": ["primary", "secondary"]
         }
       },
       "additionalProperties": false
@@ -12092,12 +10849,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id",
-        "text",
-        "votes",
-        "rate"
-      ],
+      "required": ["id", "text", "votes", "rate"],
       "additionalProperties": false
     },
     "polls_background": {
@@ -12138,10 +10890,7 @@
         },
         "type": {
           "type": "string",
-          "enum": [
-            "gradient",
-            "tile"
-          ]
+          "enum": ["gradient", "tile"]
         },
         "width": {
           "description": "Original with of pattern tile",
@@ -12159,9 +10908,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "polls_poll": {
@@ -12357,12 +11104,7 @@
           "description": "Title"
         }
       },
-      "required": [
-        "card_id",
-        "link_url",
-        "title",
-        "photo"
-      ],
+      "required": ["card_id", "link_url", "title", "photo"],
       "additionalProperties": false
     },
     "search_hint": {
@@ -12395,10 +11137,7 @@
           "$ref": "objects.json#/definitions/base_link"
         }
       },
-      "required": [
-        "type",
-        "description"
-      ],
+      "required": ["type", "description"],
       "additionalProperties": false
     },
     "search_hint_section": {
@@ -12418,14 +11157,7 @@
     "search_hint_type": {
       "type": "string",
       "description": "Object type",
-      "enum": [
-        "group",
-        "profile",
-        "vk_app",
-        "app",
-        "html5_game",
-        "link"
-      ]
+      "enum": ["group", "profile", "vk_app", "app", "html5_game", "link"]
     },
     "secure_giveEventSticker_item": {
       "type": "object",
@@ -12704,9 +11436,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "value"
-      ],
+      "required": ["value"],
       "additionalProperties": false
     },
     "stats_views": {
@@ -12831,9 +11561,7 @@
           "$ref": "objects.json#/definitions/audio_audio"
         }
       },
-      "required": [
-        "text"
-      ],
+      "required": ["text"],
       "additionalProperties": false
     },
     "stickers_image_set": {
@@ -12849,9 +11577,7 @@
           "description": "Version number to be appended to the image URL"
         }
       },
-      "required": [
-        "base_url"
-      ],
+      "required": ["base_url"],
       "additionalProperties": false
     },
     "storage_value": {
@@ -12864,10 +11590,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "key",
-        "value"
-      ],
+      "required": ["key", "value"],
       "additionalProperties": false
     },
     "store_product": {
@@ -12880,9 +11603,7 @@
         "type": {
           "type": "string",
           "description": "Product type",
-          "enum": [
-            "stickers"
-          ]
+          "enum": ["stickers"]
         },
         "is_new": {
           "type": "boolean",
@@ -12939,10 +11660,7 @@
           "description": "Subtitle of the product"
         }
       },
-      "required": [
-        "id",
-        "type"
-      ],
+      "required": ["id", "type"],
       "additionalProperties": false
     },
     "store_product_icon": {
@@ -12973,9 +11691,7 @@
           }
         }
       },
-      "required": [
-        "words"
-      ],
+      "required": ["words"],
       "additionalProperties": false
     },
     "store_stickers_keyword_sticker": {
@@ -12990,10 +11706,7 @@
           "description": "Sticker id"
         }
       },
-      "required": [
-        "pack_id",
-        "sticker_id"
-      ],
+      "required": ["pack_id", "sticker_id"],
       "additionalProperties": false
     },
     "store_stickers_keyword_stickers": {
@@ -13009,10 +11722,7 @@
           "type": "integer"
         }
       },
-      "requried": [
-        "x",
-        "y"
-      ],
+      "requried": ["x", "y"],
       "additionalProperties": false
     },
     "stories_clickable_sticker": {
@@ -13100,10 +11810,7 @@
         },
         "subtype": {
           "type": "string",
-          "enum": [
-            "market_item",
-            "aliexpress_product"
-          ]
+          "enum": ["market_item", "aliexpress_product"]
         },
         "post_owner_id": {
           "type": "integer"
@@ -13148,11 +11855,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "type",
-        "clickable_area",
-        "id"
-      ],
+      "required": ["type", "clickable_area", "id"],
       "additionalProperties": false
     },
     "stories_clickable_stickers": {
@@ -13173,11 +11876,7 @@
           "minimum": 0
         }
       },
-      "required": [
-        "original_height",
-        "original_width",
-        "clickable_stickers"
-      ],
+      "required": ["original_height", "original_width", "clickable_stickers"],
       "additionalProperties": false
     },
     "stories_feed_item": {
@@ -13234,9 +11933,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "stories_promo_block": {
@@ -13260,12 +11957,7 @@
           "description": "Hide animation for promo story"
         }
       },
-      "required": [
-        "photo_50",
-        "photo_100",
-        "name",
-        "not_animated"
-      ],
+      "required": ["photo_50", "photo_100", "name", "not_animated"],
       "additionalProperties": false
     },
     "stories_replies": {
@@ -13281,9 +11973,7 @@
           "description": "New replies number."
         }
       },
-      "required": [
-        "count"
-      ],
+      "required": ["count"],
       "additionalProperties": false
     },
     "stories_stat_line": {
@@ -13300,9 +11990,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "additionalProperties": false
     },
     "stories_story": {
@@ -13426,10 +12114,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "id",
-        "owner_id"
-      ],
+      "required": ["id", "owner_id"],
       "additionalProperties": false
     },
     "stories_story_link": {
@@ -13445,10 +12130,7 @@
           "description": "Link URL"
         }
       },
-      "required": [
-        "text",
-        "url"
-      ],
+      "required": ["text", "url"],
       "additionalProperties": false
     },
     "stories_story_stats": {
@@ -13503,30 +12185,18 @@
           "$ref": "objects.json#/definitions/stories_story_stats_state"
         }
       },
-      "required": [
-        "state"
-      ],
+      "required": ["state"],
       "additionalProperties": false
     },
     "stories_story_stats_state": {
       "type": "string",
       "description": "Statistic state",
-      "enum": [
-        "on",
-        "off",
-        "hidden"
-      ]
+      "enum": ["on", "off", "hidden"]
     },
     "stories_story_type": {
       "type": "string",
       "description": "Story type.",
-      "enum": [
-        "photo",
-        "video",
-        "live_active",
-        "live_finished",
-        "birthday_invite"
-      ]
+      "enum": ["photo", "video", "live_active", "live_finished", "birthday_invite"]
     },
     "stories_upload_link_text": {
       "type": "string",
@@ -13569,10 +12239,7 @@
           "$ref": "objects.json#/definitions/users_user_full"
         }
       },
-      "required": [
-        "is_liked",
-        "user_id"
-      ],
+      "required": ["is_liked", "user_id"],
       "additionalProperties": false
     },
     "users_career": {
@@ -13786,11 +12453,7 @@
           "description": "Till year"
         }
       },
-      "required": [
-        "unit",
-        "unit_id",
-        "country_id"
-      ],
+      "required": ["unit", "unit_id", "country_id"],
       "additionalProperties": false
     },
     "users_occupation": {
@@ -13840,18 +12503,10 @@
         "status": {
           "type": "string",
           "description": "In case user online is not visible, it indicates approximate timeframe of user online",
-          "enum": [
-            "recently",
-            "last_week",
-            "last_month",
-            "long_ago",
-            "not_show"
-          ]
+          "enum": ["recently", "last_week", "last_month", "long_ago", "not_show"]
         }
       },
-      "required": [
-        "visible"
-      ],
+      "required": ["visible"],
       "additionalProperties": false
     },
     "users_personal": {
@@ -13917,18 +12572,10 @@
         "type": {
           "type": "string",
           "description": "Relative type",
-          "enum": [
-            "parent",
-            "child",
-            "grandparent",
-            "grandchild",
-            "sibling"
-          ]
+          "enum": ["parent", "child", "grandparent", "grandchild", "sibling"]
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "users_school": {
@@ -14134,12 +12781,7 @@
           "description": "User's Instagram account"
         }
       },
-      "required": [
-        "facebook",
-        "instagram",
-        "twitter",
-        "skype"
-      ],
+      "required": ["facebook", "instagram", "twitter", "skype"],
       "additionalProperties": false
     },
     "users_user_counters": {
@@ -14448,10 +13090,7 @@
             },
             "wall_default": {
               "type": "string",
-              "enum": [
-                "owner",
-                "all"
-              ]
+              "enum": ["owner", "all"]
             },
             "can_call": {
               "description": "Information whether current user can call",
@@ -14708,9 +13347,7 @@
               }
             }
           },
-          "required": [
-            "can_invite_to_chats"
-          ],
+          "required": ["can_invite_to_chats"],
           "additionalProperties": false
         }
       ],
@@ -14746,26 +13383,12 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "id",
-        "first_name",
-        "last_name"
-      ],
+      "required": ["id", "first_name", "last_name"],
       "additionalProperties": false
     },
     "users_user_relation": {
       "type": "integer",
-      "enum": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8],
       "enumNames": [
         "not specified",
         "single",
@@ -14867,18 +13490,13 @@
           }
         }
       },
-      "required": [
-        "home_town",
-        "status"
-      ],
+      "required": ["home_town", "status"],
       "additionalProperties": false
     },
     "users_user_type": {
       "type": "string",
       "description": "Object type",
-      "enum": [
-        "profile"
-      ]
+      "enum": ["profile"]
     },
     "users_user_xtr_counters": {
       "type": "object",
@@ -14921,10 +13539,7 @@
           }
         }
       },
-      "required": [
-        "count",
-        "items"
-      ],
+      "required": ["count", "items"],
       "additionalProperties": false
     },
     "utils_domain_resolved": {
@@ -14947,14 +13562,7 @@
     "utils_domain_resolved_type": {
       "type": "string",
       "description": "Object type",
-      "enum": [
-        "user",
-        "group",
-        "application",
-        "page",
-        "vk_app",
-        "community_application"
-      ]
+      "enum": ["user", "group", "application", "page", "vk_app", "community_application"]
     },
     "utils_last_shortened_link": {
       "type": "object",
@@ -15005,11 +13613,7 @@
     "utils_link_checked_status": {
       "type": "string",
       "description": "Link status",
-      "enum": [
-        "not_banned",
-        "banned",
-        "processing"
-      ]
+      "enum": ["not_banned", "banned", "processing"]
     },
     "utils_link_stats": {
       "type": "object",
@@ -15364,11 +13968,7 @@
             },
             "type": {
               "type": "string",
-              "enum": [
-                "video",
-                "music_video",
-                "movie"
-              ]
+              "enum": ["video", "music_video", "movie"]
             },
             "views": {
               "type": "integer",
@@ -15397,13 +13997,7 @@
             "live_status": {
               "type": "string",
               "description": "Live stream status",
-              "enum": [
-                "waiting",
-                "started",
-                "finished",
-                "failed",
-                "upcoming"
-              ]
+              "enum": ["waiting", "started", "finished", "failed", "upcoming"]
             },
             "live": {
               "description": "1 if the video is a live stream",
@@ -15458,11 +14052,7 @@
           "description": "Album title"
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "title"
-      ],
+      "required": ["id", "owner_id", "title"],
       "additionalProperties": false
     },
     "video_video_album_full": {
@@ -15500,10 +14090,7 @@
               "minimum": 0
             }
           },
-          "required": [
-            "updated_time",
-            "count"
-          ],
+          "required": ["updated_time", "count"],
           "additionalProperties": false
         }
       ],
@@ -15682,15 +14269,7 @@
           "description": "URL of the page with note preview"
         }
       },
-      "required": [
-        "id",
-        "owner_id",
-        "comments",
-        "read_comments",
-        "date",
-        "title",
-        "view_url"
-      ],
+      "required": ["id", "owner_id", "comments", "read_comments", "date", "title", "view_url"],
       "additionalProperties": false
     },
     "wall_carousel_base": {
@@ -15741,9 +14320,7 @@
           "$ref": "objects.json#/definitions/video_video"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "wall_comment_attachment_type": {
@@ -15786,15 +14363,7 @@
     "wall_get_filter": {
       "description": "Filter to apply: 'owner' — posts by the wall owner, 'others' — posts by someone else, 'all' — posts by the wall owner and others (default), 'postponed' — timed posts (only available for calls with an 'access_token'), 'suggests' — suggested posts on a community wall",
       "type": "string",
-      "enum": [
-        "owner",
-        "others",
-        "all",
-        "postponed",
-        "suggests",
-        "archived",
-        "donut"
-      ]
+      "enum": ["owner", "others", "all", "postponed", "suggests", "archived", "donut"]
     },
     "wall_graffiti": {
       "type": "object",
@@ -15836,11 +14405,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "type",
-        "link",
-        "name"
-      ],
+      "required": ["type", "link", "name"],
       "additionalProperties": false
     },
     "wall_post_source": {
@@ -15868,25 +14433,12 @@
     "wall_post_source_type": {
       "type": "string",
       "description": "Type of post source",
-      "enum": [
-        "vk",
-        "widget",
-        "api",
-        "rss",
-        "sms",
-        "mvk"
-      ]
+      "enum": ["vk", "widget", "api", "rss", "sms", "mvk"]
     },
     "wall_post_type": {
       "type": "string",
       "description": "Post type",
-      "enum": [
-        "post",
-        "copy",
-        "reply",
-        "postpone",
-        "suggest"
-      ]
+      "enum": ["post", "copy", "reply", "postpone", "suggest"]
     },
     "wall_posted_photo": {
       "type": "object",
@@ -15987,12 +14539,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "date",
-        "text"
-      ],
+      "required": ["id", "from_id", "date", "text"],
       "additionalProperties": false
     },
     "wall_wall_comment_donut": {
@@ -16015,10 +14562,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "text",
-        "button"
-      ],
+      "required": ["text", "button"],
       "additionalProperties": false
     },
     "wall_wallpost": {
@@ -16181,9 +14725,7 @@
           "$ref": "objects.json#/definitions/video_video"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "additionalProperties": false
     },
     "wall_wallpost_attachment_type": {
@@ -16230,9 +14772,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "text"
-      ],
+      "required": ["text"],
       "additionalProperties": false
     },
     "wall_wallpost_donut": {
@@ -16258,15 +14798,10 @@
         "edit_mode": {
           "description": "Says what user can edit in post about donut properties",
           "type": "string",
-          "enum": [
-            "all",
-            "duration"
-          ]
+          "enum": ["all", "duration"]
         }
       },
-      "required": [
-        "is_donut"
-      ],
+      "required": ["is_donut"],
       "additionalProperties": false
     },
     "wall_wallpost_donut_placeholder": {
@@ -16276,9 +14811,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "text"
-      ],
+      "required": ["text"],
       "additionalProperties": false
     },
     "wall_wallpost_full": {
@@ -16332,20 +14865,7 @@
               "type": "integer",
               "minimum": 0,
               "description": "Topic ID. Allowed values can be obtained from newsfeed.getPostTopics method",
-              "enum": [
-                0,
-                1,
-                7,
-                12,
-                16,
-                19,
-                21,
-                23,
-                25,
-                26,
-                32,
-                43
-              ],
+              "enum": [0, 1, 7, 12, 16, 19, 21, 23, 25, 26, 32, 43],
               "enumNames": [
                 "empty_topic",
                 "art",
@@ -16471,11 +14991,7 @@
     "widgets_comment_media_type": {
       "type": "string",
       "description": "Media type",
-      "enum": [
-        "audio",
-        "photo",
-        "video"
-      ]
+      "enum": ["audio", "photo", "video"]
     },
     "widgets_comment_replies": {
       "type": "object",
@@ -16582,14 +15098,7 @@
           "$ref": "objects.json#/definitions/users_user_full"
         }
       },
-      "required": [
-        "id",
-        "from_id",
-        "to_id",
-        "date",
-        "post_type",
-        "text"
-      ],
+      "required": ["id", "from_id", "to_id", "date", "post_type", "text"],
       "additionalProperties": false
     },
     "widgets_widget_likes": {
