@@ -105,6 +105,8 @@ const MessageItem = ({
         </Text>
       )}
 
+      {Number(message.attachments?.length) > 0 && <Attachments attachments={message.attachments} />}
+
       <View style={styles.messageFooter}>
         {
           // <Text style={_styles.footerText}>ред.</Text>
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 3,
     width: "100%",
+    flex: 1,
   },
   messageContent: {
     backgroundColor: "whitesmoke",

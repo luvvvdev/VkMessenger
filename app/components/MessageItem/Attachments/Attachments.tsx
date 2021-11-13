@@ -5,14 +5,18 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   VirtualizedList,
 } from "react-native"
 import FastImage from "react-native-fast-image"
 import React, { memo, useEffect } from "react"
-import { MessagesMessageAttachment } from "../../../types/vk"
+import { MessagesMessageAttachment, MessagesMessageAttachmentType } from "../../../types/vk"
 import _ from "lodash"
 import { getAttachmentsHeight } from "../../../utils/getAttachmentsHeight"
+import { FlatGrid } from "react-native-super-grid"
+import { Div } from "react-native-magnus"
+import { useNavigation } from "@react-navigation/native"
 
 /*     {attachments && attachments.length > 0 && attachments[0].type === 'photo' ?
         (
@@ -29,6 +33,8 @@ export const Attachments = memo(
   ({ attachments }: AttachmentsProps) => {
     if (!attachments) return null
 
+    const navigation = useNavigation()
+
     const height = getAttachmentsHeight(attachments)
 
     const attachmentWidth = attachments.length === 1 ? 220 : 150
@@ -43,32 +49,63 @@ export const Attachments = memo(
         headers: {
           access_key: attachment.photo.access_key,
         },
-        uri: attachment.photo.sizes[0].url || "",
+        uri: attachment.photo.sizes[3].url || "",
         // cache: 'immutable',
         priority: FastImage.priority.high,
       }
 
       return (
-        <FastImage
-          resizeMode={"cover"}
-          //style={{marginLeft: !isSecond ? 5 : 0}}
-          source={source}
-        />
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate("ImageView", { image: source })}
+        >
+          <FastImage
+            resizeMode={"cover"}
+            style={{ width: "100%", height: "100%", backgroundColor: "gray" }}
+            source={source}
+          />
+        </TouchableOpacity>
       )
     }
 
-    /*const rows = _.chunk(children, 2).map((c, i, arr) => (
-        <View style={{flexDirection: 'row', marginBottom: arr[i + 1] ? 5 : 0}} key={`attachments-row-${i}`}>
-            {c}
-        </View>
-    ))*/
+    const rows = _.chunk(attachments, 2)
 
-    return (
-      <FlatList
-        data={attachments}
-        scrollEnabled={false}
-        horizontal={false}
-        renderItem={({ item: attachment, index }) => {
+    const renderAttachment = (attachment: MessagesMessageAttachment) => {
+      switch (attachment.type) {
+        case "photo":
+          return (
+            <Div w={220} h={160} mb={5} rounded={5} overflow={"hidden"}>
+              {renderPhoto(attachment, false)}
+            </Div>
+          )
+        default:
+          return <View style={{ height: 150, width: 150, backgroundColor: "gray" }}></View>
+      }
+    }
+
+    const renderedRows = () =>
+      rows.map((row, i) => {
+        return <Div key={i}>{row.map((item) => renderAttachment(item))}</Div>
+      })
+
+    return <Div w={"100%"}>{renderedRows()}</Div>
+  },
+  (prevProps, nextProps) => _.isEqual(prevProps, nextProps),
+)
+
+const styles = StyleSheet.create({
+  attachmentsContainer: {
+    width: "100%",
+  },
+  attachment: {
+    width: 150,
+    height: "100%",
+    maxWidth: 150,
+    maxHeight: "100%",
+  },
+})
+
+/* ({ item: attachment, index }) => {
           let child: React.ReactNode = null
 
           switch (attachment.type) {
@@ -85,21 +122,4 @@ export const Attachments = memo(
               {child}
             </View>
           )
-        }}
-      />
-    )
-  },
-  (prevProps, nextProps) => _.isEqual(prevProps, nextProps),
-)
-
-const styles = StyleSheet.create({
-  attachmentsContainer: {
-    width: "100%",
-  },
-  attachment: {
-    width: 150,
-    height: "100%",
-    maxWidth: 150,
-    maxHeight: "100%",
-  },
-})
+        }*/

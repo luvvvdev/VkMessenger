@@ -117,7 +117,7 @@ export default ({ peer_id }: MessagesProps) => {
 
     const hasReply = Boolean(msg.reply_message)
 
-    return calculateHeight(msg.text, 325, 15, 0, hasReply)
+    return calculateHeight(msg.text, 325, 15, msg.attachments?.length, hasReply)
   }
 
   const placeholder = (

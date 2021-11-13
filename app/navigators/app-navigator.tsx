@@ -15,14 +15,15 @@ import { Dispatch, RootState } from "../models"
 import ConversationScreen from "../screens/Messenger/ConversationScreen/ConversationScreen"
 import { Header } from "../components"
 import ConversationsScreen from "../screens/Messenger/CoversationsScreen/ConversationsScreen"
-import SettingsModal from "../features/SettingsModal"
-import FastImage from "react-native-fast-image"
+import ImageViewModal from "../screens/Messenger/ImageViewModal"
+
 import { translate } from "../i18n"
 
 import HeaderRight from "../screens/Messenger/ConversationScreen/components/HeaderRight"
 import HeaderTitle from "../screens/Messenger/ConversationScreen/components/HeaderTitle"
 import ConversationsHeaderTitle from "../screens/Messenger/CoversationsScreen/components/HeaderTitle"
 import HeaderLeft from "../screens/Messenger/CoversationsScreen/components/HeaderLeft"
+import { ImageSource } from "react-native-vector-icons/Icon"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,6 +41,7 @@ export type NavigatorParamList = {
   Conversations: undefined
   Login: undefined
   Conversation: undefined
+  ImageView: { image: ImageSource }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -63,6 +65,7 @@ const AppStack = () => {
         //headerBlurEffect: "extraLight",
         headerShadowVisible: false,
         header: Header,
+        gestureEnabled: true,
       })}
     >
       {!isLoggedIn && (
@@ -99,6 +102,17 @@ const AppStack = () => {
             headerTitle: () => <HeaderTitle route={route} />,
           })}
         />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: "modal",
+          gestureEnabled: true,
+          //animation: "fade",
+          animationTypeForReplace: "pop",
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="ImageView" component={ImageViewModal} />
       </Stack.Group>
     </Stack.Navigator>
   )

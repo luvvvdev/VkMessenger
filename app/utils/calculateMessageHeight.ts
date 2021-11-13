@@ -13,14 +13,14 @@ export const calculateHeight = (
   const rowLength = calculateRowMaxSymbols(maxWidth)
 
   // messageItem - verticalPadding; messageContent - verticalPadding; footerHeight
-  const baseHeight = 6 + 20 + 13
+  const baseHeight = 6 + 20 + 15
 
   let attachmentsHeight = 0
   let rowsHeight = 0
 
   if (attachmentsCount > 0) {
     // attachmentsContainer marginTop + (baseHeight and marginVertical of attachment) * count of attachments rows
-    attachmentsHeight = 5 + (150 + 10) * Math.ceil(attachmentsCount / 2)
+    attachmentsHeight = 5 + (150 + 10) * attachmentsCount
   }
 
   if (text) {

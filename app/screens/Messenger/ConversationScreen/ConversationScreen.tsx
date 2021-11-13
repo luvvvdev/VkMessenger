@@ -66,7 +66,7 @@ const ConversationScreen = (props) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior={"position"} keyboardVerticalOffset={70}>
+    <KeyboardAvoidingView behavior={"padding"} keyboardVerticalOffset={0}>
       <View style={styles.conversationContainer}>
         <Messages peer_id={peerId} />
         <BView>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
-    paddingVertical: 8,
+    paddingVertical: 5,
     maxWidth: "100%",
     // backgroundColor: 'transparent'
     // paddingVertical: 5,
